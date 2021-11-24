@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="d3-sankey-circular.js"></script>
+    <script src="d3-path-arrows.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="example-data.js"></script>
+
+    <title>Sankey with circular links</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        h1 {
+            color: #8e0152
+        }
+
+        span {
+            font-weight: bold
+        }
+
+        rect {
+            shape-rendering: crispEdges;
+        }
+
+        text {
+            font-size: 12px;
+        }
+
+        path {
+            fill: none;
+            opacity: 0.5
+        }
+
+        .lower {
+            text-anchor: end
+        }
+
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            display: none;
+        }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #8e0152;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #8e0152;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Sankey with circular links</h1>
+    <p>Switch to new data:</p>
+    <form id="selectData">
+        <input type="radio" name="selectData" value="Control" checked> Control group<br>
+        <input type="radio" name="selectData" value="Test 1"> Test 1<br>
+        <input type="radio" name="selectData" value="Test 2"> Test 2
+    </form>
+
+
+    <div id="legend"></div>
+
+    <div id="chart"></div>
+
+    <script>
+        var margin = { top: 10, right: 10, bottom: 10, left: 120 };
+        var width = 1000;
+        var height = 700;
+
+        var extent = [-1, 1]
+
+        //colour for updated nodes and links
+        var colour = d3.scaleSequential(d3.interpolatePiYG)
+            .domain(extent);
+
+        let data = data5;
+
+        let originalLinks = [
+            { "source": "startA", "target": "process8", "value": 20, "optimal": "yes" },
+            { "source": "startA", "target": "process5", "value": 20, "optimal": "yes" },
+            { "source": "startA", "target": "process6", "value": 20, "optimal": "yes" },
+            { "source": "startB", "target": "process1", "value": 15, "optimal": "yes" },
+            { "source": "startB", "target": "process5", "value": 15, "optimal": "yes" },
+            { "source": "process1", "target": "process4", "value": 30, "optimal": "yes" },
+            { "source": "process4", "target": "process1", "value": 10, "optimal": "yes" },
+            { "source": "process2", "target": "process7", "value": 35, "optimal": "yes" },
+            { "source": "process1", "target": "process3", "value": 20, "optimal": "yes" },
+            { "source": "process5", "target": "process1", "value": 20, "optimal": "yes" },
+            { "source": "process6", "target": "startA", "value": 5, "optimal": "yes" },
+            { "source": "process4", "target": "process2", "value": 5, "optimal": "yes" },
+            { "source": "process6", "target": "process8", "value": 15, "optimal": "yes" },
+            { "source": "process4", "target": "startB", "value": 5, "optimal": "yes" },
+            { "source": "process3", "target": "process2", "value": 15, "optimal": "yes" },
+            { "source": "process3", "target": "startB", "value": 5, "optimal": "yes" },
+            { "source": "process15", "target": "process13", "value": 10, "optimal": "yes" },
+            { "source": "process13", "target": "process9", "value": 10, "optimal": "yes" },
+            { "source": "process7", "target": "startB", "value": 20, "optimal": "yes" },
+            { "source": "process8", "target": "process1", "value": 10, "optimal": "yes" },
+            { "source": "process8", "target": "process16", "value": 10, "optimal": "yes" },
+            { "source": "process16", "target": "process9", "value": 10, "optimal": "yes" },
+            { "source": "process8", "target": "process11", "value": 25, "optimal": "yes" },
+            { "source": "process11", "target": "process10", "value": 20, "optimal": "yes" },
+            { "source": "process4", "target": "process12", "value": 10, "optimal": "yes" },
+            { "source": "process12", "target": "process11", "value": 10, "optimal": "yes" },
+            { "source": "process7", "target": "process15", "value": 15, "optimal": "yes" },
+            { "source": "process15", "target": "process14", "value": 10, "optimal": "yes" },
+            { "source": "process10", "target": "process13", "value": 10, "optimal": "yes" },
+            { "source": "process10", "target": "process16", "value": 10, "optimal": "yes" },
+            { "source": "process14", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process9", "target": "finishA", "value": 10, "optimal": "yes" },
+            { "source": "process16", "target": "process8", "value": 10, "optimal": "yes" },
+            { "source": "process9", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process15", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process15", "target": "finishA", "value": 10, "optimal": "yes" },
+            { "source": "process11", "target": "process15", "value": 25, "optimal": "yes" }
+        ]
+
+
+        let newLinks = [
+            { "source": "startA", "target": "process8", "value": 20, "optimal": "yes" },
+            { "source": "startA", "target": "process5", "value": 20, "optimal": "yes" },
+            { "source": "startA", "target": "process6", "value": 20, "optimal": "yes" },
+            { "source": "startB", "target": "process1", "value": 15, "optimal": "yes" },
+            { "source": "startB", "target": "process5", "value": 15, "optimal": "yes" },
+            { "source": "process1", "target": "process4", "value": 30, "optimal": "yes" },
+            { "source": "process4", "target": "process1", "value": 20, "optimal": "yes" },
+            { "source": "process2", "target": "process7", "value": 35, "optimal": "yes" },
+            { "source": "process1", "target": "process3", "value": 20, "optimal": "yes" },
+            { "source": "process5", "target": "process1", "value": 20, "optimal": "yes" },
+            { "source": "process6", "target": "startA", "value": 5, "optimal": "yes" },
+            { "source": "process4", "target": "process2", "value": 10, "optimal": "yes" },
+            { "source": "process6", "target": "process8", "value": 15, "optimal": "yes" },
+            { "source": "process3", "target": "process2", "value": 15, "optimal": "yes" },
+            { "source": "process15", "target": "process13", "value": 10, "optimal": "yes" },
+            { "source": "process13", "target": "process9", "value": 10, "optimal": "yes" },
+            { "source": "process7", "target": "startB", "value": 20, "optimal": "yes" },
+            { "source": "process8", "target": "process1", "value": 10, "optimal": "yes" },
+            { "source": "process8", "target": "process16", "value": 10, "optimal": "yes" },
+            { "source": "process16", "target": "process9", "value": 10, "optimal": "yes" },
+            { "source": "process8", "target": "process11", "value": 25, "optimal": "yes" },
+            { "source": "process11", "target": "process10", "value": 20, "optimal": "yes" },
+            { "source": "process4", "target": "process12", "value": 10, "optimal": "yes" },
+            { "source": "process12", "target": "process11", "value": 10, "optimal": "yes" },
+            { "source": "process7", "target": "process15", "value": 15, "optimal": "yes" },
+            { "source": "process15", "target": "process14", "value": 10, "optimal": "yes" },
+            { "source": "process10", "target": "process13", "value": 10, "optimal": "yes" },
+            { "source": "process10", "target": "process16", "value": 10, "optimal": "yes" },
+            { "source": "process14", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process9", "target": "finishA", "value": 10, "optimal": "yes" },
+            { "source": "process16", "target": "process8", "value": 5, "optimal": "yes" },
+            { "source": "process9", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process15", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process15", "target": "finishA", "value": 25, "optimal": "yes" },
+            { "source": "process11", "target": "process15", "value": 5, "optimal": "yes" },
+            { "source": "process11", "target": "process11", "value": 5, "optimal": "yes" },
+            { "source": "finishA", "target": "finishA", "value": 15, "optimal": "yes" },
+            { "source": "finishB", "target": "finishB", "value": 15, "optimal": "yes" },
+            { "source": "process5", "target": "process5", "value": 5, "optimal": "yes" },
+            { "source": "finishB", "target": "process14", "value": 5, "optimal": "yes" }
+        ]
+
+        let newLinks2 = [
+            { "source": "startA", "target": "process8", "value": 20, "optimal": "yes" },
+            { "source": "startA", "target": "process5", "value": 20, "optimal": "yes" },
+            { "source": "startA", "target": "process6", "value": 20, "optimal": "yes" },
+            { "source": "startB", "target": "process1", "value": 15, "optimal": "yes" },
+            { "source": "startB", "target": "process5", "value": 15, "optimal": "yes" },
+            { "source": "process1", "target": "process4", "value": 30, "optimal": "yes" },
+            { "source": "process4", "target": "process1", "value": 20, "optimal": "yes" },
+            { "source": "process2", "target": "process7", "value": 35, "optimal": "yes" },
+            { "source": "process1", "target": "process3", "value": 20, "optimal": "yes" },
+            { "source": "process5", "target": "process1", "value": 20, "optimal": "yes" },
+            { "source": "process6", "target": "startA", "value": 5, "optimal": "yes" },
+            { "source": "process4", "target": "process2", "value": 10, "optimal": "yes" },
+            { "source": "process6", "target": "process8", "value": 15, "optimal": "yes" },
+            { "source": "process3", "target": "process2", "value": 15, "optimal": "yes" },
+            { "source": "process15", "target": "process13", "value": 20, "optimal": "yes" },
+            { "source": "process13", "target": "process9", "value": 10, "optimal": "yes" },
+            { "source": "process7", "target": "startB", "value": 20, "optimal": "yes" },
+            { "source": "process8", "target": "process1", "value": 10, "optimal": "yes" },
+            { "source": "process8", "target": "process16", "value": 10, "optimal": "yes" },
+            { "source": "process16", "target": "process9", "value": 5, "optimal": "yes" },
+            { "source": "process8", "target": "process11", "value": 25, "optimal": "yes" },
+            { "source": "process11", "target": "process10", "value": 10, "optimal": "yes" },
+            { "source": "process4", "target": "process12", "value": 10, "optimal": "yes" },
+            { "source": "process12", "target": "process11", "value": 10, "optimal": "yes" },
+            { "source": "process7", "target": "process15", "value": 15, "optimal": "yes" },
+            { "source": "process15", "target": "process14", "value": 10, "optimal": "yes" },
+            { "source": "process10", "target": "process13", "value": 5, "optimal": "yes" },
+            { "source": "process10", "target": "process16", "value": 5, "optimal": "yes" },
+            { "source": "process14", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process9", "target": "finishA", "value": 10, "optimal": "yes" },
+            { "source": "process16", "target": "process8", "value": 5, "optimal": "yes" },
+            { "source": "process9", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process15", "target": "finishB", "value": 10, "optimal": "yes" },
+            { "source": "process15", "target": "finishA", "value": 25, "optimal": "yes" },
+            { "source": "process11", "target": "process15", "value": 15, "optimal": "yes" },
+            { "source": "process11", "target": "process11", "value": 5, "optimal": "yes" },
+            { "source": "finishA", "target": "finishA", "value": 15, "optimal": "yes" },
+            { "source": "finishB", "target": "finishB", "value": 15, "optimal": "yes" },
+            { "source": "process5", "target": "process5", "value": 5, "optimal": "yes" },
+            { "source": "finishB", "target": "process14", "value": 5, "optimal": "yes" }
+        ]
+
+        const nodePadding = 40;
+
+        const circularLinkGap = 2;
+
+        var sankey = d3.sankeyCircular()
+            .nodeWidth(10)
+            .nodePadding(nodePadding)
+            .nodePaddingRatio(0.1)
+            .size([width, height])
+            .nodeId(function (d) {
+                return d.name;
+            })
+            .nodeAlign(d3.sankeyRight)
+            .iterations(32);
+
+        var svg = d3.select("#chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
+
+        var g = svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+        var linkG = g.append("g")
+            .attr("class", "links")
+            .attr("fill", "none")
+            .selectAll("path");
+
+        var linkLabels = g.append("g")
+
+        var nodeG = g.append("g")
+            .attr("class", "nodes")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 10)
+            .selectAll("g");
+
+        //run the Sankey + circular over the data
+        let sankeyData = sankey(data);
+
+        var node = nodeG
+            .data(sankeyData.nodes, function (d) { return d.name })
+            .enter()
+            .append("g");
+
+        node.append("rect")
+            .attr("x", function (d) { return d.x0; })
+            .attr("y", function (d) { return d.y0; })
+            .attr("height", function (d) { return d.y1 - d.y0; })
+            .attr("width", function (d) { return d.x1 - d.x0; })
+            .style("fill", "#C89776")
+
+        node.append("text")
+            .attr("x", function (d) { return (d.x0 + d.x1) / 2; })
+            .attr("y", function (d) { return d.y0 - 12; })
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "middle")
+            .text(function (d) { return d.name; });
+
+        var link = linkG.data(sankeyData.links, function (d) { return d.index })
+            .enter()
+            .append("g")
+
+        link.append("path")
+            .attr("class", "sankey-link")
+            .attr("d", function (link) {
+                return link.path;
+            })
+            .style("stroke-width", function (d) { return d.width; })
+            .style("stroke", "#BAB5A1")
+
+        link.append("title")
+            .text(function (d) {
+                return d.source.name + " → " + d.target.name + "\n Index: " + (d.index);
+            });
+
+        //////////////////////////////////////////////////////////////////////
+
+
+
+        let legendMargin = { top: 0, right: 500, bottom: 0, left: 500 };
+        let legendWidth = width + (margin.left + margin.right) - (legendMargin.left + legendMargin.right);
+        let legendHeight = 45;
+
+        let legend = d3.select("#legend").append("svg")
+            .attr("width", legendWidth + legendMargin.left + legendMargin.right)
+            .attr("height", legendHeight + legendMargin.top + legendMargin.bottom);
+
+        let legendG = legend.append("g")
+            .attr("transform", "translate(" + legendMargin.left + "," + legendMargin.top + ")")
+
+        let defs = legend.append("defs")
+
+        let legendGradient = defs.append("linearGradient")
+            .attr("id", "linear-gradient")
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%");
+
+        let noOfSamples = 20;
+        let dataRange = extent[1] - extent[0];
+        let stepSize = dataRange / noOfSamples;
+
+        for (i = 0; i < noOfSamples; i++) {
+            legendGradient.append("stop")
+                .attr("offset", (i / (noOfSamples - 1)))
+                .attr("stop-color", colour(extent[0] + (i * stepSize)));
+        }
+
+        legendG.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", legendWidth)
+            .attr("height", legendHeight)
+            .style("fill", "url(#linear-gradient)");
+
+        let textX = 3
+        let textY = 15
+        let textYOffset = 12
+
+        legendG.append("text")
+            .attr("class", "legend-label lower after")
+            .text("")
+            .attr("x", -textX)
+            .attr("y", textY)
+
+        legendG.append("text")
+            .attr("class", "legend-label lower")
+            .text("is lower than")
+            .attr("x", -textX)
+            .attr("y", textY + textYOffset)
+
+        legendG.append("text")
+            .attr("class", "legend-label lower before")
+            .text("")
+            .attr("x", -textX)
+            .attr("y", textY + textYOffset + textYOffset)
+
+        legendG.append("text")
+            .attr("class", "legend-label higher after")
+            .text("")
+            .attr("x", legendWidth + textX)
+            .attr("y", textY)
+
+        legendG.append("text")
+            .attr("class", "legend-label higher")
+            .text("is higher than")
+            .attr("x", legendWidth + textX)
+            .attr("y", textY + textYOffset)
+
+        legendG.append("text")
+            .attr("class", "legend-label higher before")
+            .text("")
+            .attr("x", legendWidth + textX)
+            .attr("y", textY + textYOffset + textYOffset)
+
+
+        //////////////////////////////////////////////////////////////////////
+
+
+        var useNewData = true
+
+        let selected = "Control"
+        let previousSelected = "Control"
+
+        d3.selectAll("input")
+            .on("change", function () {
+
+                let t = d3.transition().duration(1000)
+                previousSelected = selected
+                selected = this.value
+
+                d3.selectAll(".before").text(previousSelected)
+                d3.selectAll(".after").text(selected)
+
+                if (selected == "Control") {
+                    sankey.updateValues(sankeyData, originalLinks)
+                } else if (selected == "Test 1") {
+                    sankey.updateValues(sankeyData, newLinks)
+                } else {
+                    sankey.updateValues(sankeyData, newLinks2)
+                }
+
+                node.data(sankeyData.nodes, function (d) { return d.name })
+                link.data(sankeyData.links, function (d) { return d.name })
+
+
+                node.selectAll("rect")
+                    .transition(t)
+                    .attr("y", function (d) { return d.y0; })
+                    .attr("height", function (d) { return d.y1 - d.y0; })
+                    .style("fill", function (d) { return d.value == d.previousValue ? "grey" : colour((d.value / d.previousValue) - 1) })
+
+                node.selectAll("text")
+                    .transition(t)
+                    .attr("y", function (d) { return d.y0 - 12; })
+
+                link.selectAll("path")
+                    .transition(t)
+                    .attr("d", function (link) {
+                        return link.path;
+                    })
+                    .style("stroke-width", function (d) { return d.width })
+                    .style("stroke", function (d) { return d.value == d.previousValue ? "lightgrey" : colour((d.value / d.previousValue) - 1) })
+
+
+
+            })
+
+
+
+
+
+    </script>
+</body>
+
+</html>
