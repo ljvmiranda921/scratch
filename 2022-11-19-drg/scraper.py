@@ -1,6 +1,7 @@
 from typing import List
 import datetime
 from pathlib import Path
+from tqdm import tqdm
 
 import typer
 import requests
@@ -26,15 +27,13 @@ app = typer.Typer(help=APP_HELP)
 def get_loadout_links(
     # fmt: off
     output_dir: Path = typer.Argument(..., help="Output directory to save the scraped files."), 
-    page_num: int = typer.Option(950, "--page-num", "-n", show_default=True, help="Max number of page to scrape."), 
-    verbose: bool = typer.Option(False, "--verbose", "-v", help="Set verbosity.")
+    page_num: int = typer.Option(950, "--page-num", "-n", show_default=True, help="Max number of page to scrape."),
     # fmt: on
 ) -> List[str]:
     """Scrape all loadout links from Karl.GG"""
     links = []
     timestamp = datetime.datetime.now()
-    for p in range(1, page_num + 1):
-        msg.text(f"Checking page {p}...", show=verbose)
+    for p in tqdm(range(1, page_num + 1)):
         url = f"https://karl.gg/browse?sort=updated_at&direction=desc&page={p}"
         response = requests.get(url)
         if response.ok:
