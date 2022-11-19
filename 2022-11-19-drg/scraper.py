@@ -1,10 +1,12 @@
-from typing import List
+import json
+from typing import List, Dict, Any
 import datetime
 from pathlib import Path
 from tqdm import tqdm
 
 import typer
 import requests
+import pandas as pd
 from bs4 import BeautifulSoup
 from wasabi import msg
 
@@ -64,10 +66,108 @@ def get_loadout_links(
 def get_individual_loadouts(
     # fmt: off
     input_path: Path = typer.Argument(..., help="Path to the TXT file from `get-links`."),
-    output_dir: Path = typer.Argument(..., help="Output directory to save the final CSV dump.")
+    output_path: Path = typer.Argument(..., help="Output CSV file to save the final dump.")
     # fmt: on
 ):
-    timestamp = _get_timestamp_from_file(input_path)
+    def _get_loadout(url) -> Dict[str, Any]:
+        EMPTY_DATA = "{}"
+        response = requests.get(url)
+        if response.ok:
+            soup = BeautifulSoup(response.content, "html.parser")
+
+            # The output of the response isn't the actual DOM but rather, a PHP/AJAX call
+            # where the parameters are stored in the attrs. That's what we only need
+            data = soup.body.find("loadout-preview-page").attrs
+            user_loadout = json.loads(data[":loadout-data"])
+
+            salutes = int(soup.find("span", attrs={"class": "salute-count"}).text)
+
+            primary = json.loads(data.get(":primary", EMPTY_DATA))
+            secondary = json.loads(data.get(":secondary", EMPTY_DATA))
+            equipment = json.loads(data.get(":available-equipment", EMPTY_DATA))
+            weapon_mods = user_loadout.get("mods")
+            equipment_mods = user_loadout.get("equipment_mods")
+            overclocks = json.loads(data.get(":overclocks", EMPTY_DATA))
+
+            def _get_mods(id: str, key: str, mods: Dict) -> str:
+                _mods = sorted(
+                    [mod for mod in mods if mod.get(key) == id],
+                    key=lambda x: x.get("mod_tier"),
+                )
+                _mod_text = "".join([m.get("mod_index") for m in _mods])
+                return _mod_text
+
+            def _get_overclock(id: str) -> str:
+                for overclock in overclocks:
+                    if overclock.get("gun_id") == id:
+                        return overclock.get("overclock_name")
+
+            def _get_equipment(class_name: Dict, equip_map: Dict):
+                for equip in equipment:
+                    if equip.get("name") == equip_map.get(class_name):
+                        id = equip.get("id")
+                        mods = _get_mods(id, "equipment_id", equipment_mods)
+                        return {"name": equip.get("name"), "mods": mods}
+
+            # The problem here is that both traversal and support tools are called Support Tools,
+            # so we need to disambiguate a bit and hard code a few things
+            traversal_map = {
+                "Gunner": "Zipline Launcher",
+                "Scout": "Grappling Hook",
+                "Driller": "Reinforced Power Drills",
+                "Engineer": "Platform Gun",
+            }
+            support_map = {
+                "Gunner": "Shield Generator",
+                "Scout": "Flare Gun",
+                "Driller": "Satchel Charge",
+                "Engineer": "LMG Gun Platform",
+            }
+            traversal = _get_equipment(
+                user_loadout.get("character").get("name"), traversal_map
+            )
+            support = _get_equipment(
+                user_loadout.get("character").get("name"), support_map
+            )
+
+            # Prepare output
+            loadout = {
+                # fmt: off
+                "name": user_loadout.get("name"),
+                "class": user_loadout.get("character").get("name"),
+                "patch": user_loadout.get("patch_id"),
+                "created_at": user_loadout.get("created_at"),
+                "updated_at": user_loadout.get("updated_at", None),
+                "description": user_loadout.get("description"),
+                "username": user_loadout.get("creator").get("name"),
+                "primary": primary.get("name"),
+                "primary_mods": _get_mods(id=primary.get("id"), key="gun_id", mods=weapon_mods),
+                "primary_overclock": _get_overclock(id=primary.get("id")),
+                "secondary": secondary.get("name"),
+                "secondary_mods": _get_mods(id=secondary.get("id"), key="gun_id", mods=weapon_mods),
+                "secondary_overclock": _get_overclock(id=secondary.get("id")),
+                "throwable": json.loads(data.get(":throwable", "{}")).get("name"),
+                "traversal": traversal.get("name"),
+                "traversal_mods": traversal.get("mods"),
+                "support": support.get("name"),
+                "support_mods": support.get("mods"),
+                "salutes": salutes,
+                # fmt: on
+            }
+
+            return loadout
+
+    with input_path.open("r") as file:
+        lines = [line.rstrip() for line in file]
+
+    loadouts = []
+    for line in tqdm(lines):
+        loadouts.append(_get_loadout(line))
+
+    df = pd.DataFrame(loadouts)
+
+    df.to_csv(output_path, index=False)
+    msg.good(f"Saved to {output_path}")
 
 
 if __name__ == "__main__":
