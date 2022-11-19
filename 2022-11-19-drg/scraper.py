@@ -46,11 +46,11 @@ def get_loadout_links(
                     links.append(link[0].get("href"))
     msg.info(f"Found {len(links)} builds (until page {page_num}) as of {timestamp}")
 
-    if output_dir and len(links) > 0:
+    if len(links) > 0:
         output_dir.mkdir(parents=True, exist_ok=True)
-        output_path = (
-            output_dir / f"loadout_links-page-{page_num}_{timestamp.isoformat()}.txt"
-        )
+        output_file = f"loadout_links-page-{page_num}_{timestamp.isoformat()}.txt"
+        output_path = output_dir / output_file
+
         with open(output_path, "w") as f:
             for link in tqdm(links):
                 f.write("%s\n" % link)
@@ -58,8 +58,6 @@ def get_loadout_links(
         msg.good(
             f"Done scraping loadout links. Use the `get-loadouts` command to download in-depth information."
         )
-
-    return links
 
 
 @app.command("get-loadouts", help="Get individual loadouts from a list of links.")
