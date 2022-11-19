@@ -56,13 +56,21 @@ def get_loadout_links(
             for link in links:
                 f.write("%s\n" % link)
         msg.good(f"Individual loadout links saved to {output_path}")
+        msg.good(
+            f"Done scraping loadout links. Use the `get-loadouts` command to download in-depth information."
+        )
 
     return links
 
 
 @app.command("get-loadouts", help="Get individual loadouts from a list of links.")
-def get_individual_loadouts():
-    pass
+def get_individual_loadouts(
+    # fmt: off
+    input_path: Path = typer.Argument(..., help="Path to the TXT file from `get-links`."),
+    output_dir: Path = typer.Argument(..., help="Output directory to save the final CSV dump.")
+    # fmt: on
+):
+    timestamp = _get_timestamp_from_file(input_path)
 
 
 if __name__ == "__main__":
