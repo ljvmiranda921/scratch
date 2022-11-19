@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import datetime
 from pathlib import Path
 from tqdm import tqdm
@@ -66,7 +66,8 @@ def get_loadout_links(
 def get_individual_loadouts(
     # fmt: off
     input_path: Path = typer.Argument(..., help="Path to the TXT file from `get-links`."),
-    output_path: Path = typer.Argument(..., help="Output CSV file to save the final dump.")
+    output_path: Path = typer.Argument(..., help="Output CSV file to save the final dump."),
+    start_at: Optional[int] = typer.Option(0, help="Start scraping from the following index.")
     # fmt: on
 ):
     def _get_loadout(url) -> Dict[str, Any]:
@@ -88,6 +89,11 @@ def get_individual_loadouts(
             weapon_mods = user_loadout.get("mods")
             equipment_mods = user_loadout.get("equipment_mods")
             overclocks = json.loads(data.get(":overclocks", EMPTY_DATA))
+
+            if user_loadout.get("creator"):
+                username = user_loadout.get("creator").get("name")
+            else:
+                username = "Anonymous"
 
             def _get_mods(id: str, key: str, mods: Dict) -> str:
                 _mods = sorted(
@@ -139,7 +145,7 @@ def get_individual_loadouts(
                 "created_at": user_loadout.get("created_at"),
                 "updated_at": user_loadout.get("updated_at", None),
                 "description": user_loadout.get("description"),
-                "username": user_loadout.get("creator").get("name"),
+                "username": username,
                 "primary": primary.get("name"),
                 "primary_mods": _get_mods(id=primary.get("id"), key="gun_id", mods=weapon_mods),
                 "primary_overclock": _get_overclock(id=primary.get("id")),
@@ -161,13 +167,18 @@ def get_individual_loadouts(
         lines = [line.rstrip() for line in file]
 
     loadouts = []
-    for line in tqdm(lines):
-        loadouts.append(_get_loadout(line))
-
-    df = pd.DataFrame(loadouts)
-
-    df.to_csv(output_path, index=False)
-    msg.good(f"Saved to {output_path}")
+    try:
+        for idx, line in tqdm(enumerate(lines)):
+            loadouts.append(_get_loadout(line))
+    except Exception:
+        msg.text(f"Encountered error, attempting to save until index {idx}")
+        df = pd.DataFrame(loadouts)
+        df.to_csv(output_path, index=False)
+        msg.fail(f"Failure at URL {line}. Stopped at index {idx}.")
+    else:
+        df = pd.DataFrame(loadouts)
+        df.to_csv(output_path, index=False)
+        msg.good(f"Saved to {output_path}")
 
 
 if __name__ == "__main__":
