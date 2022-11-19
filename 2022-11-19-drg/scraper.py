@@ -52,7 +52,7 @@ def get_loadout_links(
             output_dir / f"loadout_links-page-{page_num}_{timestamp.isoformat()}.txt"
         )
         with open(output_path, "w") as f:
-            for link in links:
+            for link in tqdm(links):
                 f.write("%s\n" % link)
         msg.good(f"Individual loadout links saved to {output_path}")
         msg.good(
