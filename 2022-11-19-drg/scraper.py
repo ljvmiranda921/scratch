@@ -167,6 +167,9 @@ def get_individual_loadouts(
         lines = [line.rstrip() for line in file]
 
     loadouts = []
+    if start_at:
+        msg.info(f"Starting from index {start_at}")
+    lines = lines[start_at:]
     try:
         for idx, line in tqdm(enumerate(lines)):
             loadouts.append(_get_loadout(line))
