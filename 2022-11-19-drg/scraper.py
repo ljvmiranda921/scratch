@@ -171,7 +171,7 @@ def get_individual_loadouts(
         msg.info(f"Starting from index {start_at}")
     lines = lines[start_at:]
     try:
-        for idx, line in tqdm(enumerate(lines)):
+        for idx, line in tqdm(enumerate(lines), total=len(lines)):
             loadouts.append(_get_loadout(line))
     except Exception:
         msg.text(f"Encountered error, attempting to save until index {idx}")
