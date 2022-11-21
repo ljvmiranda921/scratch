@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .error {
+        color: red;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.17.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelFontSize": 12, "titleFontSize": 14}}, "layer": [{"mark": {"type": "bar", "color": "#a00000"}, "encoding": {"x": {"field": "Number of builds", "type": "quantitative"}, "y": {"field": "Class", "type": "ordinal"}}}, {"mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 3}, "encoding": {"text": {"field": "Number of builds", "type": "quantitative"}, "x": {"field": "Number of builds", "type": "quantitative"}, "y": {"field": "Class", "type": "ordinal"}}}], "data": {"name": "data-6a9b35dcbb0068d80573bda6d4ddf7e5"}, "height": 200, "width": 600, "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json", "datasets": {"data-6a9b35dcbb0068d80573bda6d4ddf7e5": [{"Class": "Engineer", "Number of builds": 3643}, {"Class": "Scout", "Number of builds": 3611}, {"Class": "Gunner", "Number of builds": 3498}, {"Class": "Driller", "Number of builds": 3441}]}};
+      var embedOpt = {"renderer": "svg", "mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
