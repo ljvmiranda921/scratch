@@ -1,3 +1,17 @@
 # 🌱 Scratch
 
-Scratch notebooks (my digital garden as Jupyter notebooks)
+This repository contains Jupyter notebooks and random assortment of projects.
+Think of this as a scratch paper for my ideas.
+
+## Contents
+
+| Name                                                                                                                   | Description                                                                                                                                                    |
+|:-----------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [spaCy contributors](https://github.com/ljvmiranda921/scratch/tree/master/2021-11-19-spacy-contributors)               | Logo of spaCy with the Github usernames of different contributors.                                                                                             |
+| [Prettymaps exploration](https://github.com/ljvmiranda921/scratch/tree/master/2022-06-28-prettymaps)                   | Playing around the prettymaps library on Philippine landmarks.                                                                                                 |
+| [Finite state automata](https://github.com/ljvmiranda921/scratch/tree/master/2022-10-05-fsa)                           | Implementing finite state automata in Python. I also wrote a [blog post](https://ljvmiranda921.github.io/notebook/2022/10/07/finite-state-automata/) about it. |
+| [Word vectors from scratch](https://github.com/ljvmiranda921/scratch/tree/master/2021-11-06-word-vectors-from-scratch) | Exploratory notebook for my [word vectors blog post](https://ljvmiranda921.github.io/notebook/2021/12/11/word-vectors/)                                        |
+| [Sankey diagram](https://github.com/ljvmiranda921/scratch/tree/master/2021-11-24-sankey)                               | Trying to run and debug Avic's sankey diagram code.                                                                                                            |
+| [Spancat architecture inspection](https://github.com/ljvmiranda921/scratch/tree/master/2022-07-12-spancat-inspection)  | Figuring out how spancat works internally for work. I also wrote a [blog post](https://ljvmiranda921.github.io/notebook/2022/07/16/spacy-registry/) about it.  |
+| [Deep rock galactic data analysis](https://github.com/ljvmiranda921/scratch/tree/master/2022-11-19-drg)                | Data analysis for my Deep Rock Galactic [blog post](https://ljvmiranda921.github.io/notebook/2022/12/02/drg/).                                                 |
+    
