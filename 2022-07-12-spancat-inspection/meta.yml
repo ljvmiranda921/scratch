@@ -1,0 +1,2 @@
+name: "Spancat architecture inspection"
+description: "Figuring out how spancat works internally for work. I also wrote a [blog post](https://ljvmiranda921.github.io/notebook/2022/07/16/spacy-registry/) about it."
