@@ -1,0 +1,4 @@
+spacy>=3.4.0
+typer
+wasabi
+pandas
