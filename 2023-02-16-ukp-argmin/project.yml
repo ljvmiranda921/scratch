@@ -98,15 +98,13 @@ commands:
     script:
       - >-
         python -m spacy train configs/${vars.config}
-        --paths.train corpus/train.sapcy
-        --paths.dev corpus/dev.spacy
-        --paths.test corpus/test.spacy
+        --paths.train corpus/train.spacy
+        --paths.dev corpus/val.spacy
         --gpu-id ${vars.gpu_id}
         --output training/
     deps:
       - "corpus/train.spacy"
       - "corpus/val.spacy"
-      - "corpus/test.spacy"
     outputs:
       - "training/model-best"
 
