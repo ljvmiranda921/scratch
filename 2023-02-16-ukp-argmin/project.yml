@@ -20,9 +20,68 @@ description: |
   my work to empirical tests. However, if this work piqued your interest and
   you're working in HCI, let me know and we can collaborate!
 
+# These are the directories that the project needs. The project CLI will make
+# sure that they always exist.
 directories:
   - "assets"
   - "configs"
   - "corpus"
   - "scripts"
   - "training"
+  - "metrics"
+
+# Variables can be referenced across the project.yml using ${vars.var_name}
+vars:
+  config: "textcat.cfg"
+  ukp_data: "minimum_wage.tsv"
+  gpu_id: 0
+
+# Workflows are sequences of commands (see below) executed in order. You can
+# run them via "spacy project run [workflow]". If a commands's inputs/outputs
+# haven't changed, it won't be re-run.
+workflows:
+  textcat:
+    - preprocess
+    - train
+    - evaluate
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
+commands:
+  - name: "preprocess"
+    help: "Convert the data to spaCy's binary format"
+    script:
+      - "python -m scripts.preprocess assets/${vars.ukp_data}"
+    deps:
+      - ${vars.ukp_data}
+    outputs:
+      - "corpus/train.spacy"
+      - "corpus/val.spacy"
+      - "corpus/test.spacy"
+
+  - name: "train"
+    help: "Train a text classification model"
+    script:
+      - >-
+        python -m spacy train configs/${vars.config}
+        --paths.train corpus/train.sapcy
+        --paths.dev corpus/dev.spacy
+        --paths.test corpus/test.spacy
+        --gpu-id ${vars.gpu_id}
+        --output training/
+    deps:
+      - "corpus/train.spacy"
+      - "corpus/val.spacy"
+      - "corpus/test.spacy"
+    outputs:
+      - "training/model-best"
+
+  - name: "evaluate"
+    help: "Evaluate the model and export metrics"
+    script:
+      - >-
+        python -m spacy evaluate training/model-best corpus/test.spacy
+        --output metrics/scores.json
+        --gpu-id ${vars.gpu_id}
