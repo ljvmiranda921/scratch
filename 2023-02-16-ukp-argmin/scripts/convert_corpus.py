@@ -40,7 +40,7 @@ def convert_corpus(
     # fmt: on
 ):
     """Convert the raw annotations into the spaCy format"""
-    records = read_tsv(input_path.open("r"))
+    records = read_tsv(input_path.open("r", encoding="utf-8"))
     msg.info(f"Found {len(records)} records in {input_path}")
 
     datasets = set([record.get("dataset") for record in records])
