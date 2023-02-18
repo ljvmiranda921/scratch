@@ -6,12 +6,13 @@ import srsly
 from prodigy.components.db import connect
 from prodigy.components.loaders import get_stream
 from prodigy.core import recipe
-from prodigy.util import OPENAI_DEFAULTS, log, msg
+from prodigy.util import log, msg
 from tqdm import tqdm
 
-from .openai import (GLOBAL_STYLE, OpenAISuggester, PromptExample, _ItemT,
-                     get_api_credentials, get_resume_stream, load_template,
-                     normalize_label, read_prompt_examples)
+from scripts.recipes.openai import GLOBAL_STYLE, OPENAI_DEFAULTS, OpenAISuggester
+from scripts.recipes.openai import PromptExample, _ItemT, get_api_credentials
+from scripts.recipes.openai import get_resume_stream, load_template, normalize_label
+from scripts.recipes.openai import read_prompt_examples
 
 
 @dataclass

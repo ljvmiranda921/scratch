@@ -6,8 +6,8 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from random import shuffle
-from typing import (Any, Callable, ClassVar, Dict, Iterable, List, Optional,
-                    Tuple, Type, TypeVar)
+from typing import Any, Callable, ClassVar, Dict, Iterable, List, Optional
+from typing import Tuple, Type, TypeVar
 
 import jinja2
 import pydantic
