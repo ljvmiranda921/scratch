@@ -33,7 +33,7 @@ def convert_record(nlp: Language, record: Dict[str, str], categories: List[str])
     return doc
 
 
-def preprocess(
+def convert_corpus(
     # fmt: off
     input_path: Path = Arg(..., help="Path to the TSV file of UKP annotations."),
     output_dir: Path = Opt(CORPUS_DIR, dir_okay=True, help="Path to the output directory to store the spaCy files."),
@@ -64,4 +64,4 @@ def preprocess(
 
 
 if __name__ == "__main__":
-    typer.run(preprocess)
+    typer.run(convert_corpus)
