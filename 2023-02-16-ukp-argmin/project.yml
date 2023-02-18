@@ -20,6 +20,33 @@ description: |
   my work to empirical tests. However, if this work piqued your interest and
   you're working in HCI, let me know and we can collaborate!
 
+  ### Getting the OpenAI annotations
+
+  Make sure to [install Prodigy](https://prodi.gy/docs/install) as well as a few additional Python dependencies:
+
+  ```bash
+  python -m pip install prodigy -f https://XXXX-XXXX-XXXX-XXXX@download.prodi.gy
+  python -m pip install -r requirements.txt
+  ```
+
+  With `XXXX-XXXX-XXXX-XXXX` being your personal Prodigy license key.
+
+  Then, create a new API key from [openai.com](https://beta.openai.com/account/api-keys) or fetch an existing
+  one. Record the secret key as well as the [organization key](https://beta.openai.com/account/org-settings)
+  and make sure these are available as environmental variables. For instance, set them in a `.env` file in the
+  root directory:
+
+  ```
+  OPENAI_ORG = "org-..."
+  OPENAI_KEY = "sk-..."
+  ```
+
+  From there, you can run the following command to get batch annotations from OpenAI:
+
+  ```
+  python -m spacy project run openai
+  ```
+
 # These are the directories that the project needs. The project CLI will make
 # sure that they always exist.
 directories:
@@ -35,6 +62,7 @@ vars:
   config: "textcat.cfg"
   ukp_data: "minimum_wage.tsv"
   gpu_id: 0
+  prompt_template: "openai_zero_shot.jinja2"
 
 # Workflows are sequences of commands (see below) executed in order. You can
 # run them via "spacy project run [workflow]". If a commands's inputs/outputs
@@ -44,6 +72,10 @@ workflows:
     - preprocess
     - train
     - evaluate
+  openai:
+    - openai-preprocess
+    - openai-fetch
+    - openai-evaluate
 
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
@@ -53,9 +85,9 @@ commands:
   - name: "preprocess"
     help: "Convert the data to spaCy's binary format"
     script:
-      - "python -m scripts.preprocess assets/${vars.ukp_data}"
+      - "python -m scripts.convert_corpus assets/${vars.ukp_data}"
     deps:
-      - ${vars.ukp_data}
+      - "assets/${vars.ukp_data}"
     outputs:
       - "corpus/train.spacy"
       - "corpus/val.spacy"
@@ -85,3 +117,44 @@ commands:
         python -m spacy evaluate training/model-best corpus/test.spacy
         --output metrics/scores.json
         --gpu-id ${vars.gpu_id}
+    deps:
+      - "training/model-best"
+      - "corpus/test.spacy"
+    outputs:
+      - "metrics/scores.json"
+
+  - name: "openai-preprocess"
+    help: "Convert the corpus into JSONL files to load into Prodigy"
+    script:
+      - >-
+        python -m scripts.convert_to_jsonl assets/${vars.ukp_data} corpus/input_texts.jsonl
+        --dataset test
+    deps:
+      - "assets/${vars.ukp_data}"
+    outputs:
+      - "corpus/input_texts.jsonl"
+
+  - name: "openai-fetch"
+    help: "Run batch annotations using the `textcat.openai.fetch` recipe"
+    script:
+      - >-
+        python -m prodigy textcat.openai.fetch corpus/input_texts.jsonl corpus/openai_output.spacy
+        --labels NoArgument,Argument_Against,Argument_For
+        --data-to-spacy
+        -F ./recipes/textcat.py
+    deps:
+      - "corpus/input_texts.jsonl"
+    outputs:
+      - "corpus/openai_output.spacy"
+
+  - name: "openai-evaluate"
+    help: "Evaluate OpenAI annotations to the test data"
+    script:
+      - >-
+        python -m scripts.evaluate corpus/openai_output.spacy corpus/test.spacy
+        --output metrics/scores_openai.json
+    deps:
+      - "corpus/openai_output.spacy"
+      - "corpus/test.spacy"
+    outputs:
+      - "metrics/scores_openai.json"
