@@ -9,9 +9,10 @@ from prodigy.core import recipe
 from prodigy.util import log, msg
 from tqdm import tqdm
 
-from scripts.recipes.openai import GLOBAL_STYLE, OPENAI_DEFAULTS, OpenAISuggester
-from scripts.recipes.openai import PromptExample, _ItemT, get_api_credentials
-from scripts.recipes.openai import get_resume_stream, load_template, normalize_label
+from scripts.recipes.openai import GLOBAL_STYLE, OPENAI_DEFAULTS
+from scripts.recipes.openai import OpenAISuggester, PromptExample, _ItemT
+from scripts.recipes.openai import get_api_credentials, get_resume_stream
+from scripts.recipes.openai import load_template, normalize_label
 from scripts.recipes.openai import read_prompt_examples
 
 
