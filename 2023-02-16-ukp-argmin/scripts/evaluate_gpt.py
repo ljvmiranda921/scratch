@@ -50,7 +50,9 @@ def evaluate_gpt(
     examples = [Example(pred, ref) for pred, ref in zip(predicted, reference)]
 
     # Perform evaluation
-    scores = Scorer.score_cats(examples, attr="cats", labels=CATEGORY_MAP.values())
+    scores = Scorer.score_cats(
+        examples, attr="cats", labels=CATEGORY_MAP.values(), multi_label=False
+    )
     msg.text(title="Scores", text=scores)
     if output_path:
         msg.good(f"Saved metrics to {output_path}")
