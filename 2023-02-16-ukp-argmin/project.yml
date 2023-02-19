@@ -149,10 +149,10 @@ commands:
     help: "Evaluate OpenAI annotations to the test data"
     script:
       - >-
-        python -m scripts.evaluate corpus/openai_output.jsonl corpus/test.spacy
+        python -m scripts.evaluate_gpt corpus/openai_output.jsonl corpus/test.spacy
         --output metrics/scores_openai.json
     deps:
-      - "corpus/openai_output.spacy"
+      - "corpus/openai_output.jsonl"
       - "corpus/test.spacy"
     outputs:
       - "metrics/scores_openai.json"
