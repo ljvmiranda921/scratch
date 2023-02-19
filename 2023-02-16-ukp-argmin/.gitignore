@@ -165,5 +165,7 @@ training/
 metrics/
 pretraining/
 vectors/
+!corpus/test_data.jsonl
+!corpus/openai_output.jsonl
 corpus/
 project.lock
