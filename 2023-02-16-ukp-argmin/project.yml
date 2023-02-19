@@ -125,23 +125,23 @@ commands:
     help: "Convert the corpus into JSONL files to load into Prodigy"
     script:
       - >-
-        python -m scripts.convert_to_jsonl assets/${vars.ukp_data} corpus/input_texts.jsonl
+        python -m scripts.convert_to_jsonl assets/${vars.ukp_data} corpus/test_data.jsonl
         --dataset test
     deps:
       - "assets/${vars.ukp_data}"
     outputs:
-      - "corpus/input_texts.jsonl"
+      - "corpus/test_data.jsonl"
 
   - name: "openai-fetch"
     help: "Run batch annotations using the `textcat.openai.fetch` recipe"
     script:
       - >-
-        python -m prodigy textcat.openai.fetch corpus/input_texts.jsonl corpus/openai_output.spacy
-        --labels NoArgument,Argument_Against,Argument_For
+        python -m prodigy textcat.openai.fetch corpus/test_data.jsonl corpus/openai_output.jsonl
         --prompt-path scripts/recipes/openai_templates/${vars.prompt_template}
-        -F ./recipes/textcat.py
+        --labels Argument_for,Argument_against,NoArgument
+        -F ./scripts/recipes/textcat.py
     deps:
-      - "corpus/input_texts.jsonl"
+      - "corpus/test_data.jsonl"
     outputs:
       - "corpus/openai_output.spacy"
 
