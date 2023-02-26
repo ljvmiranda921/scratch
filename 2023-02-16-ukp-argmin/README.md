@@ -68,8 +68,9 @@ Commands are only re-run if their inputs have changed.
 | `train` | Train a text classification model |
 | `evaluate` | Evaluate the model and export metrics |
 | `openai-preprocess` | Convert the corpus into JSONL files to load into Prodigy |
-| `openai-fetch` | Run batch annotations using the `textcat.openai.fetch` recipe |
+| `openai-fetch-textcat` | Run batch annotations using the `textcat.openai.fetch` recipe |
 | `openai-evaluate` | Evaluate OpenAI annotations to the test data |
+| `openai-fetch-spans` | Run batch annotations using the `spans.openai.fetch` recipe |
 
 ### ⏭ Workflows
 
@@ -81,6 +82,6 @@ inputs have changed.
 | Workflow | Steps |
 | --- | --- |
 | `textcat` | `preprocess` &rarr; `train` &rarr; `evaluate` |
-| `openai` | `openai-preprocess` &rarr; `openai-fetch` &rarr; `openai-evaluate` |
+| `openai` | `openai-preprocess` &rarr; `openai-fetch-textcat` &rarr; `openai-evaluate` |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
