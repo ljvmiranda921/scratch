@@ -196,8 +196,8 @@ def openai_correct_textcat(
 @recipe(
     # fmt: off
     "textcat.openai.fetch",
-    file_path=("Path to jsonl data to annotate", "positional", None, str),
-    output_path=("Path to save the output", "positional", None, str),
+    source=("Data to annotate (file path or '-' to read from standard input)", "positional", None, str),
+    output_path=("Path to save the output", "positional", None, Path),
     labels=("Labels (comma delimited)", "option", "L", lambda s: s.split(",")),
     lang=("Language to use for tokenizer.", "option", "l", str),
     model=("GPT-3 model to use for completion", "option", "m", str),
@@ -212,8 +212,8 @@ def openai_correct_textcat(
     # fmt: on
 )
 def openai_fetch_textcat(
-    file_path: str,
-    output_path: str,
+    source: str,
+    output_path: Path,
     labels: List[str],
     lang: str = "en",
     model: str = "text-davinci-003",
@@ -224,6 +224,7 @@ def openai_fetch_textcat(
     max_examples: int = 2,
     exclusive_classes: bool = False,
     resume: bool = False,
+    loader: Optional[str] = None,
     verbose: bool = False,
 ):
     """
@@ -274,7 +275,10 @@ def openai_fetch_textcat(
     for eg in examples:
         openai.add_example(eg)
 
-    stream = list(srsly.read_jsonl(file_path))
+    # Set up the stream
+    stream = get_stream(
+        source, loader=loader, rehash=False, dedup=False, input_key="text"
+    )
     # If we want to resume, we take the path to the cache and
     # compare the hashes with respect to our inputs.
     if resume:
