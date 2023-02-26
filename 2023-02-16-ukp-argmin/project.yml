@@ -74,7 +74,7 @@ workflows:
     - evaluate
   openai:
     - openai-preprocess
-    - openai-fetch
+    - openai-fetch-textcat
     - openai-evaluate
 
 # Project commands, specified in a style similar to CI config files (e.g. Azure
@@ -132,7 +132,7 @@ commands:
     outputs:
       - "corpus/test_data.jsonl"
 
-  - name: "openai-fetch"
+  - name: "openai-fetch-textcat"
     help: "Run batch annotations using the `textcat.openai.fetch` recipe"
     script:
       - >-
@@ -156,3 +156,6 @@ commands:
       - "corpus/test.spacy"
     outputs:
       - "metrics/scores_openai.json"
+
+  - name: "openai-fetch-spans"
+    help: "Run batch annotations using the `spans.openai.fetch` recipe"
