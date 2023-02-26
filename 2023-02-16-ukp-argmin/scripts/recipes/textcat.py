@@ -1,9 +1,9 @@
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable, Dict, Iterable, List, Optional, Union
 
 import spacy
 import srsly
-from prodigy.components.db import connect
 from prodigy.components.loaders import get_stream
 from prodigy.core import recipe
 from prodigy.util import log, msg
@@ -110,8 +110,8 @@ def openai_correct_textcat(
     model: str = "text-davinci-003",
     batch_size: int = 10,
     segment: bool = False,
-    prompt_path: str = OPENAI_DEFAULTS.TEXTCAT_PROMPT_PATH,
-    examples_path: Optional[str] = None,
+    prompt_path: Path = OPENAI_DEFAULTS.TEXTCAT_PROMPT_PATH,
+    examples_path: Optional[Path] = None,
     max_examples: int = 2,
     exclusive_classes: bool = False,
     loader: Optional[str] = None,
@@ -129,6 +129,10 @@ def openai_correct_textcat(
 
     if segment:
         nlp.add_pipe("sentencizer")
+
+    if not labels:
+        msg.fail("No --label argument set", exits=1)
+    msg.text(f"Using {len(labels)} labels from model: {', '.join(labels)}")
 
     if not exclusive_classes and len(labels) == 1:
         msg.warn(
@@ -158,13 +162,6 @@ def openai_correct_textcat(
     )
     for eg in examples:
         openai.add_example(eg)
-    if max_examples >= 1:
-        db = connect()
-        db_examples = db.get_dataset(dataset)
-        if db_examples:
-            for eg in db_examples:
-                if PromptExample.is_flagged(eg):
-                    openai.add_example(PromptExample.from_prodigy(eg, openai.labels))
 
     # Set up the stream
     stream = get_stream(
@@ -222,8 +219,8 @@ def openai_fetch_textcat(
     model: str = "text-davinci-003",
     batch_size: int = 10,
     segment: bool = False,
-    prompt_path: str = OPENAI_DEFAULTS.TEXTCAT_PROMPT_PATH,
-    examples_path: Optional[str] = None,
+    prompt_path: Path = OPENAI_DEFAULTS.TEXTCAT_PROMPT_PATH,
+    examples_path: Optional[Path] = None,
     max_examples: int = 2,
     exclusive_classes: bool = False,
     resume: bool = False,
@@ -243,6 +240,10 @@ def openai_fetch_textcat(
 
     if segment:
         nlp.add_pipe("sentencizer")
+
+    if not labels:
+        msg.fail("No --label argument set", exits=1)
+    msg.text(f"Using {len(labels)} labels from model: {', '.join(labels)}")
 
     if not exclusive_classes and len(labels) == 1:
         msg.warn(
