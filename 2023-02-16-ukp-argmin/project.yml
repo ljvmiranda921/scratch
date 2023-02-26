@@ -136,14 +136,14 @@ commands:
     help: "Run batch annotations using the `textcat.openai.fetch` recipe"
     script:
       - >-
-        python -m prodigy textcat.openai.fetch corpus/test_data.jsonl corpus/openai_output.jsonl
-        --prompt-path scripts/recipes/openai_templates/${vars.prompt_template}
+        python -m prodigy textcat.openai.fetch corpus/test_data.jsonl corpus/textcat-openai-fetch_output.jsonl
+        --prompt-path scripts/recipes/openai_templates/openai_zero_shot.jinja2
         --labels Argument_for,Argument_against,NoArgument
         -F ./scripts/recipes/textcat.py
     deps:
       - "corpus/test_data.jsonl"
     outputs:
-      - "corpus/openai_output.spacy"
+      - "corpus/textcat-openai-fetch_output.spacy"
 
   - name: "openai-evaluate"
     help: "Evaluate OpenAI annotations to the test data"
@@ -159,3 +159,13 @@ commands:
 
   - name: "openai-fetch-spans"
     help: "Run batch annotations using the `spans.openai.fetch` recipe"
+    script:
+      - >-
+        python -m prodigy spans.openai.fetch corpus/test_data.jsonl corpus/spans-openai-fetch_output.jsonl
+        --prompt-path scripts/recipes/openai_templates/openai_highlight_claims.jinja2
+        --labels Premise,Claim
+        -F ./scripts/recipes/spans.py
+    deps:
+      - "corpus/test_data.jsonl"
+    outputs:
+      - "corpus/spans-openai-fetch_output.jsonl"
