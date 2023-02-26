@@ -112,9 +112,8 @@ class OPENAI_DEFAULTS:
     # prompt paths #
     # fmt: off
     TEMPLATES_DIR = "openai_templates"
-    TEXTCAT_PROMPT_PATH = str(Path(__file__).parent / TEMPLATES_DIR / "textcat_prompt.jinja2")
-    NER_PROMPT_PATH = str(Path(__file__).parent / TEMPLATES_DIR / "ner_prompt.jinja2")
-    TERMS_PROMPT_PATH = str(Path(__file__).parent / TEMPLATES_DIR / "terms_prompt.jinja2")
+    TEXTCAT_PROMPT_PATH = Path(__file__).parent / TEMPLATES_DIR / "textcat_prompt.jinja2"
+    SPAN_PROMPT_PATH = Path(__file__).parent / TEMPLATES_DIR / "span_prompt.jinja2"
     # fmt: on
 
     # html templates #
@@ -135,7 +134,7 @@ class OPENAI_DEFAULTS:
     </details>
     </div>
     """
-    NER_HTML_TEMPLATE = """
+    TEXTCAT_WITH_CLAIMS_HTML_TEMPLATE = """
     <div class="cleaned">
     <details>
         <summary>Show the prompt for OpenAI</summary>
