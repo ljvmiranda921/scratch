@@ -169,3 +169,16 @@ commands:
       - "corpus/test_data.jsonl"
     outputs:
       - "corpus/spans-openai-fetch_output.jsonl"
+
+  - name: "openai-fetch-cot"
+    help: "Run batch annotations using the `textcat.openai.fetch` recipe using chain-of-thought"
+    script:
+      - >-
+        python -m prodigy textcat.openai.fetch corpus/test_data.jsonl corpus/cot-openai-fetch_output.jsonl
+        --prompt-path scripts/recipes/openai_templates/openai_chain_of_thought.jinja2
+        --labels Argument_for,Argument_against,NoArgument
+        -F ./scripts/recipes/textcat.py
+    deps:
+      - "corpus/test_data.jsonl"
+    outputs:
+      - "corpus/cot-openai-fetch_output.spacy"

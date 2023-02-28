@@ -71,6 +71,7 @@ Commands are only re-run if their inputs have changed.
 | `openai-fetch-textcat` | Run batch annotations using the `textcat.openai.fetch` recipe |
 | `openai-evaluate` | Evaluate OpenAI annotations to the test data |
 | `openai-fetch-spans` | Run batch annotations using the `spans.openai.fetch` recipe |
+| `openai-fetch-cot` | Run batch annotations using the `textcat.openai.fetch` recipe using chain-of-thought |
 
 ### ⏭ Workflows
 
