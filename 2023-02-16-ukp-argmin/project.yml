@@ -2,7 +2,7 @@ title: "GPT-3 annotation for argument mining"
 description: |
   Accompanying spaCy project for my blog post, [*GPT-3 for
   argument mining
-  annotation*](https://ljvmiranda921.github.io/notebook/2023/03/28/chain-of-thought-annotation/), where
+  annotation*](https://ljvmiranda921.github.io/notebook/2023/03/28/llm-annotation/), where
   I explored how LLM-assisted annotation can help in complex annotation tasks.
 
   I am using an argument mining dataset from the [UKP Sentential Argument Mining
