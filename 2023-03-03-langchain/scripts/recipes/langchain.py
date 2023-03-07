@@ -69,6 +69,7 @@ def _load_stuff_chain(
     )
     return stuff.StuffDocumentsChain(
         llm_chain=llm_chain,
+        input_key=document_variable_name,
         document_variable_name=document_variable_name,
         verbose=verbose,
         callback_manager=callback_manager,
@@ -130,6 +131,7 @@ def _load_map_reduce_chain(
         )
     return map_reduce.MapReduceDocumentsChain(
         llm_chain=map_chain,
+        input_key=map_reduce_document_variable_name,
         combine_document_chain=combine_document_chain,
         document_variable_name=map_reduce_document_variable_name,
         collapse_document_chain=collapse_chain,
@@ -165,6 +167,7 @@ def _load_refine_chain(
     )
     return refine.RefineDocumentsChain(
         initial_llm_chain=initial_chain,
+        input_key=document_variable_name,
         refine_llm_chain=refine_chain,
         document_variable_name=document_variable_name,
         initial_response_name=initial_response_name,
@@ -190,6 +193,7 @@ def _load_map_rerank_chain(
     return map_rerank.MapRerankDocumentsChain(
         llm_chain=llm_chain,
         rank_key=rank_key,
+        input_key=document_variable_name,
         answer_key=answer_key,
         document_variable_name=document_variable_name,
         verbose=verbose,

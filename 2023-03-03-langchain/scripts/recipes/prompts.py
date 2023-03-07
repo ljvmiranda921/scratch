@@ -6,12 +6,6 @@ Reference: https://langchain.readthedocs.io/en/latest/modules/indexes/combine_do
 from langchain.prompts import PromptTemplate
 from langchain.prompts.base import RegexParser
 
-output_parser = RegexParser(
-    regex=r"answer:(.*)",
-    output_keys=["answer"],
-    default_output_key="answer",
-)
-
 output_parser_scored = RegexParser(
     regex=r"answer:(.*)\nscore:(.*)",
     output_keys=["answer", "score"],
@@ -38,9 +32,7 @@ class Stuff:
     Text: {question}
     """
     prompt = PromptTemplate(
-        template=PROMPT_TMPL,
-        input_variables=["context", "question"],
-        output_parser=output_parser,
+        template=PROMPT_TMPL, input_variables=["context", "question"]
     )
 
 
@@ -72,9 +64,7 @@ class MapReduce:
     {summaries}
     """
     combine_prompt = PromptTemplate(
-        template=COMBINE_PROMPT_TMPL,
-        input_variables=["summaries", "question"],
-        output_parser=output_parser,
+        template=COMBINE_PROMPT_TMPL, input_variables=["summaries", "question"]
     )
 
 
@@ -126,9 +116,7 @@ class Refine:
     {question}
     """
     question_prompt = PromptTemplate(
-        template=QUESTION_PROMPT_TPL,
-        input_variables=["context", "question"],
-        output_parser=output_parser,
+        template=QUESTION_PROMPT_TPL, input_variables=["context", "question"]
     )
 
     REFINE_PROMPT_TPL = """
