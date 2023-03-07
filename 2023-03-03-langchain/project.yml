@@ -50,6 +50,7 @@ directories:
 # Variables can be referenced across the project.yml using ${vars.var_name}
 vars:
   source_name: "minimum_wage"
+  dataset: "train"
   annotation_guideline: "morante2020"
   config: "textcat.cfg"
   gpu_id: 0
@@ -108,39 +109,44 @@ workflows:
 # shown when executing "spacy project run [optional command] [path] --help".
 commands:
   - name: "convert"
-    help: "Convert UKP's TSV file into a JSONL format compatible with Prodigy"
+    help: "Convert UKP's TSV file into both JSONL and spaCy formats"
     script:
       - mkdir -p corpus/jsonl/${vars.source_name}/
       - python -m scripts.convert assets/${vars.source_name}.tsv corpus/jsonl/${vars.source_name}/ --jsonl
+      - mkdir -p corpus/spacy/${vars.source_name}/
+      - python -m scripts.convert assets/${vars.source_name}.tsv corpus/spacy/${vars.source_name}/
     deps:
       - assets/${vars.source_name}.tsv
     outputs:
       - corpus/jsonl/${vars.source_name}/train.jsonl
       - corpus/jsonl/${vars.source_name}/val.jsonl
       - corpus/jsonl/${vars.source_name}/test.jsonl
+      - corpus/spacy/${vars.source_name}/train.jsonl
+      - corpus/spacy/${vars.source_name}/val.jsonl
+      - corpus/spacy/${vars.source_name}/test.jsonl
 
   - name: "fetch"
     help: "Run an LLM-assisted textcat.fetch recipe to label text in bulk"
     script:
       - >-
         python -m prodigy run langchain.textcat.fetch
-        corpus/jsonl/${vars.source_name}/train.jsonl outputs/langchain-${vars.annotation_guideline}.jsonl
+        corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
         --annotation-guideline assets/guidelines/${vars.annotation_guideline}.pdf
         -F scripts/recipes/textcat.py
     deps:
-      - corpus/${vars.source_name}.jsonl
+      - corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl
       - assets/guidelines/${vars.annotation_guideline}.pdf
     outputs:
-      - outputs/langchain-${vars.annotation_guideline}.jsonl
+      - outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
 
   - name: "evaluate"
     help: "Evaluate zero-shot predictions on a gold-annotated dataset"
     script:
       - >-
-        python -m scripts.evaluate assets/minimum_wage.tsv outputs/langchain-${vars.annotation_guideline}.jsonl
-        --output-path metrics/langchain-${vars.annotation_guideline}.pdf
+        python -m scripts.evaluate corpus/spacy/${vars.source_name}/${vars.dataset}.spacy outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
+        --output-path metrics/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
     deps:
-      - assets/minimum_wage.tsv
-      - outputs/langchain-${vars.annotation_guideline}.jsonl
+      - corpus/spacy/${vars.source_name}/${vars.dataset}.spacy
+      - outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
     outputs:
-      - metrics/langchain-${vars.annotation_guideline}.pdf
+      - metrics/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
