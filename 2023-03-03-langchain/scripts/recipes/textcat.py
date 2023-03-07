@@ -22,7 +22,7 @@ from prodigy.util import log, msg, set_hashes
 from spacy.language import Language
 from tqdm import tqdm
 
-from .langchain import load_prodigy_chain
+from scripts.recipes.langchain import load_prodigy_chain
 
 
 @recipe(
