@@ -51,6 +51,7 @@ directories:
 vars:
   source_name: "minimum_wage"
   dataset: "train"
+  chain_type: "stuff"
   annotation_guideline: "morante2020"
   config: "textcat.cfg"
   gpu_id: 0
@@ -132,6 +133,7 @@ commands:
         python -m prodigy langchain.textcat.fetch
         corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
         --annotation-guideline assets/guidelines/${vars.annotation_guideline}.pdf
+        --chain-type ${vars.chain_type}
         -F scripts/recipes/textcat.py
     deps:
       - corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl
