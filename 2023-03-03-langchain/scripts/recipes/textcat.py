@@ -186,7 +186,8 @@ class Suggester:
         """Split the stream into batches and get the response from LangChain"""
         for batch in self._batch_sequence(stream, batch_size):
             responses: List[str] = [
-                chain.run(question=eg, context=self.pages) for eg in batch
+                chain.run(question=eg.get("text", ""), context=self.pages)
+                for eg in batch
             ]
             for eg, response in zip(batch, responses):
                 eg["llm"] = {"response": response}
