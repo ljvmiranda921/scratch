@@ -10,9 +10,9 @@ class Stuff:
     """Stuff all the related data into the prompt as context to pass to the
     language model"""
 
-    _prompt_template = ""
+    _prompt_template = "{text} {pages}"
     prompt = PromptTemplate(
-        template=_prompt_template, input_variables=["context", "question"]
+        template=_prompt_template, input_variables=["text", "pages"]
     )
 
 
@@ -20,13 +20,13 @@ class MapReduce:
     """Create an initial prompt on each chunk of data. Then a different prompt
     is run to combine all the initial outputs."""
 
-    _prompt_template = ""
+    _prompt_template = "{text} {pages}"
     question_prompt = PromptTemplate(
-        template=_prompt_template, input_variables=["context", "question"]
+        template=_prompt_template, input_variables=["text", "pages"]
     )
 
     combine_prompt = PromptTemplate(
-        template=_prompt_template, input_variables=["context", "question"]
+        template=_prompt_template, input_variables=["text", "pages"]
     )
 
 
@@ -35,9 +35,9 @@ class MapRerank:
     how certain it is in its answer. The responses are ranked according to this
     score, and the highest score is returned."""
 
-    _prompt_template = ""
+    _prompt_template = "{text} {pages}"
     prompt = PromptTemplate(
-        template=_prompt_template, input_variables=["context", "question"]
+        template=_prompt_template, input_variables=["text", "pages"]
     )
 
 
@@ -47,11 +47,11 @@ class Refine:
     based on that new document.
     """
 
-    _prompt_template = ""
+    _prompt_template = "{text} {pages}"
     question_prompt = PromptTemplate(
-        template=_prompt_template, input_variables=["context", "question"]
+        template=_prompt_template, input_variables=["text", "pages"]
     )
 
     refine_prompt = PromptTemplate(
-        template=_prompt_template, input_variables=["context", "question"]
+        template=_prompt_template, input_variables=["text", "pages"]
     )
