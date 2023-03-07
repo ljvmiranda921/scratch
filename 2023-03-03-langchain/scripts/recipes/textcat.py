@@ -111,6 +111,8 @@ def get_api_credentials() -> Tuple[str, str]:
     load_dotenv()
     api_key = os.getenv("PRODIGY_OPENAI_KEY")
     api_org = os.getenv("PRODIGY_OPENAI_ORG")
+    if api_key is None or api_org is None:
+        msg.fail("Can't find API credentials from the environment.", exit=1)
     return api_key, api_org
 
 
