@@ -124,8 +124,7 @@ commands:
     script:
       - >-
         python -m prodigy run langchain.textcat.fetch
-        corpus/${vars.source_name}.jsonl outputs/langchain-${vars.annotation_guideline}.jsonl
-        --labels Claim,No_Claim
+        corpus/jsonl/${vars.source_name}/train.jsonl outputs/langchain-${vars.annotation_guideline}.jsonl
         --annotation-guideline assets/guidelines/${vars.annotation_guideline}.pdf
         -F scripts/recipes/textcat.py
     deps:

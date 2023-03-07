@@ -30,7 +30,6 @@ from .langchain import load_prodigy_chain
     "langchain.textcat.fetch",
     source=("Data to annotate (file path or '-' to read from standard input)", "positional", None, str),
     output_path=("Path to save the output", "positional", None, Path),
-    labels=("Labels (comma delimited)", "option", "L", lambda s: s.split(",")),
     annotation_guideline=("Path to the PDF annotation guideline", "option", "G", Path),
     lang=("Language to initialize spaCy model", "option", "l", str),
     chain_type=("Prompt-style to use for combining documents", "option", "C", str),
@@ -45,7 +44,6 @@ from .langchain import load_prodigy_chain
 def langchain_textcat_fetch(
     source: Union[str, Iterable[Dict]],
     output_path: Path,
-    labels: List[str],
     annotation_guideline: Path,
     lang: str = "en",
     chain_type: str = "stuff",
@@ -73,11 +71,6 @@ def langchain_textcat_fetch(
     if segment:
         nlp.add_pipe("sentencizer")
 
-    # Setup and validate the labels
-    if not labels:
-        msg.fail("No --labels argument set", exits=0)
-    msg.text(f"Using {len(labels)}: {', '.join(labels)}")
-
     # Setup and validate the annotation guideline's filepath
     if not annotation_guideline.exists():
         msg.fail(
@@ -92,7 +85,7 @@ def langchain_textcat_fetch(
     llm = OpenAI(openai_api_key=api_key, model_name=model, temperature=temperature)
 
     # Setup the stream and the Prodigy UI
-    suggester = Suggester(llm, pages, labels=labels, segment=segment)
+    suggester = Suggester(llm, pages, segment=segment)
     stream = get_stream(
         source, loader=loader, rehash=True, dedup=True, input_key="text"
     )
@@ -148,12 +141,10 @@ class Suggester:
         llm: BaseLLM,
         pages: List[Document],
         *,
-        labels: List[str],
         segment: bool,
     ):
         self.llm = llm
         self.pages = pages
-        self.labels = labels
         self.segment = segment
 
     def __call__(
@@ -193,7 +184,7 @@ class Suggester:
         """Split the stream into batches and get the response from LangChain"""
         for batch in self._batch_sequence(stream, batch_size):
             responses: List[str] = [
-                chain.run(text=eg, labels=self.labels, pages=self.pages) for eg in batch
+                chain.run(text=eg, pages=self.pages) for eg in batch
             ]
             for eg, response in zip(batch, responses):
                 eg["llm"] = {"response": response}
