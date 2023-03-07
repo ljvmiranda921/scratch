@@ -13,7 +13,7 @@ from langchain.docstore.document import Document
 from langchain.document_loaders import PagedPDFSplitter
 from langchain.llms import OpenAI
 from langchain.llms.base import BaseLLM
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import SpacyTextSplitter
 from prodigy.components import preprocess
 from prodigy.components.loaders import get_stream
 from prodigy.core import recipe
@@ -118,7 +118,7 @@ def load_document(file_path: Path) -> List[Document]:
     """Load PDF document and return its pages"""
     loader = PagedPDFSplitter(str(file_path))
     pages = loader.load_and_split(
-        text_splitter=RecursiveCharacterTextSplitter(chunk_size=50, chunk_overlap=0)
+        text_splitter=SpacyTextSplitter(pipeline="en_core_web_sm")
     )
     return pages
 
