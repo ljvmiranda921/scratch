@@ -143,7 +143,7 @@ def _load_refine_chain(
     llm: BaseLLM,
     question_prompt: BasePromptTemplate = Refine.question_prompt,
     refine_prompt: BasePromptTemplate = Refine.refine_prompt,
-    document_variable_name: str = "context_str",
+    document_variable_name: str = "context",
     initial_response_name: str = "existing_answer",
     refine_llm: Optional[BaseLLM] = None,
     verbose: Optional[bool] = None,
