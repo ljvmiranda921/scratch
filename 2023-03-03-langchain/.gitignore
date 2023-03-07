@@ -167,3 +167,4 @@ pretraining/
 vectors/
 corpus/
 project.lock
+outputs/
