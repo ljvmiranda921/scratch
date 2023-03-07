@@ -192,6 +192,10 @@ class Suggester:
                 eg["llm"] = {"response": response}
                 yield eg
 
+    def set_hashes(self, stream: Iterable[TaskType]) -> Iterable[TaskType]:
+        for example in stream:
+            yield set_hashes(example)
+
     def format_suggestions(
         self, stream: Iterable[TaskType], nlp: Language
     ) -> Iterable[TaskType]:
