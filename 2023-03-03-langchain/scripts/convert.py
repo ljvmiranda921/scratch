@@ -48,7 +48,9 @@ def read_tsv(tsv_file) -> List[Dict[str, str]]:
     return records
 
 
-def records_to_spacy(records, lang: str = "en") -> Dict[str, DocBin]:
+def records_to_spacy(
+    records: List[Dict[str, str]], lang: str = "en"
+) -> Dict[str, DocBin]:
     datasets: List[str] = set([record.get("dataset") for record in records])
     categories: List[str] = set([record.get("label") for record in records])
     nlp = spacy.blank(lang)
@@ -73,7 +75,7 @@ def records_to_spacy(records, lang: str = "en") -> Dict[str, DocBin]:
     return corpora
 
 
-def records_to_jsonl(records) -> Dict[str, List[Dict[str, str]]]:
+def records_to_jsonl(records: List[Dict[str, str]]) -> Dict[str, List[Dict[str, str]]]:
     datasets: List[str] = set([record.get("dataset") for record in records])
     corpora = {
         dataset: [record for record in records if record.get("dataset") == dataset]
