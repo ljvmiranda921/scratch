@@ -3,7 +3,7 @@
 import copy
 import os
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 import spacy
 import srsly
@@ -23,6 +23,7 @@ from spacy.language import Language
 from tqdm import tqdm
 
 from scripts.recipes.langchain import load_prodigy_chain
+from scripts.parsers import get_parser
 
 
 @recipe(
@@ -32,7 +33,7 @@ from scripts.recipes.langchain import load_prodigy_chain
     output_path=("Path to save the output", "positional", None, Path),
     annotation_guideline=("Path to the PDF annotation guideline", "option", "G", Path),
     lang=("Language to initialize spaCy model", "option", "l", str),
-    chain_type=("Prompt-style to use for combining documents", "option", "C", str),
+    chain_type=("Prompt-style to use for combining documents. Choose from 'stuff', 'map_reduce', 'map_rerank', or 'refine'", "option", "C", str),
     model=("GPT-3 model to use for completion", "option", "m", str),
     segment=("Split sentences passed to the source", "flag", "S", bool),
     temperature=("Temperature parameter to control LLM generation", "option", "t", float),
@@ -85,7 +86,12 @@ def langchain_textcat_fetch(
     llm = OpenAI(openai_api_key=api_key, model_name=model, temperature=temperature)
 
     # Setup the stream and the Prodigy UI
-    suggester = Suggester(llm, pages, segment=segment)
+    suggester = Suggester(
+        llm,
+        pages,
+        segment=segment,
+        response_parser=get_parser(annotation_guideline),
+    )
     stream = get_stream(
         source, loader=loader, rehash=True, dedup=True, input_key="text"
     )
@@ -143,11 +149,13 @@ class Suggester:
         llm: BaseLLM,
         pages: List[Document],
         *,
+        response_parser: Callable,
         segment: bool,
     ):
         self.llm = llm
         self.pages = pages
         self.segment = segment
+        self.response_parser = response_parser
 
     def __call__(
         self,
@@ -189,6 +197,7 @@ class Suggester:
                 chain.run(question=eg.get("text", ""), context=self.pages)
                 for eg in batch
             ]
+            breakpoint()
             for eg, response in zip(batch, responses):
                 eg["llm"] = {"response": response}
                 yield eg
@@ -208,7 +217,7 @@ class Suggester:
                 example["meta"] = {}
 
             response = example["llm"].get("response", "")
-            example.update(self._parse_response(response, example))
+            example.update(self.response_parser(response, example))
             yield example
 
     def _batch_sequence(
@@ -222,7 +231,3 @@ class Suggester:
                 batch = []
         if batch:
             yield batch
-
-    def _parse_response(response: str, example: TaskType) -> Dict[str, Any]:
-        # TODO
-        ...
