@@ -42,9 +42,9 @@ def make_naive_parser(
             if label.lower() in response.strip().lower():
                 accept = label
                 break
-            else:
-                msg.warn(f"Cannot parse: '{response}'. Will set to '{default}'")
-                accept = default
+        else:
+            msg.warn(f"Cannot parse: '{response}'. Will set to '{default}'")
+            accept = default
 
         return {
             "options": [{"id": label, "text": label} for label in labels],
