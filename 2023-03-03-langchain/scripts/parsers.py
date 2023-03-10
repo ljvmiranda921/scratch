@@ -9,54 +9,47 @@ Although some tasks are binary classification problems. I opted to parse them as
 an exclusive multilabel classification problem.
 """
 
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List
 
 from pathlib import Path
 from prodigy.util import msg
-from prodigy.types import TaskType
+
+LABELS = {
+    # fmt: off
+    "levy2018": {"labels": ["Accept", "Reject"], "default": "Reject"},
+    "morante2020": {"labels": ["Claim", "No claim"], "default": "No claim"},
+    "shnarch2018": {"labels": ["Accept", "Reject"], "default": "Reject"},
+    "stab2018": {"labels": ["Non-argument", "Supporting argument", "Opposing argument"], "default": "Non-argument"},
+    # fmt: on
+}
 
 
 def get_parser(file: Path) -> Callable:
-    if file.stem not in PARSERS.keys():
-        msg.fail(f"Cannot find parser for {file}. Available: {PARSERS.keys()}", exit=1)
-    parser = PARSERS.get(file.stem)
-    return parser
+    if file.stem not in LABELS.keys():
+        msg.fail(f"Cannot find parser for {file}. Available: {LABELS.keys()}", exit=1)
+
+    labels = LABELS.get(file.stem).get("labels")
+    default = LABELS.get(file.stem).get("default")
+    return make_naive_parser(labels=labels, default=default)
 
 
-def _parse_levy2018():
-    pass
+def make_naive_parser(
+    labels: List[str],
+    default: str,
+) -> Callable:
+    def _naive_parser(response: str) -> Dict[str, Any]:
+        for label in labels:
+            if label.lower() in response.strip().lower():
+                accept = label
+                break
+            else:
+                msg.warn(f"Cannot parse: '{response}'. Will set to '{default}'")
+                accept = default
 
+        return {
+            "options": [{"id": label, "text": label} for label in labels],
+            "answer": "accept",
+            "accept": [accept],
+        }
 
-def _parse_morante2020():
-    pass
-
-
-def _parse_shnarch2018():
-    pass
-
-
-def _parse_stab2018(
-    response: str,
-    example: Optional[TaskType] = None,
-    labels: List[str] = ["Non-argument", "Supporting argument", "Opposing argument"],
-) -> Dict[str, Any]:
-    for label in labels:
-        if label.lower() in response.strip().lower():
-            accept = label
-            break
-        else:
-            msg.warn(f"Cannot parse: '{response}'. Will set to 'Non-argument'")
-            accept = "Non-argument"
-    return {
-        "options": [{"id": label, "text": label} for label in labels],
-        "answer": "accept",
-        "accept": [accept],
-    }
-
-
-PARSERS: Dict[str, Callable] = {
-    "levy2018": _parse_levy2018,
-    "morante2020": _parse_morante2020,
-    "shnarch2018": _parse_shnarch2018,
-    "stab2018": _parse_stab2018,
-}
+    return _naive_parser
