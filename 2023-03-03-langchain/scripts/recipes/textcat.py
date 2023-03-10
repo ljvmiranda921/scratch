@@ -197,7 +197,6 @@ class Suggester:
                 chain.run(question=eg.get("text", ""), context=self.pages)
                 for eg in batch
             ]
-            breakpoint()
             for eg, response in zip(batch, responses):
                 eg["llm"] = {"response": response}
                 yield eg
@@ -217,7 +216,7 @@ class Suggester:
                 example["meta"] = {}
 
             response = example["llm"].get("response", "")
-            example.update(self.response_parser(response, example))
+            example.update(self.response_parser(response))
             yield example
 
     def _batch_sequence(
