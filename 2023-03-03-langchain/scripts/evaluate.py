@@ -57,6 +57,8 @@ def evaluate(
     examples = [Example(pred, ref) for pred, ref in zip(pred_docs, ref_docs)]
     msg.text(f"Found {len(examples)} examples")
     labels = get_labels(predicted)
+    if normalize_labels:
+        labels = [normalize(label) for label in labels]
     scores = Scorer.score_cats(examples, attr="cats", labels=labels, multi_label=False)
     msg.text(title="Scores", text=scores)
     if output_path:
