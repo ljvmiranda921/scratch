@@ -50,10 +50,9 @@ directories:
 # Variables can be referenced across the project.yml using ${vars.var_name}
 vars:
   source_name: "minimum_wage"
-  dataset: "train"
-  chain_type: "stuff"
-  annotation_guideline: "morante2020"
-  config: "textcat.cfg"
+  dataset: "test"
+  chain_type: "refine"
+  annotation_guideline: "stab2018"
   gpu_id: 0
 
 # Assets that should be downloaded or available in the directory. But the
@@ -142,10 +141,12 @@ commands:
       - outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
 
   - name: "evaluate"
-    help: "Evaluate zero-shot predictions on a gold-annotated dataset"
+    help: "Evaluate predictions on a gold-annotated dataset"
     script:
       - >-
-        python -m scripts.evaluate corpus/spacy/${vars.source_name}/${vars.dataset}.spacy outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
+        python -m scripts.evaluate 
+        corpus/spacy/${vars.source_name}/${vars.dataset}.spacy 
+        outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.spacy
         --output-path metrics/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
     deps:
       - corpus/spacy/${vars.source_name}/${vars.dataset}.spacy
