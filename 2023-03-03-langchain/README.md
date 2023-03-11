@@ -52,9 +52,9 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `preprocess` | Convert UKP's TSV file into a JSONL format compatible with Prodigy |
+| `convert` | Convert UKP's TSV file into both JSONL and spaCy formats |
 | `fetch` | Run an LLM-assisted textcat.fetch recipe to label text in bulk |
-| `evaluate` | Evaluate zero-shot predictions on a gold-annotated dataset |
+| `evaluate` | Evaluate predictions on a gold-annotated dataset |
 
 ### ⏭ Workflows
 
@@ -65,7 +65,7 @@ inputs have changed.
 
 | Workflow | Steps |
 | --- | --- |
-| `all` | `preprocess` &rarr; `fetch` &rarr; `evaluate` |
+| `all` | `convert` &rarr; `fetch` &rarr; `evaluate` |
 
 ### 🗂 Assets
 
@@ -77,7 +77,7 @@ in the project directory.
 | --- | --- | --- |
 | `assets/guidelines/morante2020.pdf` | URL | Annotation guidelines from [Morante et al. (2020)](https://aclanthology.org/2020.lrec-1.611) for context-independent claim-like sentence detection. The original guidelines are from https://git.io/J1OKR and the IAA is measured by its token-level annotation F-score, which in this case is 42.4. |
 | `assets/guidelines/levy2018.pdf` | URL | Annotation guidelines from [Levy at al. (2018)](https://aclanthology.org/C18-1176/) for context-dependent claim-detection.  Here, the term claim refers to the "assertion the argument aims to prove" or simply, the conclusion. The IAA, using Cohen's kappa metric, is 0.58. |
-| `assets/guidelines/stab2018.pdf` | URL | Annotation guidelines from [Stab et al. (2018)](https://aclanthology.org/D18-1402/) for context-dependent claim and premise detection. The UKP dataset came from this work.  Sometimes, it contains statements of general topics that do not reflect a conclusion in itself. In the original paper, they also require the annotators to distinguish between supporting and opposing arguments. The IAA, using Cohen's kappa metric, is 0.721 for two expert annotators and 0.40 for non-experts. |
+| `assets/guidelines/stab2018.pdf` | URL | Annotation guidelines from [Stab et al. (2018)](https://aclanthology.org/D18-1402/) for context-dependent claim and premise detection. The UKP dataset came from this work.  Sometimes, it contains statements of general topics that do not reflect a conclusion in itself. In the original paper, they also require the annotators to distinguish between supporting and Argument_againsts. The IAA, using Cohen's kappa metric, is 0.721 for two expert annotators and 0.40 for non-experts. |
 | `assets/guidelines/shnarch2018.pdf` | URL | Annotation guidelines from [Shnarch et al. (2018)](https://aclanthology.org/2020.findings-emnlp.243/) for context-dependent claim and premise detection. They use the term claim as meaning the conclusion and premise as a type of evidence. The IAA, using Fleiss' kappa metric, is 0.45. |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->

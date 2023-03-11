@@ -82,7 +82,7 @@ assets:
       and premise detection. The UKP dataset came from this work.  Sometimes, it
       contains statements of general topics that do not reflect a conclusion in
       itself. In the original paper, they also require the annotators to
-      distinguish between supporting and opposing arguments. The IAA, using
+      distinguish between supporting and Argument_againsts. The IAA, using
       Cohen's kappa metric, is 0.721 for two expert annotators and 0.40 for
       non-experts.
   - dest: "assets/guidelines/shnarch2018.pdf"
@@ -145,8 +145,8 @@ commands:
     script:
       - >-
         python -m scripts.evaluate 
-        corpus/spacy/${vars.source_name}/${vars.dataset}.spacy 
-        outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.spacy
+        corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl
+        outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
         --output-path metrics/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
     deps:
       - corpus/spacy/${vars.source_name}/${vars.dataset}.spacy
