@@ -19,7 +19,7 @@ LABELS = {
     "levy2018": {"labels": ["Accept", "Reject"], "default": "Reject"},
     "morante2020": {"labels": ["Claim", "No claim"], "default": "No claim"},
     "shnarch2018": {"labels": ["Accept", "Reject"], "default": "Reject"},
-    "stab2018": {"labels": ["Non-argument", "Supporting argument", "Opposing argument"], "default": "Non-argument"},
+    "stab2018": {"labels": ["NoArgument", "Argument_for", "Argument_against"], "default": "NoArgument"},
     # fmt: on
 }
 
