@@ -43,7 +43,7 @@ def read_tsv(tsv_file) -> List[Dict[str, str]]:
     next(tsv_file)  # skip first line (headers)
     for line in tsv_file:
         text, label, dataset = line.strip().split("\t")[4:]  # skip a few columns
-        record = {"text": text, "label": label, "dataset": dataset}
+        record = {"text": text, "label": label, "dataset": dataset, "accept": [label]}
         records.append(record)
     return records
 
