@@ -11,10 +11,12 @@ from wasabi import msg
 Arg = typer.Argument
 Opt = typer.Option
 
+BRAND_COLOR = "#fffff8"  # dirty-white for blog
 # Set matplotlb parameters
 plt.rcParams.update(
     {
         "text.usetex": True,
+        "axes.facecolor": BRAND_COLOR,
         "axes.titlesize": 16,
         "axes.labelsize": 14,
         "xtick.labelsize": 11,
@@ -53,6 +55,7 @@ def plot_heatmap(
 
     # Plotting proper
     fig, ax = plt.subplots()
+    fig.patch.set_facecolor(BRAND_COLOR)
     im = ax.imshow(scores, cmap="Greys")
 
     ax.set_xticks(np.arange(n_guides), labels=[g.title() for g in guidelines])
