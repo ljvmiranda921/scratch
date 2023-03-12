@@ -76,7 +76,7 @@ def plot_heatmap(
             )
     fig.tight_layout()
     if output_path:
-        plt.savefig(output_path, dpi=300, format="png")
+        plt.savefig(output_path, dpi=120, format="png")
         msg.good(f"Saved to {output_path}")
 
 
