@@ -164,12 +164,21 @@ class Suggester:
         nlp: Language,
         batch_size: int,
         chain_type: str,
+        get_rank_ctx: bool,
     ) -> Iterable[TaskType]:
         if self.segment:
             stream = preprocess.split_sentences(nlp, stream)
 
         chain = load_prodigy_chain(llm=self.llm, chain_type=chain_type)
-        stream = self.pipe(stream, nlp, batch_size, chain)
+
+        # Create a chain for getting a ranked list
+        rank_chain = (
+            load_prodigy_chain(llm=self.llm, chain_type="map_rerank")
+            if get_rank_ctx
+            else None
+        )
+
+        stream = self.pipe(stream, nlp, batch_size, chain, rank_chain)
         stream = self.set_hashes(stream)
         return stream
 
@@ -179,9 +188,10 @@ class Suggester:
         nlp: Language,
         batch_size: int,
         chain: BaseCombineDocumentsChain,
+        rank_chain: Optional[BaseCombineDocumentsChain],
     ) -> Iterable[TaskType]:
         """Process the stream and add suggestions"""
-        stream = self.stream_suggestions(stream, batch_size, chain)
+        stream = self.stream_suggestions(stream, batch_size, chain, rank_chain)
         stream = self.format_suggestions(stream, nlp=nlp)
         return stream
 
@@ -190,6 +200,7 @@ class Suggester:
         stream: Iterable[TaskType],
         batch_size: int,
         chain: BaseCombineDocumentsChain,
+        rank_chain: Optional[BaseCombineDocumentsChain],
     ) -> Iterable[TaskType]:
         """Split the stream into batches and get the response from LangChain"""
         for batch in self._batch_sequence(stream, batch_size):
@@ -197,8 +208,18 @@ class Suggester:
                 chain.run(question=eg.get("text", ""), context=self.pages)
                 for eg in batch
             ]
+
+            if rank_chain:
+                relevant_ctx: List[Tuple[str, float]] = (
+                    rank_chain.run(question=eg.get("text", ""), context=self.pages)
+                    for eg in batch
+                )
+            else:
+                relevant_ctx = []
+
             for eg, response in zip(batch, responses):
-                eg["llm"] = {"response": response}
+                eg["llm"] = {"response": response, "relevant_ctx": relevant_ctx}
+                breakpoint()
                 yield eg
 
     def set_hashes(self, stream: Iterable[TaskType]) -> Iterable[TaskType]:

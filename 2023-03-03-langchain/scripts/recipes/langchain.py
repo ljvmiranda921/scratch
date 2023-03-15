@@ -4,7 +4,7 @@ Implementation was based from the question & answering use-case:
 https://github.com/hwchase17/langchain/blob/master/langchain/chains/question_answering/__init__.py
 """
 
-from typing import Any, Mapping, Optional, Protocol
+from typing import Any, Mapping, Literal, Optional, Protocol
 
 from langchain.callbacks.base import BaseCallbackManager
 from langchain.chains.combine_documents import map_reduce, map_rerank, refine
@@ -19,7 +19,7 @@ from .prompts import MapReduce, MapRerank, Refine, Stuff
 
 def load_prodigy_chain(
     llm: BaseLLM,
-    chain_type: str = "stuff",
+    chain_type: Literal["stuff", "map_reduce", "refine", "map_rerank"] = "stuff",
     *,
     verbose: Optional[bool] = None,
     callback_manager: Optional[BaseCallbackManager] = None,
