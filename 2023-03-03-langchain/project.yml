@@ -129,7 +129,7 @@ commands:
     help: "Run an LLM-assisted textcat.fetch recipe to label text in bulk"
     script:
       - >-
-        python -m prodigy langchain.textcat.fetch
+        python -m prodigy textcat.langchain.fetch
         corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
         --annotation-guideline assets/guidelines/${vars.annotation_guideline}.pdf
         --chain-type ${vars.chain_type}

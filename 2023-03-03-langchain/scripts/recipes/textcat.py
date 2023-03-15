@@ -28,7 +28,7 @@ from scripts.parsers import get_parser
 
 @recipe(
     # fmt: off
-    "langchain.textcat.fetch",
+    "textcat.langchain.fetch",
     source=("Data to annotate (file path or '-' to read from standard input)", "positional", None, str),
     output_path=("Path to save the output", "positional", None, Path),
     annotation_guideline=("Path to the PDF annotation guideline", "option", "G", Path),
