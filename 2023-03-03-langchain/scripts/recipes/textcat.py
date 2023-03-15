@@ -23,7 +23,7 @@ from spacy.language import Language
 from tqdm import tqdm
 
 from scripts.recipes.langchain import load_prodigy_chain
-from scripts.parsers import get_parser
+from scripts.parsers import get_parser, LABELS
 
 
 @recipe(
@@ -112,6 +112,99 @@ def langchain_textcat_fetch(
     srsly.write_jsonl(output_path, stream, append=resume, append_new_line=False)
 
 
+@recipe(
+    # fmt: off
+    "textcat.langchain.correct",
+    dataset=("Dataset to save answers to", "positional", None, str),
+    source=("Data to annotate (file path or '-' to read from standard input)", "positional", None, str),
+    annotation_guideline=("Path to the PDF annotation guideline", "option", "G", Path),
+    lang=("Language to initialize spaCy model", "option", "l", str),
+    chain_type=("Prompt-style to use for combining documents. Choose from 'stuff', 'map_reduce', 'map_rerank', or 'refine'", "option", "C", str),
+    model=("GPT-3 model to use for completion", "option", "m", str),
+    segment=("Split sentences passed to the source", "flag", "S", bool),
+    temperature=("Temperature parameter to control LLM generation", "option", "t", float),
+    batch_size=("Batch size to send to OpenAI API", "option", "b", int),
+    loader=("Loader (guessed from file extension if not set)", "option", "lo", str),
+    # fmt: on
+)
+def langchain_textcat_correct(
+    dataset: str,
+    source: Union[str, Iterable[Dict]],
+    annotation_guideline: Path,
+    lang: str = "en",
+    chain_type: str = "stuff",
+    model: str = "text-davinci-003",
+    segment: bool = False,
+    temperature: float = 0.7,
+    batch_size: int = 10,
+    loader: Optional[str] = None,
+):
+    """Perform bulk zero-shot annotation using GPT-3 with the aid of an
+    annotation guideline. For binary text classification only.
+
+    Because annotation guidelines tend to be long, the document is split into
+    chunks and fed piecemeal to an LLM's prompt. You can control how these
+    chunks (and their respective outputs) are combined together by setting the
+    `--chain-type` parameter. It has four options: `stuff`, `map_reduce`,
+    `map_rerank`, and `refine.`
+
+    You can find more information in the Langchain documentation:
+    https://langchain.readthedocs.io/en/latest/modules/indexes/combine_docs.html
+    """
+    log("RECIPE: Starting recipe langchain.textcat.fetch", locals())
+    nlp = spacy.blank(lang)
+    if segment:
+        nlp.add_pipe("sentencizer")
+
+    # Setup and validate the annotation guideline's filepath
+    if not annotation_guideline.exists():
+        msg.fail(
+            f"Cannot find path to the annotation guideline ({annotation_guideline})",
+            exits=0,
+        )
+    msg.text(f"Using annotation guideline from {annotation_guideline}")
+    pages = load_document(annotation_guideline)
+
+    # Setup OpenAI
+    api_key, _ = get_api_credentials()
+    llm = OpenAI(openai_api_key=api_key, model_name=model, temperature=temperature)
+
+    # Setup the stream and the Prodigy UI
+    suggester = Suggester(
+        llm, pages, segment=segment, response_parser=get_parser(annotation_guideline)
+    )
+    stream = get_stream(
+        source, loader=loader, rehash=True, dedup=True, input_key="text"
+    )
+
+    # Run the LangChain suggester on the stream
+    stream = suggester(
+        tqdm(stream),
+        nlp=nlp,
+        batch_size=batch_size,
+        chain_type=chain_type,
+        get_rank_ctx=True,
+    )
+
+    # Set up the Prodigy UI
+    return {
+        "dataset": dataset,
+        "view_id": "blocks",
+        "stream": stream,
+        "config": {
+            "labels": LABELS.get(annotation_guideline.stem).get("labels"),
+            "batch_size": batch_size,
+            "exclude_by": "input",
+            "choice_style": "single",
+            "blocks": [
+                {"view_id": "choice"},
+                # {"view_id": "html", "html_template": HTML_TEMPLATE},  TODO
+            ],
+            # "global_css": GLOBAL_STYLE,  TODO
+        },
+    }
+
+
 def get_api_credentials() -> Tuple[str, str]:
     """Obtain OpenAI API credentials from a .env file"""
     load_dotenv()
@@ -164,7 +257,7 @@ class Suggester:
         nlp: Language,
         batch_size: int,
         chain_type: str,
-        get_rank_ctx: bool,
+        get_rank_ctx: bool = False,
     ) -> Iterable[TaskType]:
         if self.segment:
             stream = preprocess.split_sentences(nlp, stream)
@@ -210,16 +303,18 @@ class Suggester:
             ]
 
             if rank_chain:
-                relevant_ctx: List[Tuple[str, float]] = (
-                    rank_chain.run(question=eg.get("text", ""), context=self.pages)
+                relevant_ctx = [
+                    rank_chain.combine_docs(
+                        question=eg.get("text", ""), docs=self.pages
+                    )
                     for eg in batch
-                )
+                ]
+                breakpoint()
             else:
                 relevant_ctx = []
 
             for eg, response in zip(batch, responses):
                 eg["llm"] = {"response": response, "relevant_ctx": relevant_ctx}
-                breakpoint()
                 yield eg
 
     def set_hashes(self, stream: Iterable[TaskType]) -> Iterable[TaskType]:

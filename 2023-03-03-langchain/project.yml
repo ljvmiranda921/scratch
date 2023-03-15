@@ -140,6 +140,19 @@ commands:
     outputs:
       - outputs/langchain-${vars.dataset}-${vars.annotation_guideline}.jsonl
 
+  - name: "correct"
+    help: "Run an LLM-assisted textcat.correct recipe to label text"
+    script:
+      - >-
+        python -m prodigy textcat.langchain.correct
+        langchain_correct corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl
+        --annotation-guideline assets/guidelines/${vars.annotation_guideline}.pdf
+        --chain-type ${vars.chain_type}
+        -F scripts/recipes/textcat.py
+    deps:
+      - corpus/jsonl/${vars.source_name}/${vars.dataset}.jsonl
+      - assets/guidelines/${vars.annotation_guideline}.pdf
+
   - name: "evaluate"
     help: "Evaluate predictions on a gold-annotated dataset"
     script:

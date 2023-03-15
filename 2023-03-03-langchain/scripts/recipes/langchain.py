@@ -198,5 +198,6 @@ def _load_map_rerank_chain(
         document_variable_name=document_variable_name,
         verbose=verbose,
         callback_manager=callback_manager,
+        return_intermediate_steps=True,
         **kwargs,
     )
