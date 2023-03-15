@@ -1,0 +1,8 @@
+spacy>=3.4.0
+langchain==0.0.100
+pypdf==3.5.0
+python-dotenv
+openai==0.27.0
+typer
+wasabi
+transformers
