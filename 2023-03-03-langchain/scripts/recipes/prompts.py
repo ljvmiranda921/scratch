@@ -7,7 +7,7 @@ from langchain.prompts import PromptTemplate
 from langchain.prompts.base import RegexParser
 
 output_parser_scored = RegexParser(
-    regex=r"answer:(.*)\nscore:(.*)",
+    regex=r"(?i)Answer:\s*(.*?)\s*Score:\s*(\d+)",
     output_keys=["answer", "score"],
     default_output_key="answer",
 )
