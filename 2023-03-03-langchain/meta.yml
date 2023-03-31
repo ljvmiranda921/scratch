@@ -1,2 +1,2 @@
 name: "Langchain Annotation"
-description: "Using langchain to finetune an LLM to train for us given an annotation guideline"
+description: "Using langchain to finetune an LLM to train for us given an annotation guideline for my [blog post](https://ljvmiranda921.github.io/notebook/2023/03/25/langchain-annotation/)."
