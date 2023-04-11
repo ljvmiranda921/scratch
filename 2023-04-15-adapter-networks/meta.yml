@@ -1,2 +1,2 @@
-name: "Adapter Networks"
-description: "Reproducing an adapter network paper so that I'm familiar with its implementation"
+name: "Parameter-efficient finetuning"
+description: "Exploring some PEFT techniques"
