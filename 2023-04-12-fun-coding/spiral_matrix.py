@@ -1,3 +1,6 @@
+from typing import List
+
+
 def variation_1():
     problem = """
     Given an m x n matrix, return all elements of the matrix in spiral order
@@ -8,32 +11,39 @@ def variation_1():
 
     matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
-    def solution(m):
+    def solution(matrix: List[List[int]]) -> List[int]:
+        # Edge case where they give you an empty matrix
+        if not matrix:
+            return []
+
+        # Then we're tracking four variables to traverse the matrix
+        start_row, end_row = 0, len(matrix)
+        start_col, end_col = 0, len(matrix[0])
+
         output = []
-        if len(m) == 0:
-            return output
 
-        # Prepare the indices you will traverse on
-        row_start, col_start = 0, 0
-        row_end, col_end = len(m) - 1, len(m[0]) - 1
+        # We will run through a while loop,
+        # while the starting row is less than the ending row
+        while start_row < end_row or start_col < end_col:
+            # Each time we change directions, we're going to change
+            # our start/ending row and start/ending col so that we don't append
+            # the values we have already traversed.
 
-        while row_start <= row_end and col_start <= col_end:
-            for i in range(col_start, col_end + 1):
-                output.append(m[row_start][i])
-            row_start += 1
+            # fmt: off
+            # Going right
+            output.extend([matrix[start_row][i] for i in range(start_col, end_col)])
+            start_row += 1
+            # Going down
+            output.extend([matrix[i][end_col - 1] for i in range(start_row, end_row)])
+            end_col -= 1
+            # Going left
+            output.extend([matrix[end_row - 1][i] for i in range(end_col - 1, start_col - 1, -1)])
+            end_row -= 1
+            # Going up
+            output.extend([matrix[i][start_col - 1] for i in range(end_row - 1, start_row - 1, -1)])
+            start_col += 1
+            # fmt: on
 
-            for i in range(row_start, row_end + 1):
-                output.append(m[i][col_end])
-            col_end -= 1
-
-            if row_start <= row_end:
-                for i in range(col_end, col_start - 1, -1):
-                    output.append(m[row_end][i])
-                row_end -= 1
-            if col_start <= col_end:
-                for i in range(row_end, row_start - 1, -1):
-                    output.append(m[i][col_start])
-                col_start += 1
         return output
 
     print(solution(matrix))
