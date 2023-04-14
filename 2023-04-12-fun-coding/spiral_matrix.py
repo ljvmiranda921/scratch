@@ -29,19 +29,27 @@ def variation_1():
             # our start/ending row and start/ending col so that we don't append
             # the values we have already traversed.
 
+            # However, there's an edge-case: if we have a non-square matrix
+            # (4x3, 3x4), this wouldn't work because the conditions in the while loop
+            # won't work. The solution is to add the if-statements
+
             # fmt: off
             # Going right
-            output.extend([matrix[start_row][i] for i in range(start_col, end_col)])
-            start_row += 1
+            if start_row < end_row:
+                output.extend([matrix[start_row][i] for i in range(start_col, end_col)])
+                start_row += 1
             # Going down
-            output.extend([matrix[i][end_col - 1] for i in range(start_row, end_row)])
-            end_col -= 1
+            if start_col < end_col:
+                output.extend([matrix[i][end_col - 1] for i in range(start_row, end_row)])
+                end_col -= 1
             # Going left
-            output.extend([matrix[end_row - 1][i] for i in range(end_col - 1, start_col - 1, -1)])
-            end_row -= 1
+            if start_row < end_row:
+                output.extend([matrix[end_row - 1][i] for i in range(end_col - 1, start_col - 1, -1)])
+                end_row -= 1
             # Going up
-            output.extend([matrix[i][start_col - 1] for i in range(end_row - 1, start_row - 1, -1)])
-            start_col += 1
+            if start_col < end_col:
+                output.extend([matrix[i][start_col] for i in range(end_row - 1, start_row - 1, -1)])
+                start_col += 1
             # fmt: on
 
         return output
