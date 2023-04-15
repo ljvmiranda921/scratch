@@ -3,7 +3,7 @@ from collections import Counter
 from wasabi import msg
 
 
-def variation_1():
+def anagram():
     problem = """
     Given two strings s and t, write a function to determine if t is an anagram
     of s.
@@ -24,6 +24,26 @@ def variation_1():
     print(solution(s="rat", t="car"))
 
 
+def longest_substring():
+    problem = """
+    Given a string, find the length of the longest substring without repeating characters
+    Input: "abcabcbb
+    Output: 3
+
+    Input: "bbbbb
+    Output: 1
+
+    Input: "pwwkew"
+    Output: 3
+    """
+    print(problem)
+
+    def solution(s: str) -> int:
+        pass
+
+    print([solution(qxn) for qxn in ("abcabcbb", "bbbbb", "pwwkew")])
+
+
 if __name__ == "__main__":
-    variation_1()
+    anagram()
     msg.divider()
