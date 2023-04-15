@@ -1,5 +1,6 @@
-from wasabi import msg
 from collections import Counter
+
+from wasabi import msg
 
 
 def variation_1():
