@@ -39,7 +39,17 @@ def longest_substring():
     print(problem)
 
     def solution(s: str) -> int:
-        pass
+        start = 0
+        maxlen = 0
+        lookup = {}
+
+        for idx, char in enumerate(s):
+            # Have we seen this character before?
+            if char in lookup and start <= lookup[char]:
+                start = lookup[char] + 1
+            else:
+                maxlen = max(maxlen, idx - start + 1)
+            lookup[char] = idx
 
     print([solution(qxn) for qxn in ("abcabcbb", "bbbbb", "pwwkew")])
 
