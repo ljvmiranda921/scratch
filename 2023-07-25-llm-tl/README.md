@@ -22,6 +22,8 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `process-datasets` | Process the datasets and convert them into spaCy format |
+| `ner` | Run an LLM pipeline on an NER task |
+| `textcat` | Run an LLM pipeline on a TextCat task |
 
 ### 🗂 Assets
 

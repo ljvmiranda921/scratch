@@ -1,5 +1,5 @@
 spacy>=3.6.0
-spacy-llm[transformers]
+spacy-llm[transformers]==0.4.2
 transformers[sentencepiece]
 wasabi
 typer

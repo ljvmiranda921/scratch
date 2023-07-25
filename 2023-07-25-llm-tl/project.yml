@@ -21,6 +21,8 @@ directories:
 vars:
   lang: "tl"
   seed: 0
+  model_family: spacy.GPT-4.v1
+  model_name: gpt-4
 
 # Assets that should be downloaded or available in the directory. But the
 # 'project assets' command still lets you verify that the checksums match.
@@ -56,6 +58,24 @@ assets:
     description: "Processing script for the UD treebanks"
     url: "https://github.com/ljvmiranda921/calamanCy/blob/master/report/benchmark/scripts/split_treebank.py"
 
+# Workflows are sequences of commands (see below) executed in order. You can
+# run them via "spacy project run [workflow]". If a commands's inputs/outputs
+# haven't changed, it won't be re-run.
+workflows:
+  all:
+    - process-datasets
+    - ner
+    - textcat
+    # - tagger
+  llm:
+    - ner
+    - textcat
+    # - tagger
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
 commands:
   - name: "process-datasets"
     help: "Process the datasets and convert them into spaCy format"
@@ -100,3 +120,33 @@ commands:
       - corpus/parser-ud/ugnayan/dev.spacy
       - corpus/parser-ud/trg/train.spacy
       - corpus/parser-ud/trg/dev.spacy
+
+  - name: "ner"
+    help: "Run an LLM pipeline on an NER task"
+    script:
+      - python -m spacy assemble configs/ner.cfg pipelines/${vars.model_name}-ner/ . --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-ner/ corpus/ner-calamancy_gold/test.spacy --output metrics/${vars.model_name}/ner/results.json
+    deps:
+      - corpus/ner-calamancy_gold/test.spacy
+    outputs:
+      - metrics/${vars.model_name}/ner/results.json
+
+  - name: "textcat"
+    help: "Run an LLM pipeline on a TextCat task"
+    script:
+      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ . --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat_multilabel-dengue/ corpus/textcat_multilabel-dengue/test.spacy --output metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
+      - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ . --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat-hatespeech/ corpus/textcat-hatespeech/test.spacy --output metrics/${vars.model_name}/textcat-hatespeech/results.json
+    deps:
+      - corpus/textcat-hatespeech/test.spacy
+      - corpus/textcat_multilabel-dengue/test.spacy
+    outputs:
+      - metrics/${vars.model_name}/textcat-hatespeech/results.json
+      - metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
+
+  # - name: "tagger"
+  #   help: "Run an LLM pipeline on a POS task"
+  #   script:
+  #   deps:
+  #   outputs:
