@@ -18,7 +18,20 @@ description: |
   ```sh
   python -m spacy project run llm . --vars.model_family "spacy.GPT-4.v1" --vars.model_name "gpt-4-32k"
   ```
-  You can find all the experimental variants in the `scripts/benchmarks.sh` file.
+
+  You can also use the handy utility script to easily run multiple benchmarks:
+
+  ```sh
+  python -m scripts.benchmark all                  # Run all model configurations
+  python -m scripts.benchmark gpt4 cohere          # Run OpenAI GPT-4 and Cohere only
+  python -m scripts.benchmark all --ignore gpt4    # Run all except the GPT-4 config
+  ```
+
+  For more information, run:
+
+  ```sh
+  python -m scripts.benchmark --help
+  ```
 
 # These are the directories that the project needs. The project CLI will make
 # sure that they always exist.
@@ -35,10 +48,17 @@ directories:
 
 # Variables can be referenced across the project.yml using ${vars.var_name}
 vars:
-  lang: "tl"
+  lang: tl
   seed: 0
   model_family: spacy.GPT-4.v1
   model_name: gpt-4
+  cache_dir: cache
+  remote_gcs_bucket: "ljvmiranda"
+
+remotes:
+  # Create a service account, download a JSON key, and set the credentials path
+  # to GOOGLE_APPLICATION_CREDENTIALS env variable
+  gcs: "gs://${vars.remote_gcs_bucket}/experiments/tl_llm/"
 
 # Assets that should be downloaded or available in the directory. But the
 # 'project assets' command still lets you verify that the checksums match.
@@ -132,24 +152,33 @@ commands:
   - name: "ner"
     help: "Run an LLM pipeline on an NER task"
     script:
-      - python -m spacy assemble configs/ner.cfg pipelines/${vars.model_name}-ner/ --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - mkdir -p cache/${vars.model_name}/ner/
+      - python -m spacy assemble configs/ner.cfg pipelines/${vars.model_name}-ner/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/ner/
+      - mkdir -p metrics/${vars.model_name}/ner/
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-ner/ corpus/ner-calamancy_gold/test.spacy --output metrics/${vars.model_name}/ner/results.json
     deps:
       - corpus/ner-calamancy_gold/test.spacy
     outputs:
+      - cache/${vars.model_name}/ner/
       - metrics/${vars.model_name}/ner/results.json
 
   - name: "textcat"
     help: "Run an LLM pipeline on a TextCat task"
     script:
-      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - mkdir -p cache/${vars.model_name}/textcat_multilabel-dengue/
+      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat_multilabel-dengue/
+      - mkdir -p metrics/${vars.model_name}/textcat_multilabel-dengue/
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat_multilabel-dengue/ corpus/textcat_multilabel-dengue/test.spacy --output metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
-      - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - mkdir -p cache/${vars.model_name}/textcat-hatespeech/
+      - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat-hatespeech/
+      - mkdir -p metrics/${vars.model_name}/textcat-hatespeech/
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat-hatespeech/ corpus/textcat-hatespeech/test.spacy --output metrics/${vars.model_name}/textcat-hatespeech/results.json
     deps:
       - corpus/textcat-hatespeech/test.spacy
       - corpus/textcat_multilabel-dengue/test.spacy
     outputs:
+      - cache/${vars.model_name}/textcat-hatespeech/
+      - cache/${vars.model_name}/textcat_multilabel-dengue/
       - metrics/${vars.model_name}/textcat-hatespeech/results.json
       - metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
 
