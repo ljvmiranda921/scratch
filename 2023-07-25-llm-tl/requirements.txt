@@ -1,0 +1,5 @@
+spacy>=3.6.0
+spacy-llm[transformers]
+transformers[sentencepiece]
+wasabi
+typer
