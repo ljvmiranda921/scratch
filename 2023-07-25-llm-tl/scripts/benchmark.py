@@ -26,6 +26,7 @@ CONFIGS = {
     "gpt4": ModelConfig(family="spacy.GPT-4.v1", name="gpt-4"),
     "gpt3.5": ModelConfig(family="spacy.GPT-3-5.v1", name="gpt-3.5-turbo"),
     "cohere": ModelConfig(family="spacy.Command.v1", name="command"),
+    "claude": ModelConfig(family="spacy.Claude-1.v1", name="claude-1"),
     "dolly": ModelConfig(family="spacy.Dolly.v1", name="dolly-v2-3b"),
     "llama2": ModelConfig(family="spacy.Llama2.v1", name="Llama-2-7b-hf"),
     "falcon": ModelConfig(family="spacy.Falcon.v1", name="falcon-7b"),
