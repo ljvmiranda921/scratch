@@ -6,6 +6,18 @@ Accompanying spaCy project for my blog post, [*Do large language models work on 
 Here, I used [spacy-llm](https://github.com/explosion/spacy-llm) to access different LLMs.
 I highly-recommend checking the [documentation](https://spacy.io/api/large-language-models) on how to use the framework.
 
+You can run a specific pipeline via the `llm` workflow. 
+You need to pass a `vars.model_family` and a `vars.model_name`. 
+The model family is what you pass to the `@llm_models` parameter while the model name is the specific variant of that particular model.
+You can find more information in the [model documentation](https://spacy.io/api/large-language-models#models).
+
+For example, if you wish to evaluate on the `32k` version of GPT-4, then run the following:
+
+```sh
+python -m spacy project run llm . --vars.model_family "spacy.GPT-4.v1" --vars.model_name "gpt-4-32k"
+```
+You can find all the experimental variants in the `scripts/benchmarks.sh` file.
+
 
 ## 📋 project.yml
 
@@ -24,6 +36,19 @@ Commands are only re-run if their inputs have changed.
 | `process-datasets` | Process the datasets and convert them into spaCy format |
 | `ner` | Run an LLM pipeline on an NER task |
 | `textcat` | Run an LLM pipeline on a TextCat task |
+| `tagger` | Run an LLM pipeline on a POS tagging task |
+
+### ⏭ Workflows
+
+The following workflows are defined by the project. They
+can be executed using [`spacy project run [name]`](https://spacy.io/api/cli#project-run)
+and will run the specified commands in order. Commands are only re-run if their
+inputs have changed.
+
+| Workflow | Steps |
+| --- | --- |
+| `all` | `process-datasets` &rarr; `ner` &rarr; `textcat` |
+| `llm` | `ner` &rarr; `textcat` |
 
 ### 🗂 Assets
 
@@ -40,6 +65,5 @@ in the project directory.
 | `assets/calamancy_gold.tar.gz` | URL | Contains the annotated TLUnified corpora in spaCy format with PER, ORG, LOC as entity labels (named entity recognition). Annotated by three annotators with IAA (Cohen's Kappa) of 0.78. Corpora was based from *Improving Large-scale Language Models and Resources for Filipino* by Cruz and Cheng (2021). |
 | `scripts/process_dengue.py` | URL | Processing script for the Dengue dataset |
 | `scripts/process_hatespeech.py` | URL | Processing script for the Hatespeech dataset |
-| `scripts/split_treebank.py` | URL | Processing script for the UD treebanks |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->

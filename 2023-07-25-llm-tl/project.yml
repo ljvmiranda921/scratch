@@ -4,6 +4,18 @@ description: |
   Here, I used [spacy-llm](https://github.com/explosion/spacy-llm) to access different LLMs.
   I highly-recommend checking the [documentation](https://spacy.io/api/large-language-models) on how to use the framework.
 
+  You can run a specific pipeline via the `llm` workflow. 
+  You need to pass a `vars.model_family` and a `vars.model_name`. 
+  The model family is what you pass to the `@llm_models` parameter while the model name is the specific variant of that particular model.
+  You can find more information in the [model documentation](https://spacy.io/api/large-language-models#models).
+
+  For example, if you wish to evaluate on the `32k` version of GPT-4, then run the following:
+
+  ```sh
+  python -m spacy project run llm . --vars.model_family "spacy.GPT-4.v1" --vars.model_name "gpt-4-32k"
+  ```
+  You can find all the experimental variants in the `scripts/benchmarks.sh` file.
+
 # These are the directories that the project needs. The project CLI will make
 # sure that they always exist.
 directories:
@@ -54,9 +66,6 @@ assets:
   - dest: "scripts/process_hatespeech.py"
     description: "Processing script for the Hatespeech dataset"
     url: "https://github.com/ljvmiranda921/calamanCy/blob/master/report/benchmark/scripts/process_hatespeech.py"
-  - dest: "scripts/split_treebank.py"
-    description: "Processing script for the UD treebanks"
-    url: "https://github.com/ljvmiranda921/calamanCy/blob/master/report/benchmark/scripts/split_treebank.py"
 
 # Workflows are sequences of commands (see below) executed in order. You can
 # run them via "spacy project run [workflow]". If a commands's inputs/outputs
@@ -93,10 +102,8 @@ commands:
       - tar -xzvf assets/calamancy_gold.tar.gz -C corpus/ner-calamancy_gold/
       # parser: convert treebank into spaCy format and then merge them
       - mkdir -p corpus/parser-ud/
-      - python -m spacy convert assets/treebank/UD_Tagalog-Ugnayan/tl_ugnayan-ud-test.conllu assets/treebank --converter conllu --n-sents 1 --merge-subtokens
-      - python -m scripts.split_treebank assets/treebank/tl_ugnayan-ud-test.spacy corpus/parser-ud/ugnayan/ --lang ${vars.lang} --train-size 0.9 --seed ${vars.seed}
-      - python -m spacy convert assets/treebank/UD_Tagalog-TRG/tl_trg-ud-test.conllu assets/treebank --converter conllu --n-sents 1 --merge-subtokens
-      - python -m scripts.split_treebank assets/treebank/tl_trg-ud-test.spacy corpus/parser-ud/trg/ --lang ${vars.lang} --train-size 0.9 --seed ${vars.seed}
+      - python -m spacy convert assets/treebank/UD_Tagalog-Ugnayan/tl_ugnayan-ud-test.conllu corpus/parser-ud/ --converter conllu --n-sents 1 --merge-subtokens
+      - python -m spacy convert assets/treebank/UD_Tagalog-TRG/tl_trg-ud-test.conllu corpus/parser-ud/ --converter conllu --n-sents 1 --merge-subtokens
     deps:
       - assets/hatespeech.zip
       - assets/dengue.zip
@@ -105,7 +112,6 @@ commands:
       - assets/treebank/UD_Tagalog-TRG/tl_trg-ud-test.conllu
       - scripts/process_dengue.py
       - scripts/process_hatespeech.py
-      - scripts/split_treebank.py
     outputs:
       - corpus/textcat-hatespeech/train.spacy
       - corpus/textcat-hatespeech/dev.spacy
@@ -116,15 +122,13 @@ commands:
       - corpus/ner-calamancy_gold/train.spacy
       - corpus/ner-calamancy_gold/dev.spacy
       - corpus/ner-calamancy_gold/test.spacy
-      - corpus/parser-ud/ugnayan/train.spacy
-      - corpus/parser-ud/ugnayan/dev.spacy
-      - corpus/parser-ud/trg/train.spacy
-      - corpus/parser-ud/trg/dev.spacy
+      - corpus/parser-ud/tl_ugnayan-ud-test.spacy
+      - corpus/parser-ud/tl_trg-ud-test.spacy
 
   - name: "ner"
     help: "Run an LLM pipeline on an NER task"
     script:
-      - python -m spacy assemble configs/ner.cfg pipelines/${vars.model_name}-ner/ . --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - python -m spacy assemble configs/ner.cfg pipelines/${vars.model_name}-ner/ --model.family ${vars.model_family} --model.name ${vars.model_name}
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-ner/ corpus/ner-calamancy_gold/test.spacy --output metrics/${vars.model_name}/ner/results.json
     deps:
       - corpus/ner-calamancy_gold/test.spacy
@@ -134,9 +138,9 @@ commands:
   - name: "textcat"
     help: "Run an LLM pipeline on a TextCat task"
     script:
-      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ . --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ --model.family ${vars.model_family} --model.name ${vars.model_name}
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat_multilabel-dengue/ corpus/textcat_multilabel-dengue/test.spacy --output metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
-      - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ . --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ --model.family ${vars.model_family} --model.name ${vars.model_name}
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat-hatespeech/ corpus/textcat-hatespeech/test.spacy --output metrics/${vars.model_name}/textcat-hatespeech/results.json
     deps:
       - corpus/textcat-hatespeech/test.spacy
@@ -145,8 +149,16 @@ commands:
       - metrics/${vars.model_name}/textcat-hatespeech/results.json
       - metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
 
-  # - name: "tagger"
-  #   help: "Run an LLM pipeline on a POS task"
-  #   script:
-  #   deps:
-  #   outputs:
+  - name: "tagger"
+    help: "Run an LLM pipeline on a POS tagging task"
+    script:
+      - python -m spacy assemble configs/tagger.cfg pipelines/${vars.model_name}-tagger/ --code scripts/tagger_task.py --model.family ${vars.model_family} --model.name ${vars.model_name}
+      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-tagger/ corpus/parser-ud/tl_trg-ud-test.spacy --output metrics/${vars.model_name}/tagger-trg/results.json
+      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-tagger/ corpus/parser-ud/tl_ugnayan-ud-test.spacy --output metrics/${vars.model_name}/tagger-ugnayan/results.json
+    deps:
+      - corpus/parser-ud/tl_ugnayan-ud-test.spacy
+      - corpus/parser-ud/tl_trg-ud-test.spacy
+      - scripts/tagger_task.py
+    outputs:
+      - metrics/${vars.model_name}/tagger-trg/results.json
+      - metrics/${vars.model_name}/tagger-ugnayan/results.json
