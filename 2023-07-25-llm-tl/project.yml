@@ -4,6 +4,10 @@ description: |
   Here, I used [spacy-llm](https://github.com/explosion/spacy-llm) to access different LLMs.
   I highly-recommend checking the [documentation](https://spacy.io/api/large-language-models) on how to use the framework.
 
+  > **Note**  
+  For OpenAI and Cohere, you need to set API keys in your env. Check [this page](https://spacy.io/api/large-language-models#api-keys) for more info. 
+  I wasn't able to benchmark on Claude / Anthropic because I don't have any API access yet.
+
   You can run a specific pipeline via the `llm` workflow. 
   You need to pass a `vars.model_family` and a `vars.model_name`. 
   The model family is what you pass to the `@llm_models` parameter while the model name is the specific variant of that particular model.
