@@ -53,6 +53,7 @@ vars:
   model_name: gpt-4
   cache_dir: cache
   remote_gcs_bucket: "ljvmiranda"
+  batch_size: 8
 
 remotes:
   # Create a service account, download a JSON key, and set the credentials path
@@ -152,7 +153,7 @@ commands:
     help: "Run an LLM pipeline on an NER task"
     script:
       - mkdir -p cache/${vars.model_name}/ner/
-      - python -m spacy assemble configs/ner.cfg pipelines/${vars.model_name}-ner/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/ner/
+      - python -m spacy assemble configs/ner.cfg pipelines/${vars.model_name}-ner/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/ner/ --nlp.batch_size ${vars.batch_size}
       - mkdir -p metrics/${vars.model_name}/ner/
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-ner/ corpus/ner-calamancy_gold/test.spacy --output metrics/${vars.model_name}/ner/results.json
     deps:
@@ -165,11 +166,11 @@ commands:
     help: "Run an LLM pipeline on a TextCat task"
     script:
       - mkdir -p cache/${vars.model_name}/textcat_multilabel-dengue/
-      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat_multilabel-dengue/
+      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat_multilabel-dengue/ --nlp.batch_size ${vars.batch_size}
       - mkdir -p metrics/${vars.model_name}/textcat_multilabel-dengue/
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat_multilabel-dengue/ corpus/textcat_multilabel-dengue/test.spacy --output metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
       - mkdir -p cache/${vars.model_name}/textcat-hatespeech/
-      - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat-hatespeech/
+      - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat-hatespeech/ --nlp.batch_size ${vars.batch_size}
       - mkdir -p metrics/${vars.model_name}/textcat-hatespeech/
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat-hatespeech/ corpus/textcat-hatespeech/test.spacy --output metrics/${vars.model_name}/textcat-hatespeech/results.json
     deps:
@@ -181,16 +182,16 @@ commands:
       - metrics/${vars.model_name}/textcat-hatespeech/results.json
       - metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
 
-  - name: "tagger"
-    help: "Run an LLM pipeline on a POS tagging task"
-    script:
-      - python -m spacy assemble configs/tagger.cfg pipelines/${vars.model_name}-tagger/ --code scripts/tagger_task.py --model.family ${vars.model_family} --model.name ${vars.model_name}
-      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-tagger/ corpus/parser-ud/tl_trg-ud-test.spacy --output metrics/${vars.model_name}/tagger-trg/results.json
-      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-tagger/ corpus/parser-ud/tl_ugnayan-ud-test.spacy --output metrics/${vars.model_name}/tagger-ugnayan/results.json
-    deps:
-      - corpus/parser-ud/tl_ugnayan-ud-test.spacy
-      - corpus/parser-ud/tl_trg-ud-test.spacy
-      - scripts/tagger_task.py
-    outputs:
-      - metrics/${vars.model_name}/tagger-trg/results.json
-      - metrics/${vars.model_name}/tagger-ugnayan/results.json
+  # - name: "tagger"
+  #   help: "Run an LLM pipeline on a POS tagging task"
+  #   script:
+  #     - python -m spacy assemble configs/tagger.cfg pipelines/${vars.model_name}-tagger/ --code scripts/tagger_task.py --model.family ${vars.model_family} --model.name ${vars.model_name}
+  #     - python -m spacy benchmark accuracy pipelines/${vars.model_name}-tagger/ corpus/parser-ud/tl_trg-ud-test.spacy --output metrics/${vars.model_name}/tagger-trg/results.json
+  #     - python -m spacy benchmark accuracy pipelines/${vars.model_name}-tagger/ corpus/parser-ud/tl_ugnayan-ud-test.spacy --output metrics/${vars.model_name}/tagger-ugnayan/results.json
+  #   deps:
+  #     - corpus/parser-ud/tl_ugnayan-ud-test.spacy
+  #     - corpus/parser-ud/tl_trg-ud-test.spacy
+  #     - scripts/tagger_task.py
+  #   outputs:
+  #     - metrics/${vars.model_name}/tagger-trg/results.json
+  #     - metrics/${vars.model_name}/tagger-ugnayan/results.json
