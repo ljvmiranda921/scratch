@@ -168,3 +168,5 @@ vectors/
 corpus/
 project.lock
 outputs/
+cache/
+pipelines/

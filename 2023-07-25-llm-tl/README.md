@@ -20,7 +20,20 @@ For example, if you wish to evaluate on the `32k` version of GPT-4, then run the
 ```sh
 python -m spacy project run llm . --vars.model_family "spacy.GPT-4.v1" --vars.model_name "gpt-4-32k"
 ```
-You can find all the experimental variants in the `scripts/benchmarks.sh` file.
+
+You can also use the handy utility script to easily run multiple benchmarks:
+
+```sh
+python -m scripts.benchmark all                  # Run all model configurations
+python -m scripts.benchmark gpt4 cohere          # Run OpenAI GPT-4 and Cohere only
+python -m scripts.benchmark all --ignore gpt4    # Run all except the GPT-4 config
+```
+
+For more information, run:
+
+```sh
+python -m scripts.benchmark --help
+```
 
 
 ## 📋 project.yml
