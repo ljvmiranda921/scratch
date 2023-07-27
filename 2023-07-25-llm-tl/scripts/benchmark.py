@@ -29,7 +29,9 @@ CONFIGS = {
     "claude": ModelConfig(family="spacy.Claude-1.v1", name="claude-1"),
     "dolly": ModelConfig(family="spacy.Dolly.v1", name="dolly-v2-7b"),
     "llama2": ModelConfig(family="spacy.Llama2.v1", name="Llama-2-7b-hf"),
+    "openllama": ModelConfig(family="spacy.OpenLLaMA.v1", name="open_llama_7b_v2"),
     "falcon": ModelConfig(family="spacy.Falcon.v1", name="falcon-7b"),
+    "stablelm": ModelConfig(family="spacy.StableLM.v1", name="stablelm-base-alpha-7b"),
 }
 
 app = typer.Typer()
