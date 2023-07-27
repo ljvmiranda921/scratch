@@ -7,8 +7,7 @@ Here, I used [spacy-llm](https://github.com/explosion/spacy-llm) to access diffe
 I highly-recommend checking the [documentation](https://spacy.io/api/large-language-models) on how to use the framework.
 
 > **Note**  
-For OpenAI and Cohere, you need to set API keys in your env. Check [this page](https://spacy.io/api/large-language-models#api-keys) for more info. 
-I wasn't able to benchmark on Claude / Anthropic because I don't have any API access yet.
+For OpenAI, Anthropic, and Cohere, you need to set API keys in your env. Check [this page](https://spacy.io/api/large-language-models#api-keys) for more info. 
 
 You can run a specific pipeline via the `llm` workflow. 
 You need to pass a `vars.model_family` and a `vars.model_name`. 
@@ -53,7 +52,7 @@ Commands are only re-run if their inputs have changed.
 | `process-datasets` | Process the datasets and convert them into spaCy format |
 | `ner` | Run an LLM pipeline on an NER task |
 | `textcat` | Run an LLM pipeline on a TextCat task |
-| `tagger` | Run an LLM pipeline on a POS tagging task |
+| `textcat-multilabel` | Run an LLM pipeline on a TextCat multilabel task |
 
 ### ⏭ Workflows
 
@@ -64,8 +63,8 @@ inputs have changed.
 
 | Workflow | Steps |
 | --- | --- |
-| `all` | `process-datasets` &rarr; `ner` &rarr; `textcat` |
-| `llm` | `ner` &rarr; `textcat` |
+| `all` | `process-datasets` &rarr; `ner` &rarr; `textcat` &rarr; `textcat-multilabel` |
+| `llm` | `ner` &rarr; `textcat` &rarr; `textcat-multilabel` |
 
 ### 🗂 Assets
 
@@ -75,8 +74,6 @@ in the project directory.
 
 | File | Source | Description |
 | --- | --- | --- |
-| `assets/treebank/UD_Tagalog-Ugnayan/` | Git | Treebank data for UD_Tagalog-Ugnayan. Originally sourced from *Parsing in the absence of related languages: Evaluating low-resource dependency parsers in Tagalog* by Aquino and de Leon (2020). |
-| `assets/treebank/UD_Tagalog-TRG/` | Git | Treebank data for UD_Tagalog-TRG. Originally sourced from the thesis, *A treebank prototype for Tagalog*, at the University of Tübingen by Samson (2018). |
 | `assets/hatespeech.zip` | URL | Contains 10k tweets with 4.2k testing and validation data labeled as hate speech or non-hate speech (text categorization). Based on *Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing* by Cabasag et al. (2019) |
 | `assets/dengue.zip` | URL | Contains tweets on dengue labeled with five different categories. Tweets can be categorized to multiple categories at the same time (multilabel text categorization). Based on *Monitoring dengue using Twitter and deep learning techniques* by Livelo and Cheng (2018). |
 | `assets/calamancy_gold.tar.gz` | URL | Contains the annotated TLUnified corpora in spaCy format with PER, ORG, LOC as entity labels (named entity recognition). Annotated by three annotators with IAA (Cohen's Kappa) of 0.78. Corpora was based from *Improving Large-scale Language Models and Resources for Filipino* by Cruz and Cheng (2021). |
