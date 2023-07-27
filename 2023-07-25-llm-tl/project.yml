@@ -84,9 +84,11 @@ workflows:
     - process-datasets
     - ner
     - textcat
+    - textcat-multilabel
   llm:
     - ner
     - textcat
+    - textcat-multilabel
 
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
@@ -140,19 +142,25 @@ commands:
   - name: "textcat"
     help: "Run an LLM pipeline on a TextCat task"
     script:
-      - mkdir -p cache/${vars.model_name}/textcat_multilabel-dengue/
-      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat_multilabel-dengue/ --nlp.batch_size ${vars.batch_size}
-      - mkdir -p metrics/${vars.model_name}/textcat_multilabel-dengue/
-      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat_multilabel-dengue/ corpus/textcat_multilabel-dengue/test.spacy --output metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
       - mkdir -p cache/${vars.model_name}/textcat-hatespeech/
       - python -m spacy assemble configs/textcat_hatespeech.cfg pipelines/${vars.model_name}-textcat-hatespeech/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat-hatespeech/ --nlp.batch_size ${vars.batch_size}
       - mkdir -p metrics/${vars.model_name}/textcat-hatespeech/
       - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat-hatespeech/ corpus/textcat-hatespeech/test.spacy --output metrics/${vars.model_name}/textcat-hatespeech/results.json
     deps:
       - corpus/textcat-hatespeech/test.spacy
-      - corpus/textcat_multilabel-dengue/test.spacy
     outputs:
       - cache/${vars.model_name}/textcat-hatespeech/
-      - cache/${vars.model_name}/textcat_multilabel-dengue/
       - metrics/${vars.model_name}/textcat-hatespeech/results.json
+
+  - name: "textcat-multilabel"
+    help: "Run an LLM pipeline on a TextCat multilabel task"
+    script:
+      - mkdir -p cache/${vars.model_name}/textcat_multilabel-dengue/
+      - python -m spacy assemble configs/textcat_dengue.cfg pipelines/${vars.model_name}-textcat_multilabel-dengue/ --model.family ${vars.model_family} --model.name ${vars.model_name} --model.cache_dir cache/${vars.model_name}/textcat_multilabel-dengue/ --nlp.batch_size ${vars.batch_size}
+      - mkdir -p metrics/${vars.model_name}/textcat_multilabel-dengue/
+      - python -m spacy benchmark accuracy pipelines/${vars.model_name}-textcat_multilabel-dengue/ corpus/textcat_multilabel-dengue/test.spacy --output metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
+    deps:
+      - corpus/textcat_multilabel-dengue/test.spacy
+    outputs:
+      - cache/${vars.model_name}/textcat_multilabel-dengue/
       - metrics/${vars.model_name}/textcat_multilabel-dengue/results.json
