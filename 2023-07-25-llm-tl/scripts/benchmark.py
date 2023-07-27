@@ -49,7 +49,8 @@ def _callback_ignore(arg):
 def benchmark(
     # fmt: off
     configs: List[str] = typer.Argument(..., help="LLM configuration to run the pipeline on."),
-    ignore: Optional[str] = typer.Option(None, help="Ignore a specific config. Useful when running 'all'", callback=_callback_ignore),
+    subcommand: str = typer.Option("all",  "-C", "--subcommand", "--command", help="Subcommand to run. Defaults to 'all'."),
+    ignore: Optional[str] = typer.Option(None, "--ignore", help="Ignore a specific config. Useful when running 'all'", callback=_callback_ignore),
     dry: bool = typer.Option(False, "--dry", help="Perform a dry run and do not execute the commands."),
     force: bool = typer.Option(False, "-f", "--force", help="Force run a spaCy workflow."),
     # fmt: on
@@ -79,7 +80,12 @@ def benchmark(
                 "vars.model_name": model.name,
             }
             project_run(
-                root, "all", capture=True, overrides=overrides, dry=dry, force=force
+                root,
+                subcommand,
+                capture=True,
+                overrides=overrides,
+                dry=dry,
+                force=force,
             )
 
         else:
