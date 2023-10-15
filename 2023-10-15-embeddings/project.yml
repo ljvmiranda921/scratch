@@ -55,8 +55,8 @@ commands:
   - name: "plot"
     help: "Plot the chart (highly-customized for blog post)"
     script:
-      - python -m scripts.plot embeddings.spacy plots/
+      - python -m scripts.plot embeddings.spacy outputs/
     deps:
       - embeddings
     outputs:
-      - plots/
+      - outputs/
