@@ -1,4 +1,4 @@
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Iterable
 
@@ -16,6 +16,7 @@ Arg = typer.Argument
 Opt = typer.Option
 
 ENTITY_TYPES = ["PER", "ORG", "LOC"]
+SPAN_PROPERTIES = ["paren", "all_caps", "initial", "plain"]
 
 
 @dataclass
@@ -63,16 +64,10 @@ def plot(
     ]
     msg.info(f"Processed {len(examples)} entities from {embeddings}")
 
-    # Plot
-    _plot_all(examples, outdir)
-
-    ## Plot everything
-
-    ## Plot PER entities
-
-    ## Plot ORG entities
-
-    ## Plot LOC entities
+    _plot_all(examples, outdir)  # encode them based on entity type
+    _plot_by_ent(examples, outdir, label="PER")
+    _plot_by_ent(examples, outdir, label="ORG")
+    _plot_by_ent(examples, outdir, label="LOC")
 
 
 def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
@@ -121,7 +116,7 @@ plt.rcParams.update({"text.usetex": True, "font.family": "sans-serif"})
 
 
 def _plot_all(examples: Iterable[Example], outdir: Path):
-    """Plot all points and color code them based on entity type"""
+    """Plot all points and color code them based on entity type."""
     fig, ax = plt.subplots(1, 1)
 
     for entity_type, color in zip(ENTITY_TYPES, ["red", "green", "blue"]):
@@ -136,6 +131,20 @@ def _plot_all(examples: Iterable[Example], outdir: Path):
             alpha=0.4,
             label=entity_type,
         )
+    ax.legend()
+    fig.tight_layout()
+    plt.savefig(outdir / "test.png", transparent=True)
+
+
+def _plot_by_ent(examples: Iterable[Example], outdir: Path, label: str):
+    """Plot points per entity type that corresponds to a span property."""
+    fig, ax = plt.subplots(1, 1)
+    filtered_examples = [eg for eg in examples if eg.label == label]
+
+    for prop, color in zip(SPAN_PROPERTIES, ("red", "blue", "green", "black")):
+        x = [eg.tsne_x for eg in filtered_examples if eg.__dict__[prop]]
+        y = [eg.tsne_y for eg in filtered_examples if eg.__dict__[prop]]
+        ax.plot(x, y, marker="o", linestyle="", color=color, alpha=0.4, label=prop)
     ax.legend()
     fig.tight_layout()
     plt.savefig(outdir / "test.png", transparent=True)
