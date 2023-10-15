@@ -85,6 +85,9 @@ def embed(
 
     # Get embeddings
     output_docs = [nlp(doc) for doc in tqdm(docs)]
+    for doc in output_docs:
+        for token in doc:
+            print(token, token.vector)
     doc_bin_out = DocBin(docs=output_docs, store_user_data=True)
     doc_bin_out.to_disk(outfile)
     msg.good(f"Saved embeddings to disk: {outfile}")
