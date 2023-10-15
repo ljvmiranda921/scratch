@@ -1,13 +1,12 @@
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Iterable, Tuple
 
-
 import spacy
 import typer
+import pandas as pd
 import numpy as np
 from spacy.tokens import Doc, DocBin
-from srsly import write_msgpack
 from sklearn.manifold import TSNE
 from tqdm import tqdm
 from wasabi import msg
@@ -33,7 +32,9 @@ class Example:
     initial: bool  # if it is the first token in a sentence
     plain: bool  # catch-all category
 
-    tsne_coord: np.ndarray = np.array([0, 0])
+    # t-SNE coordinates for plotting
+    tsne_x: float = 0.0
+    tsne_y: float = 0.0
 
 
 def plot(
@@ -47,20 +48,31 @@ def plot(
     doc_bin = DocBin().from_disk(embeddings)
     docs = doc_bin.get_docs(nlp.vocab)
 
-    # Format documents into a human-readable table
-    examples = _get_example_properties(docs)
-    msg.info(f"Processed {len(examples)} entities from {embeddings}")
-
-    # Compute the t-SNE coordinates and update our examples
+    # Compute the t-SNE coordinates
+    _examples = _get_properties(docs)
     msg.text("Obtaining t-SNE plot")
-    X = np.vstack([eg.ctx_vector for eg in examples])
+    X = np.vstack([eg.ctx_vector for eg in _examples])
     model = TSNE(n_components=2, random_state=0)
     fit_X = model.fit_transform(X)
-    for eg, coord in zip(examples, fit_X):
-        replace(eg, tsne_coord=coord)
+    examples = [
+        replace(eg, tsne_x=coord[0], tsne_y=coord[1])
+        for eg, coord in zip(_examples, fit_X)
+    ]
+    msg.info(f"Processed {len(examples)} entities from {embeddings}")
+
+    # Plot
+    df = pd.DataFrame([asdict(eg) for eg in examples]).drop(columns=["ctx_vector"])
+
+    ## Plot everything
+
+    ## Plot PER entities
+
+    ## Plot ORG entities
+
+    ## Plot LOC entities
 
 
-def _get_example_properties(docs: Iterable[Doc]) -> Iterable[Example]:
+def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
     examples = []
     for doc in tqdm(docs):
         for ent in doc.ents:
