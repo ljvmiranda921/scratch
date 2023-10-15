@@ -52,6 +52,7 @@ def plot(
     msg.info(f"Processed {len(examples)} entities from {embeddings}")
 
     # Compute the t-SNE coordinates and update our examples
+    msg.text("Obtaining t-SNE plot")
     X = np.vstack([eg.ctx_vector for eg in examples])
     model = TSNE(n_components=2, random_state=0)
     fit_X = model.fit_transform(X)
@@ -83,12 +84,15 @@ def _get_example_properties(docs: Iterable[Doc]) -> Iterable[Example]:
                 ctx_vector=doc.user_data[
                     ("._.", "ctx_vector", ent.start_char, ent.end_char)
                 ],
-                paren=props[0],
-                all_caps=props[1],
-                initial=props[2],
-                plain=props[3],
+                paren=bool(props[0]),
+                all_caps=bool(props[1]),
+                initial=bool(props[2]),
+                plain=bool(props[3]),
             )
             examples.append(eg)
+            # FIXME
+            if len(examples) == 10:
+                break
     return examples
 
 
