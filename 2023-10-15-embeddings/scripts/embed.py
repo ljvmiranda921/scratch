@@ -1,8 +1,8 @@
 from pathlib import Path
 
+import numpy as np
 import spacy
 import typer
-import numpy as np
 from spacy.language import Language
 from spacy.tokens import Doc, DocBin, Span, Token
 from tqdm import tqdm
@@ -82,7 +82,7 @@ def embed(
     msg.info(f"Found {len(docs)} documents in '{corpus}'")
 
     # Get embeddings
-    output_docs = [nlp(doc) for doc in docs]
+    output_docs = [nlp(doc) for doc in tqdm(docs)]
     doc_bin_out = DocBin(docs=output_docs)
     doc_bin_out.to_disk(outfile)
     msg.good(f"Saved embeddings to disk: {outfile}")
