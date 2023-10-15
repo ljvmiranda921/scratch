@@ -19,7 +19,9 @@ class Tensor2Attr:
     and store them in the .vector attribute"""
 
     def __init__(self, name: str, nlp: Language):
-        pass
+        Doc.set_extension("ctx_vector", default=[])
+        Span.set_extension("ctx_vector", default=[])
+        Token.set_extension("ctx_vector", default=[])
 
     def __call__(self, doc: Doc) -> Doc:
         self.add_attributes(doc)
@@ -28,27 +30,25 @@ class Tensor2Attr:
     def add_attributes(self, doc: Doc):
         """Override the .vector and .similarity attributes
         with our own implementation."""
-        doc.user_hooks["vector"] = self.doc_tensor
 
-        doc.user_span_hooks["vector"] = self.span_tensor
-        doc.user_token_hooks["vector"] = self.token_tensor
+        doc._.set("ctx_vector", doc._.trf_data.tensors[-1].mean(axis=0))
+        for token in doc:
+            token._.set("ctx_vector", self.get_token_tensor(token))
+        for span in doc.ents:
+            span._.set("ctx_vector", self.get_span_tensor(span))
 
-        doc.user_hooks["similarity"] = self.get_similarity
-        doc.user_span_hooks["similarity"] = self.get_similarity
-        doc.user_token_hooks["similarity"] = self.get_similarity
-
-    def doc_tensor(self, doc: Doc):
+    def get_doc_tensor(self, doc: Doc):
         """Take a Doc object as input and returns the embedding for the entire Doc."""
         return doc._.trf_data.tensors[-1].mean(axis=0)
 
-    def span_tensor(self, span: Span):
+    def get_span_tensor(self, span: Span):
         """Take a Span as input and returns its transformer embedding."""
         tensor_ix = span.doc._.trf_data.align[span.start : span.end].data.flatten()
         out_dim = span.doc._.trf_data.tensors[0].shape[-1]
         tensor = span.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
         return tensor.mean(axis=0)
 
-    def token_tensor(self, token: Token):
+    def get_token_tensor(self, token: Token):
         """Take a Token as input and return its transformer embedding."""
         tensor_ix = token.doc._.trf_data.align[token.i].data.flatten()
         out_dim = token.doc._.trf_data.tensors[0].shape[-1]
