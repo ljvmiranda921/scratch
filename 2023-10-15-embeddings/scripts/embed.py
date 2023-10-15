@@ -1,12 +1,11 @@
 from pathlib import Path
-from typing import Iterable
 
 import spacy
 import typer
 import numpy as np
 from spacy.language import Language
 from spacy.tokens import Doc, DocBin, Span, Token
-from srsly import write_msgpack
+from tqdm import tqdm
 from wasabi import msg
 
 Arg = typer.Argument
@@ -86,6 +85,7 @@ def embed(
     output_docs = [nlp(doc) for doc in docs]
     doc_bin_out = DocBin(docs=output_docs)
     doc_bin_out.to_disk(outfile)
+    msg.good(f"Saved embeddings to disk: {outfile}")
 
 
 if __name__ == "__main__":
