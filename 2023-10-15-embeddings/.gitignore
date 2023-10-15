@@ -170,3 +170,5 @@ project.lock
 outputs/
 cache/
 pipelines/
+
+embeddings.spacy

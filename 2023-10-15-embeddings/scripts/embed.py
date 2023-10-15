@@ -10,7 +10,6 @@ Arg = typer.Argument
 Opt = typer.Option
 
 
-# c.f. https://applied-language-technology.mooc.fi/html/notebooks/part_iii/05_embeddings_continued.html
 @Language.factory("tensor2attr")
 class Tensor2Attr:
     """Get contextual vectors for each token, realign them,
@@ -22,6 +21,7 @@ class Tensor2Attr:
     def __call__(self, doc: Doc) -> Doc:
         for span in doc.ents:
             # Get span vector
+            # c.f. https://applied-language-technology.mooc.fi/html/notebooks/part_iii/05_embeddings_continued.html
             tensor_ix = span.doc._.trf_data.align[span.start : span.end].data.flatten()
             out_dim = span.doc._.trf_data.tensors[0].shape[-1]
             tensor = span.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
