@@ -81,6 +81,8 @@ def embed(
         docs.extend(list(doc_bin.get_docs(nlp.vocab)))
     msg.info(f"Found {len(docs)} documents in '{corpus}'")
 
+    docs = docs[:10]
+
     # Get embeddings
     output_docs = [nlp(doc) for doc in tqdm(docs)]
     doc_bin_out = DocBin(docs=output_docs)
