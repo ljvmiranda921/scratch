@@ -3,3 +3,4 @@ transformers[sentencepiece]
 wasabi
 typer
 tqdm
+scikit-learn==1.3.1

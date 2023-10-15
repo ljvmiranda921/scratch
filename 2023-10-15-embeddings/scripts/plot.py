@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Iterable, Tuple
 
 
 import spacy
@@ -8,6 +8,7 @@ import typer
 import numpy as np
 from spacy.tokens import Doc, DocBin
 from srsly import write_msgpack
+from sklearn.manifold import TSNE
 from tqdm import tqdm
 from wasabi import msg
 
@@ -32,14 +33,13 @@ class Example:
     initial: bool  # if it is the first token in a sentence
     plain: bool  # catch-all category
 
-    tsne_coord: Tuple[float, float] = (0, 0)
+    tsne_coord: np.ndarray = np.array([0, 0])
 
 
 def plot(
     # fmt: off
     embeddings: Path = Arg(..., help="Path to a spaCy file containing span embeddings."),
     outdir: Path = Arg(..., help="Directory to save the plots.", dir_okay=True),
-    save_tsne_coords: Optional[Path] = Opt(None, help="If provided, will save t-SNE coordinates in a serializable msgpack format."),
     # fmt: on
 ):
     # Read file
@@ -48,6 +48,18 @@ def plot(
     docs = doc_bin.get_docs(nlp.vocab)
 
     # Format documents into a human-readable table
+    examples = _get_example_properties(docs)
+    msg.info(f"Processed {len(examples)} entities from {embeddings}")
+
+    # Compute the t-SNE coordinates and update our examples
+    X = np.vstack([eg.ctx_vector for eg in examples])
+    model = TSNE(n_components=2, random_state=0)
+    fit_X = model.fit_transform(X)
+    for eg, coord in zip(examples, fit_X):
+        replace(eg, tsne_coord=coord)
+
+
+def _get_example_properties(docs: Iterable[Doc]) -> Iterable[Example]:
     examples = []
     for doc in tqdm(docs):
         for ent in doc.ents:
@@ -77,8 +89,7 @@ def plot(
                 plain=props[3],
             )
             examples.append(eg)
-
-    msg.info(f"Processed {len(examples)} entities from {embeddings}")
+    return examples
 
 
 if __name__ == "__main__":
