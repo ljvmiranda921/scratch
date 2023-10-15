@@ -84,7 +84,7 @@ def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
             elif ent.start == 0:
                 props = (0, 0, 1, 0)
             else:
-                props = (0, 0, 0, 0)
+                props = (0, 0, 0, 1)
 
             eg = Example(
                 text=doc.text,
