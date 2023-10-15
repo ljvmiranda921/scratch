@@ -1,10 +1,9 @@
 from pathlib import Path
 
-import numpy as np
 import spacy
 import typer
 from spacy.language import Language
-from spacy.tokens import Doc, DocBin, Span, Token
+from spacy.tokens import Doc, DocBin, Span
 from wasabi import msg
 
 Arg = typer.Argument
