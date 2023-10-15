@@ -3,7 +3,9 @@ from typing import Iterable
 
 import spacy
 import typer
-from spacy.tokens import Doc, DocBin
+import numpy as np
+from spacy.language import Language
+from spacy.tokens import Doc, DocBin, Span, Token
 from srsly import write_msgpack
 from wasabi import msg
 
@@ -11,16 +13,66 @@ Arg = typer.Argument
 Opt = typer.Option
 
 
+# c.f. https://applied-language-technology.mooc.fi/html/notebooks/part_iii/05_embeddings_continued.html
+@Language.factory("tensor2attr")
+class Tensor2Attr:
+    """Get contextual vectors for each token, realign them,
+    and store them in the .vector attribute"""
+
+    def __init__(self, name: str, nlp: Language):
+        pass
+
+    def __call__(self, doc: Doc) -> Doc:
+        self.add_attributes(doc)
+        return doc
+
+    def add_attributes(self, doc: Doc):
+        """Override the .vector and .similarity attributes
+        with our own implementation."""
+        doc.user_hooks["vector"] = self.doc_tensor
+
+        doc.user_span_hooks["vector"] = self.span_tensor
+        doc.user_token_hooks["vector"] = self.token_tensor
+
+        doc.user_hooks["similarity"] = self.get_similarity
+        doc.user_span_hooks["similarity"] = self.get_similarity
+        doc.user_token_hooks["similarity"] = self.get_similarity
+
+    def doc_tensor(self, doc: Doc):
+        """Take a Doc object as input and returns the embedding for the entire Doc."""
+        return doc._.trf_data.tensors[-1].mean(axis=0)
+
+    def span_tensor(self, span: Span):
+        """Take a Span as input and returns its transformer embedding."""
+        tensor_ix = span.doc._.trf_data.align[span.start : span.end].data.flatten()
+        out_dim = span.doc._.trf_data.tensors[0].shape[-1]
+        tensor = span.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
+        return tensor.mean(axis=0)
+
+    def token_tensor(self, token: Token):
+        """Take a Token as input and return its transformer embedding."""
+        tensor_ix = token.doc._.trf_data.align[token.i].data.flatten()
+        out_dim = token.doc._.trf_data.tensors[0].shape[-1]
+        tensor = token.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
+        return tensor.mean(axis=0)
+
+    def get_similarity(self, doc1, doc2):
+        """Get similarity score between two contextual vectors"""
+        return np.dot(doc1.vector, doc2.vector) / (doc1.vector_norm * doc2.vector_norm)
+
+
 def embed(
     # fmt: off
     corpus: Path = Arg(..., help="Path to the corpus directory containing spaCy files."),
-    outfile: Path = Arg(..., help="Path to save the embeddings."),
+    outfile: Path = Arg(..., help="Path to save the embeddings in spaCy format."),
     model: str = Opt("tl_calamancy_trf", "-m", "--model", help="Model to use for embedding."),
-    lang: str = Opt("tl", "-l", "--lang", help="Language code."),
+    verbose: bool = Opt(False, "-v", "--verbose", help="Print more information.")
     # fmt: on
 ):
     """Get embeddings for each span label in each document"""
     nlp = spacy.load(model)
+    nlp.add_pipe("tensor2attr")
+    msg.text(f"Pipeline components: {nlp.pipeline}", show=verbose)
 
     # Combine corpus
     files = corpus.glob("*.spacy")
@@ -28,7 +80,12 @@ def embed(
     for file in files:
         doc_bin = DocBin().from_disk(file)
         docs.extend(list(doc_bin.get_docs(nlp.vocab)))
-    msg.text(f"Found {len(docs)} documents in '{corpus}'")
+    msg.info(f"Found {len(docs)} documents in '{corpus}'")
+
+    # Get embeddings
+    output_docs = [nlp(doc) for doc in docs]
+    doc_bin_out = DocBin(docs=output_docs)
+    doc_bin_out.to_disk(outfile)
 
 
 if __name__ == "__main__":
