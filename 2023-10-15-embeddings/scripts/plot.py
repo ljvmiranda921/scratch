@@ -64,7 +64,8 @@ def plot(
     ]
     msg.info(f"Processed {len(examples)} entities from {embeddings}")
 
-    _plot_all(examples, outdir)  # encode them based on entity type
+    # Plot based on (1) entity type or (2) span properties
+    _plot_all(examples, outdir)
     _plot_by_ent(examples, outdir, label="PER")
     _plot_by_ent(examples, outdir, label="ORG")
     _plot_by_ent(examples, outdir, label="LOC")
