@@ -44,18 +44,18 @@ commands:
   - name: "embed"
     help: "Embed the documents and get the vectors for each named entity"
     script:
-      - python -m scripts.embed corpus/ embeddings
+      - python -m scripts.embed corpus/ embeddings.spacy --verbose
     deps:
       - corpus/train.spacy
       - corpus/dev.spacy
       - corpus/test.spacy
     outputs:
-      - embeddings
+      - embeddings.spacy
 
   - name: "plot"
     help: "Plot the chart (highly-customized for blog post)"
     script:
-      - python -m scripts.plot embeddings plots/
+      - python -m scripts.plot embeddings.spacy plots/
     deps:
       - embeddings
     outputs:
