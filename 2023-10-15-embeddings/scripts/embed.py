@@ -31,11 +31,11 @@ class Tensor2Attr:
         """Override the .vector and .similarity attributes
         with our own implementation."""
 
-        doc._.set("ctx_vector", doc._.trf_data.tensors[-1].mean(axis=0))
+        doc._.set("ctx_doc_vector", doc._.trf_data.tensors[-1].mean(axis=0))
         for token in doc:
-            token._.set("ctx_vector", self.get_token_tensor(token))
+            token._.set("ctx_token_vector", self.get_token_tensor(token))
         for span in doc.ents:
-            span._.set("ctx_vector", self.get_span_tensor(span))
+            span._.set("ctx_span_vector", self.get_span_tensor(span))
 
     def get_doc_tensor(self, doc: Doc):
         """Take a Doc object as input and returns the embedding for the entire Doc."""
