@@ -103,9 +103,6 @@ def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
                 plain=bool(props[3]),
             )
             examples.append(eg)
-            # FIXME
-            if len(examples) == 10:
-                break
     return examples
 
 
