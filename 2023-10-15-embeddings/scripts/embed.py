@@ -69,7 +69,7 @@ def embed(
     # fmt: on
 ):
     """Get embeddings for each span label in each document"""
-    nlp = spacy.load(model)
+    nlp = spacy.load(model, disable=["ner"])
     nlp.add_pipe("tensor2attr")
     msg.text(f"Pipeline components: {nlp.pipeline}", show=verbose)
 
