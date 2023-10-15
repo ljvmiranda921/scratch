@@ -1,11 +1,12 @@
-from dataclasses import asdict, dataclass, replace
+from dataclasses import dataclass, replace
 from pathlib import Path
-from typing import Iterable, Tuple
+from typing import Iterable
 
 import spacy
 import typer
-import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.pylab as pylab
 from spacy.tokens import Doc, DocBin
 from sklearn.manifold import TSNE
 from tqdm import tqdm
@@ -13,6 +14,8 @@ from wasabi import msg
 
 Arg = typer.Argument
 Opt = typer.Option
+
+ENTITY_TYPES = ["PER", "ORG", "LOC"]
 
 
 @dataclass
@@ -61,7 +64,7 @@ def plot(
     msg.info(f"Processed {len(examples)} entities from {embeddings}")
 
     # Plot
-    df = pd.DataFrame([asdict(eg) for eg in examples]).drop(columns=["ctx_vector"])
+    _plot_all(examples, outdir)
 
     ## Plot everything
 
@@ -103,6 +106,39 @@ def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
             )
             examples.append(eg)
     return examples
+
+
+pylab.rcParams.update(
+    {
+        "legend.fontsize": "x-large",
+        "axes.labelsize": "x-large",
+        "axes.titlesize": "x-large",
+        "xtick.labelsize": "larger",
+        "ytick.labelsize": "larger",
+    }
+)
+plt.rcParams.update({"text.usetex": True, "font.family": "sans-serif"})
+
+
+def _plot_all(examples: Iterable[Example], outdir: Path):
+    """Plot all points and color code them based on entity type"""
+    fig, ax = plt.subplots(1, 1)
+
+    for entity_type, color in zip(ENTITY_TYPES, ["red", "green", "blue"]):
+        x = [eg.tsne_x for eg in examples if eg.label == entity_type]
+        y = [eg.tsne_y for eg in examples if eg.label == entity_type]
+        ax.plot(
+            x,
+            y,
+            marker="o",
+            linestyle="",
+            color=color,
+            alpha=0.4,
+            label=entity_type,
+        )
+    ax.legend()
+    fig.tight_layout()
+    plt.savefig(outdir / "test.png", transparent=True)
 
 
 if __name__ == "__main__":
