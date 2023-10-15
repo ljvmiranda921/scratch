@@ -62,7 +62,6 @@ def plot(
 
     # Plot
     df = pd.DataFrame([asdict(eg) for eg in examples]).drop(columns=["ctx_vector"])
-    breakpoint()
 
     ## Plot everything
 
