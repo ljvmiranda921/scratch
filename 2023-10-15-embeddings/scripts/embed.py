@@ -23,15 +23,13 @@ class Tensor2Attr:
 
     def __call__(self, doc: Doc) -> Doc:
         for span in doc.ents:
-            span._.set("ctx_vector", self.get_span_tensor(span))
+            # Get span vector
+            tensor_ix = span.doc._.trf_data.align[span.start : span.end].data.flatten()
+            out_dim = span.doc._.trf_data.tensors[0].shape[-1]
+            tensor = span.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
+            ctx_vector = tensor.mean(axis=0)  # get average of subword vectors
+            span._.set("ctx_vector", ctx_vector)
         return doc
-
-    def get_span_tensor(self, span: Span):
-        """Take a Span as input and returns its transformer embedding."""
-        tensor_ix = span.doc._.trf_data.align[span.start : span.end].data.flatten()
-        out_dim = span.doc._.trf_data.tensors[0].shape[-1]
-        tensor = span.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
-        return tensor.mean(axis=0)
 
 
 def embed(
