@@ -19,27 +19,12 @@ class Tensor2Attr:
     and store them in the .vector attribute"""
 
     def __init__(self, name: str, nlp: Language):
-        Doc.set_extension("ctx_vector", default=[])
         Span.set_extension("ctx_vector", default=[])
-        Token.set_extension("ctx_vector", default=[])
 
     def __call__(self, doc: Doc) -> Doc:
-        self.add_attributes(doc)
-        return doc
-
-    def add_attributes(self, doc: Doc):
-        """Override the .vector and .similarity attributes
-        with our own implementation."""
-
-        doc._.set("ctx_doc_vector", doc._.trf_data.tensors[-1].mean(axis=0))
-        for token in doc:
-            token._.set("ctx_token_vector", self.get_token_tensor(token))
         for span in doc.ents:
-            span._.set("ctx_span_vector", self.get_span_tensor(span))
-
-    def get_doc_tensor(self, doc: Doc):
-        """Take a Doc object as input and returns the embedding for the entire Doc."""
-        return doc._.trf_data.tensors[-1].mean(axis=0)
+            span._.set("ctx_vector", self.get_span_tensor(span))
+        return doc
 
     def get_span_tensor(self, span: Span):
         """Take a Span as input and returns its transformer embedding."""
@@ -47,17 +32,6 @@ class Tensor2Attr:
         out_dim = span.doc._.trf_data.tensors[0].shape[-1]
         tensor = span.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
         return tensor.mean(axis=0)
-
-    def get_token_tensor(self, token: Token):
-        """Take a Token as input and return its transformer embedding."""
-        tensor_ix = token.doc._.trf_data.align[token.i].data.flatten()
-        out_dim = token.doc._.trf_data.tensors[0].shape[-1]
-        tensor = token.doc._.trf_data.tensors[0].reshape(-1, out_dim)[tensor_ix]
-        return tensor.mean(axis=0)
-
-    def get_similarity(self, doc1, doc2):
-        """Get similarity score between two contextual vectors"""
-        return np.dot(doc1.vector, doc2.vector) / (doc1.vector_norm * doc2.vector_norm)
 
 
 def embed(
