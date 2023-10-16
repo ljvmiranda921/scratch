@@ -77,8 +77,34 @@ def plot(
         msg.info(f"Using coordinates path from '{coords_path}'")
         examples = srsly.read_msgpack(coords_path)
 
-    # Plot based on (1) entity type or (2) span properties
+    # Prepare plotting variables
     df = pd.DataFrame(examples)
+    colors = {
+        "crimson": "#a00000",
+        "silver": "#adadc9",
+        "pewter": "#696880",
+        "stone_gray": "#928E85",
+        "slate_gray": "#708090",
+        "medium_gray": "#bebebe",
+    }
+
+    # Plot all points and label them by entity type
+    fig = px.scatter(
+        df,
+        x="tsne_x",
+        y="tsne_y",
+        color="label",
+        template="simple_white",
+        hover_name="span_text",
+        hover_data=["display_text", "span_text", "label"],
+        color_discrete_map={
+            "PER": colors.get("crimson"),
+            "ORG": colors.get("silver"),
+            "LOC": colors.get("pewter"),
+        },
+    )
+    fig.show()
+
     _plot_all(df, outdir)
     # _plot_by_ent(df, outdir, label="PER")
     # _plot_by_ent(df, outdir, label="ORG")
@@ -134,17 +160,7 @@ def _compute_properties(docs: Iterable[Doc]) -> Iterable[Example]:
 
 def _plot_all(df: pd.DataFrame, outdir: Path):
     """Plot all points and color code them based on entity type."""
-    fig = px.scatter(
-        df,
-        x="tsne_x",
-        y="tsne_y",
-        color="label",
-        template="simple_white",
-        hover_name="span_text",
-        hover_data=["display_text", "span_text", "label"],
-        color_discrete_map={"PER": "#a00000", "ORG": "#d8d8d8", "LOC": "#928E85"},
-    )
-    fig.show()
+    pass
 
 
 # def _plot_by_ent(df: pd.DataFrame, outdir: Path, label: str):
