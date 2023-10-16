@@ -87,9 +87,22 @@ def plot(
         "slate_gray": "#708090",
         "medium_gray": "#bebebe",
     }
+    layout_properties = {
+        "autosize": False,
+        "width": 720,
+        "height": 540,
+        "font_family": "CMU Sans Serif",
+        "title_font_family": "CMU Sans Serif",
+        "title_font_size": 24,
+        "paper_bgcolor": "rgba(0,0,0,0)",
+        "plot_bgcolor": "rgba(0,0,0,0)",
+        "legend_title": "Entity label",
+        "xaxis_title": None,
+        "yaxis_title": None,
+    }
 
     # Plot all points and label them by entity type
-    fig = px.scatter(
+    fig_all_points = px.scatter(
         df,
         x="tsne_x",
         y="tsne_y",
@@ -97,15 +110,16 @@ def plot(
         template="simple_white",
         hover_name="span_text",
         hover_data=["display_text", "span_text", "label"],
+        title="All labels",
         color_discrete_map={
             "PER": colors.get("crimson"),
             "ORG": colors.get("silver"),
             "LOC": colors.get("pewter"),
         },
     )
-    fig.show()
+    fig_all_points.update_layout(**layout_properties)
+    fig_all_points.write_html(outdir / "fig_all_points.html", include_plotlyjs="cdn")
 
-    _plot_all(df, outdir)
     # _plot_by_ent(df, outdir, label="PER")
     # _plot_by_ent(df, outdir, label="ORG")
     # _plot_by_ent(df, outdir, label="LOC")
@@ -156,11 +170,6 @@ def _compute_properties(docs: Iterable[Doc]) -> Iterable[Example]:
             )
             examples.append(eg)
     return examples
-
-
-def _plot_all(df: pd.DataFrame, outdir: Path):
-    """Plot all points and color code them based on entity type."""
-    pass
 
 
 # def _plot_by_ent(df: pd.DataFrame, outdir: Path, label: str):
