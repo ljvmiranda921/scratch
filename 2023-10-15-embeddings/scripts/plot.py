@@ -120,9 +120,32 @@ def plot(
     fig_all_points.update_layout(**layout_properties)
     fig_all_points.write_html(outdir / "fig_all_points.html", include_plotlyjs="cdn")
 
-    # _plot_by_ent(df, outdir, label="PER")
-    # _plot_by_ent(df, outdir, label="ORG")
-    # _plot_by_ent(df, outdir, label="LOC")
+    # Plot points per entity type that corresponds to a span property
+    for entity_label in ENTITY_TYPES:
+        df_per_label = df[df["label"]] == entity_label
+        fig_per_label = px.scatter(
+            df_per_label,
+            x="tsne_x",
+            y="tsne_y",
+            color="label",
+            template="simple_white",
+            hover_name="span_text",
+            hover_data=["display_text", "span_text", "label"],
+            title="All labels",
+            color_discrete_map={
+                "paren": colors.get("slate_gray"),
+                "all_caps": colors.get("silver"),
+                "initial": colors.get("pewter"),
+                "plain": colors.get("crimson"),
+            },
+        )
+        fig_per_label.update_layout(**layout_properties)
+        fig_per_label.write_html(
+            outdir / f"fig_per_label_{entity_label}.html", include_plotlyjs="cdn"
+        )
+    msg.good(
+        f"Successfully drew the charts. Please check the output in the '{outdir}' directory."
+    )
 
 
 def _compute_properties(docs: Iterable[Doc]) -> Iterable[Example]:
