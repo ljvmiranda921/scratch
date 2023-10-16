@@ -26,6 +26,7 @@ class Example:
     """Class for keeping track of an example"""
 
     text: str
+    display_text: str
     span_text: str
     label: str
     start_char: int
@@ -66,8 +67,8 @@ def plot(
         examples = []
         for eg, coord in zip(_examples, fit_X):
             eg = asdict(replace(eg, tsne_x=coord[0], tsne_y=coord[1]))
-            eg.pop("ctx_vector")  # to save space
-            examples.append(eg, None)
+            eg.pop("ctx_vector", None)  # to save space
+            examples.append(eg)
 
         msg.info(f"Processed {len(examples)} entities from {embeddings}")
         srsly.write_msgpack(DEFAULT_TSNE_COORDS_PATH, examples)
