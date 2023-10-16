@@ -6,8 +6,8 @@ import spacy
 import srsly
 import typer
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.pylab as pylab
+import pandas as pd
+import plotly.express as px
 from sklearn.manifold import TSNE
 from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
@@ -58,7 +58,7 @@ def plot(
         docs = doc_bin.get_docs(nlp.vocab)
 
         # Compute the t-SNE coordinates
-        _examples = _get_properties(docs)
+        _examples = _compute_properties(docs)
         msg.text("Obtaining t-SNE plot")
         X = np.vstack([eg.ctx_vector for eg in _examples])
         model = TSNE(n_components=2, random_state=0)
@@ -77,13 +77,14 @@ def plot(
         examples = srsly.read_msgpack(coords_path)
 
     # Plot based on (1) entity type or (2) span properties
-    _plot_all(examples, outdir)
-    _plot_by_ent(examples, outdir, label="PER")
-    _plot_by_ent(examples, outdir, label="ORG")
-    _plot_by_ent(examples, outdir, label="LOC")
+    df = pd.DataFrame(examples)
+    _plot_all(df, outdir)
+    # _plot_by_ent(df, outdir, label="PER")
+    # _plot_by_ent(df, outdir, label="ORG")
+    # _plot_by_ent(df, outdir, label="LOC")
 
 
-def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
+def _compute_properties(docs: Iterable[Doc]) -> Iterable[Example]:
     examples = []
     for doc in tqdm(docs):
         for ent in doc.ents:
@@ -98,8 +99,22 @@ def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
             else:
                 props = (0, 0, 0, 1)
 
+            # Create display text for later visualization
+            window = 15
+            start = max(0, ent.start_char - window)
+            end = min(len(doc.text), ent.end_char + window)
+            prefix = doc.text[start : ent.start_char]
+            suffix = doc.text[ent.end_char : end]
+            if start > 0:
+                prefix = "..." + prefix
+            if end < len(doc.text) - 1:
+                suffix = suffix + "..."
+            display_text = f"{prefix}<b>{ent.text}</b>{suffix}"
+
+            # Create Example class that contains all computed props
             eg = Example(
                 text=doc.text,
+                display_text=display_text,
                 span_text=ent.text,
                 label=ent.label_,
                 start_char=ent.start_char,
@@ -116,55 +131,34 @@ def _get_properties(docs: Iterable[Doc]) -> Iterable[Example]:
     return examples
 
 
-pylab.rcParams.update(
-    {
-        "legend.fontsize": "x-large",
-        "axes.labelsize": "x-large",
-        "axes.titlesize": "x-large",
-        "xtick.labelsize": "larger",
-        "ytick.labelsize": "larger",
-    }
-)
-plt.rcParams.update({"text.usetex": True, "font.family": "sans-serif"})
-
-
-def _plot_all(examples: Iterable[Dict], outdir: Path):
+def _plot_all(df: pd.DataFrame, outdir: Path):
     """Plot all points and color code them based on entity type."""
-    fig, ax = plt.subplots(1, 1)
-
-    for entity_type, color in zip(ENTITY_TYPES, ["red", "green", "blue"]):
-        x = [eg["tsne_x"] for eg in examples if eg["label"] == entity_type]
-        y = [eg["tsne_y"] for eg in examples if eg["label"] == entity_type]
-        ax.plot(
-            x,
-            y,
-            marker="o",
-            linestyle="",
-            color=color,
-            alpha=0.4,
-            label=entity_type,
-        )
-    ax.legend()
-    fig.tight_layout()
-    outfile = outdir / "all_labels.png"
-    plt.savefig(outfile, transparent=True)
-    msg.good(f"Saving plot for all labels in {outfile}")
+    fig = px.scatter(
+        df,
+        x="tsne_x",
+        y="tsne_y",
+        color="label",
+        template="simple_white",
+        hover_name="span_text",
+        hover_data=["display_text", "span_text", "label"],
+    )
+    fig.show()
 
 
-def _plot_by_ent(examples: Iterable[Example], outdir: Path, label: str):
-    """Plot points per entity type that corresponds to a span property."""
-    fig, ax = plt.subplots(1, 1)
-    filtered_examples = [eg for eg in examples if eg["label"] == label]
+# def _plot_by_ent(df: pd.DataFrame, outdir: Path, label: str):
+#     """Plot points per entity type that corresponds to a span property."""
+#     fig, ax = plt.subplots(1, 1)
+#     filtered_examples = [eg for eg in examples if eg["label"] == label]
 
-    for prop, color in zip(SPAN_PROPERTIES, ("red", "blue", "green", "black")):
-        x = [eg["tsne_x"] for eg in filtered_examples if eg[prop]]
-        y = [eg["tsne_y"] for eg in filtered_examples if eg[prop]]
-        ax.plot(x, y, marker="o", linestyle="", color=color, alpha=0.4, label=prop)
-    ax.legend()
-    fig.tight_layout()
-    outfile = outdir / f"per_label_{label}.png"
-    plt.savefig(outfile, transparent=True)
-    msg.good(f"Saving plot for label '{label}' in {outfile}")
+#     for prop, color in zip(SPAN_PROPERTIES, ("red", "blue", "green", "black")):
+#         x = [eg["tsne_x"] for eg in filtered_examples if eg[prop]]
+#         y = [eg["tsne_y"] for eg in filtered_examples if eg[prop]]
+#         ax.plot(x, y, marker="o", linestyle="", color=color, alpha=0.4, label=prop)
+#     ax.legend()
+#     fig.tight_layout()
+#     outfile = outdir / f"per_label_{label}.png"
+#     plt.savefig(outfile, transparent=True)
+#     msg.good(f"Saving plot for label '{label}' in {outfile}")
 
 
 if __name__ == "__main__":
