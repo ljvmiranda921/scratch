@@ -67,13 +67,13 @@ def plot(
         for eg, coord in zip(_examples, fit_X):
             eg = asdict(replace(eg, tsne_x=coord[0], tsne_y=coord[1]))
             eg.pop("ctx_vector")  # to save space
-            examples.append(eg)
+            examples.append(eg, None)
 
         msg.info(f"Processed {len(examples)} entities from {embeddings}")
         srsly.write_msgpack(DEFAULT_TSNE_COORDS_PATH, examples)
         msg.good(f"Saved coordinates into a binary file: {DEFAULT_TSNE_COORDS_PATH}")
     else:
-        msg.info(f"Using coordinates path from {coords_path}")
+        msg.info(f"Using coordinates path from '{coords_path}'")
         examples = srsly.read_msgpack(coords_path)
 
     # Plot based on (1) entity type or (2) span properties
@@ -146,13 +146,15 @@ def _plot_all(examples: Iterable[Dict], outdir: Path):
         )
     ax.legend()
     fig.tight_layout()
-    plt.savefig(outdir / "test.png", transparent=True)
+    outfile = outdir / "all_labels.png"
+    plt.savefig(outfile, transparent=True)
+    msg.good(f"Saving plot for all labels in {outfile}")
 
 
 def _plot_by_ent(examples: Iterable[Example], outdir: Path, label: str):
     """Plot points per entity type that corresponds to a span property."""
     fig, ax = plt.subplots(1, 1)
-    filtered_examples = [eg for eg in examples if eg["level"] == label]
+    filtered_examples = [eg for eg in examples if eg["label"] == label]
 
     for prop, color in zip(SPAN_PROPERTIES, ("red", "blue", "green", "black")):
         x = [eg["tsne_x"] for eg in filtered_examples if eg[prop]]
@@ -160,7 +162,9 @@ def _plot_by_ent(examples: Iterable[Example], outdir: Path, label: str):
         ax.plot(x, y, marker="o", linestyle="", color=color, alpha=0.4, label=prop)
     ax.legend()
     fig.tight_layout()
-    plt.savefig(outdir / "test.png", transparent=True)
+    outfile = outdir / f"per_label_{label}.png"
+    plt.savefig(outfile, transparent=True)
+    msg.good(f"Saving plot for label '{label}' in {outfile}")
 
 
 if __name__ == "__main__":

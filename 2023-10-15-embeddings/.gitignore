@@ -173,3 +173,4 @@ pipelines/
 outputs/
 
 embeddings.spacy
+tsne.coords
