@@ -142,6 +142,7 @@ def _plot_all(df: pd.DataFrame, outdir: Path):
         template="simple_white",
         hover_name="span_text",
         hover_data=["display_text", "span_text", "label"],
+        color_discrete_map={"PER": "#a00000", "ORG": "#d8d8d8", "LOC": "#928E85"},
     )
     fig.show()
 
