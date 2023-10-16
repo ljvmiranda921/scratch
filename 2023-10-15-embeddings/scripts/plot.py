@@ -1,14 +1,15 @@
 from dataclasses import asdict, dataclass, replace
 from pathlib import Path
-from typing import Iterable
+from typing import Dict, Iterable, Optional
 
 import spacy
+import srsly
 import typer
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pylab
-from spacy.tokens import Doc, DocBin
 from sklearn.manifold import TSNE
+from spacy.tokens import Doc, DocBin
 from tqdm import tqdm
 from wasabi import msg
 
@@ -17,6 +18,7 @@ Opt = typer.Option
 
 ENTITY_TYPES = ["PER", "ORG", "LOC"]
 SPAN_PROPERTIES = ["paren", "all_caps", "initial", "plain"]
+DEFAULT_TSNE_COORDS_PATH = "tsne.coords"
 
 
 @dataclass
@@ -45,24 +47,34 @@ def plot(
     # fmt: off
     embeddings: Path = Arg(..., help="Path to a spaCy file containing span embeddings."),
     outdir: Path = Arg(..., help="Directory to save the plots.", dir_okay=True),
+    coords_path: Optional[Path] = Opt(None, help="If provided, will use coords from an external file."),
     # fmt: on
 ):
-    # Read file
-    nlp = spacy.blank("xx")
-    doc_bin = DocBin().from_disk(embeddings)
-    docs = doc_bin.get_docs(nlp.vocab)
+    """Plot entity embeddings."""
+    if not coords_path:
+        # Read file
+        nlp = spacy.blank("xx")
+        doc_bin = DocBin().from_disk(embeddings)
+        docs = doc_bin.get_docs(nlp.vocab)
 
-    # Compute the t-SNE coordinates
-    _examples = _get_properties(docs)
-    msg.text("Obtaining t-SNE plot")
-    X = np.vstack([eg.ctx_vector for eg in _examples])
-    model = TSNE(n_components=2, random_state=0)
-    fit_X = model.fit_transform(X)
-    examples = [
-        replace(eg, tsne_x=coord[0], tsne_y=coord[1])
-        for eg, coord in zip(_examples, fit_X)
-    ]
-    msg.info(f"Processed {len(examples)} entities from {embeddings}")
+        # Compute the t-SNE coordinates
+        _examples = _get_properties(docs)
+        msg.text("Obtaining t-SNE plot")
+        X = np.vstack([eg.ctx_vector for eg in _examples])
+        model = TSNE(n_components=2, random_state=0)
+        fit_X = model.fit_transform(X)
+        examples = []
+        for eg, coord in zip(_examples, fit_X):
+            eg = asdict(replace(eg, tsne_x=coord[0], tsne_y=coord[1]))
+            eg.pop("ctx_vector")  # to save space
+            examples.append(eg)
+
+        msg.info(f"Processed {len(examples)} entities from {embeddings}")
+        srsly.write_msgpack(DEFAULT_TSNE_COORDS_PATH, examples)
+        msg.good(f"Saved coordinates into a binary file: {DEFAULT_TSNE_COORDS_PATH}")
+    else:
+        msg.info(f"Using coordinates path from {coords_path}")
+        examples = srsly.read_msgpack(coords_path)
 
     # Plot based on (1) entity type or (2) span properties
     _plot_all(examples, outdir)
@@ -116,13 +128,13 @@ pylab.rcParams.update(
 plt.rcParams.update({"text.usetex": True, "font.family": "sans-serif"})
 
 
-def _plot_all(examples: Iterable[Example], outdir: Path):
+def _plot_all(examples: Iterable[Dict], outdir: Path):
     """Plot all points and color code them based on entity type."""
     fig, ax = plt.subplots(1, 1)
 
     for entity_type, color in zip(ENTITY_TYPES, ["red", "green", "blue"]):
-        x = [eg.tsne_x for eg in examples if eg.label == entity_type]
-        y = [eg.tsne_y for eg in examples if eg.label == entity_type]
+        x = [eg["tsne_x"] for eg in examples if eg["label"] == entity_type]
+        y = [eg["tsne_y"] for eg in examples if eg["label"] == entity_type]
         ax.plot(
             x,
             y,
@@ -140,11 +152,11 @@ def _plot_all(examples: Iterable[Example], outdir: Path):
 def _plot_by_ent(examples: Iterable[Example], outdir: Path, label: str):
     """Plot points per entity type that corresponds to a span property."""
     fig, ax = plt.subplots(1, 1)
-    filtered_examples = [eg for eg in examples if eg.label == label]
+    filtered_examples = [eg for eg in examples if eg["level"] == label]
 
     for prop, color in zip(SPAN_PROPERTIES, ("red", "blue", "green", "black")):
-        x = [eg.tsne_x for eg in filtered_examples if eg.__dict__[prop]]
-        y = [eg.tsne_y for eg in filtered_examples if eg.__dict__[prop]]
+        x = [eg["tsne_x"] for eg in filtered_examples if eg[prop]]
+        y = [eg["tsne_y"] for eg in filtered_examples if eg[prop]]
         ax.plot(x, y, marker="o", linestyle="", color=color, alpha=0.4, label=prop)
     ax.legend()
     fig.tight_layout()
