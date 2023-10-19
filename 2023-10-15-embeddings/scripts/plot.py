@@ -32,12 +32,7 @@ class Example:
     start_char: int
     end_char: int
     ctx_vector: np.ndarray
-
-    # Other properties, assign the first applicable category
-    paren: bool  # if preceded by a left parenthesis
-    all_caps: bool  # if it consists of all capitals
-    initial: bool  # if it is the first token in a sentence
-    plain: bool  # catch-all category
+    props: str
 
     # t-SNE coordinates for plotting
     tsne_x: float = 0.0
@@ -96,7 +91,6 @@ def plot(
         "title_font_size": 24,
         "paper_bgcolor": "rgba(0,0,0,0)",
         "plot_bgcolor": "rgba(0,0,0,0)",
-        "legend_title": "Entity label",
         "xaxis_title": None,
         "yaxis_title": None,
     }
@@ -117,21 +111,21 @@ def plot(
             "LOC": colors.get("pewter"),
         },
     )
-    fig_all_points.update_layout(**layout_properties)
+    fig_all_points.update_layout(legend_title="Entity label", **layout_properties)
     fig_all_points.write_html(outdir / "fig_all_points.html", include_plotlyjs="cdn")
 
     # Plot points per entity type that corresponds to a span property
     for entity_label in ENTITY_TYPES:
-        df_per_label = df[df["label"]] == entity_label
+        df_per_label = df.query(f"label == '{entity_label}'")
         fig_per_label = px.scatter(
             df_per_label,
             x="tsne_x",
             y="tsne_y",
-            color="label",
+            color="props",
             template="simple_white",
             hover_name="span_text",
             hover_data=["display_text", "span_text", "label"],
-            title="All labels",
+            title=f"{entity_label} properties",
             color_discrete_map={
                 "paren": colors.get("slate_gray"),
                 "all_caps": colors.get("silver"),
@@ -139,7 +133,7 @@ def plot(
                 "plain": colors.get("crimson"),
             },
         )
-        fig_per_label.update_layout(**layout_properties)
+        fig_per_label.update_layout(legend_title="Properties", **layout_properties)
         fig_per_label.write_html(
             outdir / f"fig_per_label_{entity_label}.html", include_plotlyjs="cdn"
         )
@@ -155,13 +149,13 @@ def _compute_properties(docs: Iterable[Doc]) -> Iterable[Example]:
             # We only want the first applicable category for
             # per-label plots. This looks a bit ugly.
             if ent.start != 0 and doc[ent.start - 1].text == "(":
-                props = (1, 0, 0, 0)
+                props = "paren"  # if preceded by a left parenthesis
             elif all([token.is_upper for token in ent]):
-                props = (0, 1, 0, 0)
+                props = "all_caps"  # if entity consists of all capital letters
             elif ent.start == 0:
-                props = (0, 0, 1, 0)
+                props = "initial"  # if it is the first token in a sentence
             else:
-                props = (0, 0, 0, 1)
+                props = "plain"  # catch-all category
 
             # Create display text for later visualization
             window = 15
@@ -186,29 +180,10 @@ def _compute_properties(docs: Iterable[Doc]) -> Iterable[Example]:
                 ctx_vector=doc.user_data[
                     ("._.", "ctx_vector", ent.start_char, ent.end_char)
                 ],
-                paren=bool(props[0]),
-                all_caps=bool(props[1]),
-                initial=bool(props[2]),
-                plain=bool(props[3]),
+                props=props,
             )
             examples.append(eg)
     return examples
-
-
-# def _plot_by_ent(df: pd.DataFrame, outdir: Path, label: str):
-#     """Plot points per entity type that corresponds to a span property."""
-#     fig, ax = plt.subplots(1, 1)
-#     filtered_examples = [eg for eg in examples if eg["label"] == label]
-
-#     for prop, color in zip(SPAN_PROPERTIES, ("red", "blue", "green", "black")):
-#         x = [eg["tsne_x"] for eg in filtered_examples if eg[prop]]
-#         y = [eg["tsne_y"] for eg in filtered_examples if eg[prop]]
-#         ax.plot(x, y, marker="o", linestyle="", color=color, alpha=0.4, label=prop)
-#     ax.legend()
-#     fig.tight_layout()
-#     outfile = outdir / f"per_label_{label}.png"
-#     plt.savefig(outfile, transparent=True)
-#     msg.good(f"Saving plot for label '{label}' in {outfile}")
 
 
 if __name__ == "__main__":
