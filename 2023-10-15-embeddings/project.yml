@@ -1,0 +1,62 @@
+title: "Visualizing Tagalog NER embeddings"
+
+# These are the directories that the project needs. The project CLI will make
+# sure that they always exist.
+directories:
+  - "assets"
+  - "corpus"
+  - "plots"
+  - "scripts"
+
+# Assets that should be downloaded or available in the directory. But the
+# 'project assets' command still lets you verify that the checksums match.
+assets:
+  - dest: assets/calamancy_gold.tar.gz
+    description: "Contains the annotated TLUnified corpora in spaCy format with PER, ORG, LOC as entity labels (named entity recognition). Annotated by three annotators with IAA (Cohen's Kappa) of 0.78. Corpora was based from *Improving Large-scale Language Models and Resources for Filipino* by Cruz and Cheng (2021)."
+    url: "https://storage.googleapis.com/ljvmiranda/calamanCy/tl_tlunified_gold/v1.0/corpus.tar.gz"
+
+# Workflows are sequences of commands (see below) executed in order. You can
+# run them via "spacy project run [workflow]". If a commands's inputs/outputs
+# haven't changed, it won't be re-run.
+workflows:
+  all:
+    - setup
+    - embed
+    - plot
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
+commands:
+  - name: "setup"
+    help: "Setup corpora and model"
+    script:
+      - tar -xzvf assets/calamancy_gold.tar.gz -C corpus/
+      - python -m pip install https://huggingface.co/ljvmiranda921/tl_calamancy_trf/resolve/main/tl_calamancy_trf-any-py3-none-any.whl
+    deps:
+      - assets/calamancy_gold.tar.gz
+    outputs:
+      - corpus/train.spacy
+      - corpus/dev.spacy
+      - corpus/test.spacy
+
+  - name: "embed"
+    help: "Embed the documents and get the vectors for each named entity"
+    script:
+      - python -m scripts.embed corpus/ embeddings.spacy --verbose
+    deps:
+      - corpus/train.spacy
+      - corpus/dev.spacy
+      - corpus/test.spacy
+    outputs:
+      - embeddings.spacy
+
+  - name: "plot"
+    help: "Plot the chart (highly-customized for blog post)"
+    script:
+      - python -m scripts.plot embeddings.spacy outputs/
+    deps:
+      - embeddings
+    outputs:
+      - outputs/
