@@ -44,6 +44,7 @@ def plot(
     embeddings: Path = Arg(..., help="Path to a spaCy file containing span embeddings."),
     outdir: Path = Arg(..., help="Directory to save the plots.", dir_okay=True),
     coords_path: Optional[Path] = Opt(None, help="If provided, will use coords from an external file."),
+    show: bool = Opt(False, help="If set, show plot for all labels in the browser."),
     # fmt: on
 ):
     """Plot entity embeddings."""
@@ -113,6 +114,15 @@ def plot(
     )
     fig_all_points.update_layout(legend_title="Entity label", **layout_properties)
     fig_all_points.write_html(outdir / "fig_all_points.html", include_plotlyjs="cdn")
+
+    # Configuration for show and download
+    show_config = {
+        "toImageButtonOptions": {
+            "format": "svg",  # one of png, svg, jpeg, webp
+        }
+    }
+    if show:
+        fig_all_points.show(config=show_config)
 
     # Plot points per entity type that corresponds to a span property
     for entity_label in ENTITY_TYPES:
