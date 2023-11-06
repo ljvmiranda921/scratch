@@ -1,0 +1,23 @@
+title: "Are you sure? Asking LLMs follow-up questions"
+description: |
+  This project aims to evaluate how LLMs will change their response in
+  knowledge-based tasks when presented with challenging, "are you sure?"
+  questions.
+
+# These are the directories that the project needs. The project CLI will make
+# sure that they always exist.
+directories:
+  - "assets"
+  - "corpus"
+  - "metrics"
+  - "scripts"
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
+commands:
+  - name: "download-datasets"
+    help: "Download all datasets from HuggingFace"
+    script:
+      - python -m scripts.download_datasets corpus/
