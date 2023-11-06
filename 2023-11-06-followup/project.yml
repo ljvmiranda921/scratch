@@ -12,12 +12,44 @@ directories:
   - "metrics"
   - "scripts"
 
+# Assets that should be downloaded or available in the directory. But the
+# 'project assets' command still lets you verify that the checksums match.
+assets:
+  - dest: assets/boolq/train.jsonl
+    description: "Training dataset for BoolQ (Clark et al., 2019)."
+    url: "https://storage.googleapis.com/boolq/train.jsonl"
+  - dest: assets/boolq/dev.jsonl
+    description: "Validation dataset for BoolQ (Clark et al., 2019)."
+    url: "https://storage.googleapis.com/boolq/dev.jsonl"
+  - dest: assets/strategyqa/train.json
+    description: "Training dataset for StrategyQA (Geva et al., 2021)."
+    url: "https://github.com/eladsegal/strategyqa/blob/main/data/strategyqa/train.json"
+  - dest: assets/strategyqa/dev.json
+    description: "Validation dataset for StrategyQA (Geva et al., 2021)."
+    url: "https://github.com/eladsegal/strategyqa/blob/main/data/strategyqa/dev.json"
+  - dest: assets/boolqcs/dev.json
+    description: "Validation dataset for the BoolQ constrast sets (Gardner et al., 2020)."
+    url: "https://github.com/allenai/contrast-sets/blob/main/BoolQ/boolq_perturbed.json"
+  - dest: assets/boolqnp/train.jsonl
+    description: "Natural perturbations for the BoolQ training dataset (Khashabi et al., 2020)."
+    url: "https://huggingface.co/datasets/metaeval/boolq-natural-perturbations/raw/main/train.jsonl"
+  - dest: assets/boolqnp/dev.jsonl
+    description: "Natural perturbations for the BoolQ validation dataset (Khashabi et al., 2020)."
+    url: "https://huggingface.co/datasets/metaeval/boolq-natural-perturbations/raw/main/dev.jsonl"
+
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
 # via "spacy project run [command] [path]". The help message is optional and
 # shown when executing "spacy project run [optional command] [path] --help".
 commands:
-  - name: "download-datasets"
-    help: "Download all datasets from HuggingFace"
+  - name: "process-datasets"
+    help: "Convert all datasets into a single format."
     script:
-      - python -m scripts.download_datasets corpus/
+      - python -m scripts.process_datasets assets/ corpus/
+    deps:
+      - assets/
+    outputs:
+      - corpus/boolq
+      - corpus/boolqcs
+      - corpus/boolqnp
+      - corpus/strategyqa
