@@ -1,4 +1,8 @@
 title: "Visualizing Tagalog NER embeddings"
+description: |
+  This project aims to visualize Tagalog NER embeddings.
+  I ran RoBERTa Tagalog on the entities for the whole dataset, then clustered them using t-SNE, and visualized the results.
+  You can find the output in my [blog post](https://ljvmiranda921.github.io/notebook/2023/11/20/tagalog-ner-embeddings/).
 
 # These are the directories that the project needs. The project CLI will make
 # sure that they always exist.
