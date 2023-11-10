@@ -30,10 +30,10 @@ MODELS = {
 }
 
 
-def init_pipeline(model: str) -> "Pipeline":
+def init_pipeline(model: str) -> Tuple["Pipeline", Any]:
     """Initialize a model pipeline
 
-    model (str): a model's shorthand name.
+    model (str): a model's repo/shorthand name.
 
     RETURNS (Pipeline): a transformer pipeline used for `prompt_model`
     """
@@ -41,15 +41,15 @@ def init_pipeline(model: str) -> "Pipeline":
     tokenizer = AutoTokenizer.from_pretrained(model)
     init_params = {
         "task": TASK,
-        "model": model.get("name"),
+        "model": model,
         "tokenizer": tokenizer,
         "device_map": "auto",
     }
-    if model == "falcon":
+    if "falcon" in model:
         init_params["torch_dtype"] = torch.bfloat16
     pipe = pipeline(**init_params)
-    msg.good(f"Initializing pipeline with the config: {init_params}")
-    return pipe
+    msg.good("Pipeline initialized!")
+    return pipe, tokenizer
 
 
 def prompt_model(
@@ -79,7 +79,7 @@ def prompt_model(
         return_full_text=False,
     )
 
-    answers = [parse_generated_text(seq) for seq in sequences]
+    answers = [parse_generated_text(seq["generated_text"]) for seq in sequences]
     if verbose:
         msg.divider(show=verbose)
         msg.info(f"PROMPT: {prompt}", show=verbose)

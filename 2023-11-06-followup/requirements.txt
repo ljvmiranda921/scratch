@@ -1,6 +1,7 @@
 # Pipeline
 transformers
 datasets
+accelerate
 # Project
 weasel>=0.3.4
 # CLI
