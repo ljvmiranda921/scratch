@@ -1,4 +1,9 @@
-weasel>=0.3.4
-wasabi
+# Pipeline
+transformers
 datasets
+# Project
+weasel>=0.3.4
+# CLI
+wasabi
 typer
+tqdm

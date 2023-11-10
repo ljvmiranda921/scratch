@@ -45,7 +45,7 @@ commands:
   - name: "process-datasets"
     help: "Convert all datasets into a single format."
     script:
-      - python -m scripts.process_datasets assets/ corpus/
+      - python -m scripts.cli setup assets/ corpus/
     deps:
       - assets/
     outputs:
