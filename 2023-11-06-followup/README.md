@@ -21,6 +21,22 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `download-datasets` | Download all datasets from HuggingFace |
+| `process-datasets` | Convert all datasets into a single format. |
+
+### 🗂 Assets
+
+The following assets are defined by the project. They can
+be fetched by running [`weasel assets`](https://github.com/explosion/weasel/tree/main/docs/cli.md#open_file_folder-assets)
+in the project directory.
+
+| File | Source | Description |
+| --- | --- | --- |
+| `assets/boolq/train.jsonl` | URL | Training dataset for BoolQ (Clark et al., 2019). |
+| `assets/boolq/dev.jsonl` | URL | Validation dataset for BoolQ (Clark et al., 2019). |
+| `assets/strategyqa/train.json` | URL | Training dataset for StrategyQA (Geva et al., 2021). |
+| `assets/strategyqa/dev.json` | URL | Validation dataset for StrategyQA (Geva et al., 2021). |
+| `assets/boolqcs/dev.json` | URL | Validation dataset for the BoolQ constrast sets (Gardner et al., 2020). |
+| `assets/boolqnp/train.jsonl` | URL | Natural perturbations for the BoolQ training dataset (Khashabi et al., 2020). |
+| `assets/boolqnp/dev.jsonl` | URL | Natural perturbations for the BoolQ validation dataset (Khashabi et al., 2020). |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
