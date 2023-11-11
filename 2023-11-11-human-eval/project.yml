@@ -1,0 +1,23 @@
+title: "Am I smarter than a text generator?"
+description: "Some Prodigy annotation tasks to try out some common LLM benchmarks"
+
+# These are the directories that the project needs. The project CLI will make
+# sure that they always exist.
+directories:
+  - "assets"
+  - "corpus"
+  - "scripts"
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
+commands:
+  - name: "setup"
+    help: "Download datasets from HuggingFace and convert them into Prodigy format"
+    script:
+      - python -m scripts.download_piqa --choice corpus/piqa_choice.jsonl
+      - python -m scripts.download_piqa --textbox corpus/piqa_textbox.jsonl
+    outputs:
+      - corpus/piqa_choice.jsonl
+      - corpus/piqa_textbox.jsonl
