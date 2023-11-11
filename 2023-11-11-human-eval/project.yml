@@ -1,5 +1,25 @@
 title: "Am I smarter than a text generator?"
-description: "Some Prodigy annotation tasks to try out some common LLM benchmarks"
+description: |
+  Some Prodigy annotation tasks to try out some common LLM benchmarks
+  First, you need to download the dataset and specify the annotation interface (choice/textbox) it will be converted into.
+
+  ```sh
+  weasel run setup . --vars.dataset piqa --vars.interface choice
+  ```
+
+  Then, you can run [Prodigy](https://prodigy.ai) to start annotating:
+
+  ```sh
+  weasel run annotate . --vars.dataset piqa --vars.interface choice
+  ```
+
+  This saves all your annotations to the `humaneval_{dataset}_{interface}`
+  Prodigy dataset, which you can then export using [`prodigy db-out`](https://prodi.gy/docs/recipes#db-out) command.
+
+vars:
+  interface: "choice"
+  dataset: "piqa"
+  split: "validation"
 
 # These are the directories that the project needs. The project CLI will make
 # sure that they always exist.
@@ -14,10 +34,18 @@ directories:
 # shown when executing "spacy project run [optional command] [path] --help".
 commands:
   - name: "setup"
-    help: "Download datasets from HuggingFace and convert them into Prodigy format"
+    help: "Download dataset from HuggingFace and convert them into Prodigy format"
     script:
-      - python -m scripts.download_piqa --choice corpus/piqa_choice.jsonl
-      - python -m scripts.download_piqa --textbox corpus/piqa_textbox.jsonl
+      - python -m scripts.download_${vars.dataset} corpus/${vars.dataset}_${vars.interface}.jsonl --interface ${vars.interface} --split ${vars.split}
     outputs:
-      - corpus/piqa_choice.jsonl
-      - corpus/piqa_textbox.jsonl
+      - corpus/${vars.dataset}_${vars.interface}.jsonl
+
+  - name: "annotate"
+    help: "Annotate a dataset using Prodigy."
+    script:
+      - prodigy humaneval humaneval_${vars.dataset}_${vars.interface} corpus/${vars.dataset}_${vars.interface}.jsonl -v ${vars.interface} -F scripts/recipe_humaneval.py
+    deps:
+      - corpus/${vars.dataset}_${vars.interface}.jsonl
+
+  - name: "export"
+    help: "Export into JSONL format"

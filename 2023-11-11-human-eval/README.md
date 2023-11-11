@@ -3,6 +3,21 @@
 # 🪐 Weasel Project: Am I smarter than a text generator?
 
 Some Prodigy annotation tasks to try out some common LLM benchmarks
+First, you need to download the dataset and specify the annotation interface (choice/textbox) it will be converted into.
+
+```sh
+weasel run setup . --vars.dataset piqa --vars.interface choice
+```
+
+Then, you can run [Prodigy](https://prodigy.ai) to start annotating:
+
+```sh
+weasel run annotate . --vars.dataset piqa --vars.interface choice
+```
+
+This saves all your annotations to the `humaneval_{dataset}_{interface}`
+Prodigy dataset, which you can then export using [`prodigy db-out`](https://prodi.gy/docs/recipes#db-out) command.
+
 
 ## 📋 project.yml
 
@@ -18,6 +33,8 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `setup` | Download datasets from HuggingFace and convert them into Prodigy format |
+| `setup` | Download dataset from HuggingFace and convert them into Prodigy format |
+| `annotate` | Annotate a dataset using Prodigy. |
+| `export` | Export into JSONL format |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
