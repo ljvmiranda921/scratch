@@ -1,7 +1,6 @@
 from typing import Any, Dict, Iterable, List
 
 import srsly
-import typer
 from datasets import Dataset
 from spacy.tokens import Doc
 from wasabi import msg
