@@ -9,16 +9,19 @@ from wasabi import msg
 from .hellaswag import HellaSwagDataset
 from .piqa import PIQADataset
 from .utils import Interface, Split
+from .winogrande import WinograndeDataset
 
 
 class Dataset(str, Enum):
     piqa = "piqa"
     hellaswag = "hellaswag"
+    winogrande = "winogrande"
 
 
 DATASETS = {
     Dataset.piqa.value: PIQADataset,
     Dataset.hellaswag.value: HellaSwagDataset,
+    Dataset.winogrande.value: WinograndeDataset,
 }
 
 
