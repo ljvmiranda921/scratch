@@ -78,13 +78,25 @@ def evaluate(
     # fmt: on
 ):
     """Compare results on gold-standard data."""
+
+    def _to_spacy_doc(
+        nlp: "spacy.language.Language",
+        record: Dict[str, Any],
+        label: str,
+        class_labels: List[str],
+    ) -> Doc:
+        doc = nlp.make_doc(record.get("text"))
+        doc.cats = {class_label: 0 for class_label in set(class_labels)}
+        doc.cats[label] = 1
+        return doc
+
     nlp = spacy.blank("en")
 
     # Get reference documents
     ref_records = list(srsly.read_jsonl(references))
     ref_labels = [rec.get("meta").get("label") for rec in ref_records]
     ref_docs = [
-        to_spacy_doc(nlp, rec, label, CLASS_LABELS)
+        _to_spacy_doc(nlp, rec, label, CLASS_LABELS)
         for rec, label in zip(ref_records, ref_labels)
     ]
 
@@ -92,7 +104,7 @@ def evaluate(
     pred_records = list(srsly.read_jsonl(predictions))
     pred_labels = list([rec.get("accept")[0] for rec in pred_records])
     pred_docs = [
-        to_spacy_doc(nlp, rec, label, CLASS_LABELS)
+        _to_spacy_doc(nlp, rec, label, CLASS_LABELS)
         for rec, label in zip(pred_records, pred_labels)
     ]
 
@@ -103,18 +115,6 @@ def evaluate(
         examples, attr="cats", labels=CLASS_LABELS, multi_label=False
     )
     msg.text(title="Scores", text=scores)
-
-
-def to_spacy_doc(
-    nlp: "spacy.language.Language",
-    record: Dict[str, Any],
-    label: str,
-    class_labels: List[str],
-) -> Doc:
-    doc = nlp.make_doc(record.get("text"))
-    doc.cats = {class_label: 0 for class_label in set(class_labels)}
-    doc.cats[label] = 1
-    return doc
 
 
 if __name__ == "__main__":
