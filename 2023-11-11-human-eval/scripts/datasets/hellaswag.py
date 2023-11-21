@@ -5,11 +5,11 @@ from datasets import Dataset
 from spacy.tokens import Doc
 from wasabi import msg
 
-from .utils import Interface, make_doc
+from ..utils import Interface, make_doc
 
 
-class WinograndeDataset:
-    CLASS_LABELS = ["option1", "option2"]
+class HellaSwagDataset:
+    CLASS_LABELS = ["end0", "end1", "end2", "end3"]
 
     @classmethod
     def convert_to_prodigy(
@@ -19,26 +19,30 @@ class WinograndeDataset:
         annotation_tasks = []
         for eg in examples:
             if interface == Interface.choice.value:
+                num_labels = 3
+                endings = eg.get("endings")
+                options = [
+                    {"id": f"end{idx}", "text": end}
+                    for idx, end in zip(range(num_labels + 1), endings)
+                ]
+
                 annotation_tasks.append(
                     {
-                        "text": eg.get("sentence"),
-                        "options": [
-                            {"id": "option1", "text": eg.get("option1")},
-                            {"id": "option2", "text": eg.get("option2")},
-                        ],
-                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("answer"))]},
+                        "text": eg.get("activity_label"),
+                        "options": options,
+                        "meta": {"labels": cls.CLASS_LABELS[int(eg.get("label"))]},
                     }
                 )
             elif interface == Interface.textbox.value:
                 annotation_tasks.append(
                     {
-                        "text": eg.get("goal"),
+                        "text": eg.get("activity_text"),
                         "field_id": "user_input",
                         "field_label": "",
                         "field_rows": 5,
                         "field_placeholder": "Type here...",
                         "field_autofocus": False,
-                        "meta": {"label": cls.CLASS_LABELS[(eg.get("answer"))]},
+                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("label"))]},
                     }
                 )
             else:

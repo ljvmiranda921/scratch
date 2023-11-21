@@ -5,11 +5,11 @@ from datasets import Dataset
 from spacy.tokens import Doc
 from wasabi import msg
 
-from .utils import Interface, make_doc
+from ..utils import Interface, make_doc
 
 
-class PIQADataset:
-    CLASS_LABELS = ["sol1", "sol2"]
+class WinograndeDataset:
+    CLASS_LABELS = ["option1", "option2"]
 
     @classmethod
     def convert_to_prodigy(
@@ -21,12 +21,12 @@ class PIQADataset:
             if interface == Interface.choice.value:
                 annotation_tasks.append(
                     {
-                        "text": eg.get("goal"),
+                        "text": eg.get("sentence"),
                         "options": [
-                            {"id": "sol1", "text": eg.get("sol1")},
-                            {"id": "sol2", "text": eg.get("sol2")},
+                            {"id": "option1", "text": eg.get("option1")},
+                            {"id": "option2", "text": eg.get("option2")},
                         ],
-                        "meta": {"label": cls.CLASS_LABELS[eg.get("label")]},
+                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("answer"))]},
                     }
                 )
             elif interface == Interface.textbox.value:
@@ -38,7 +38,7 @@ class PIQADataset:
                         "field_rows": 5,
                         "field_placeholder": "Type here...",
                         "field_autofocus": False,
-                        "meta": {"label": cls.CLASS_LABELS[eg.get("label")]},
+                        "meta": {"label": cls.CLASS_LABELS[(eg.get("answer"))]},
                     }
                 )
             else:
