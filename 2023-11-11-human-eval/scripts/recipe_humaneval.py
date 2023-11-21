@@ -8,8 +8,9 @@ from wasabi import msg
     dataset=("Dataset to save answers to", "positional", None, str),
     source=("The source data as a JSONL file", "positional", None, str),
     view_id=("Annotation interface (choice/textbox)", "option", "v", str),
+    show_meta=("Hide meta containing the label", "option", None, bool),
 )
-def humaneval_recipe(dataset, source, view_id="choice"):
+def humaneval_recipe(dataset, source, view_id="choice", show_meta=False):
     # Load the stream from a JSONL file and return a generator that yields a
     # dictionary for each example in the data.
     stream = JSONL(source)
@@ -23,7 +24,7 @@ def humaneval_recipe(dataset, source, view_id="choice"):
         msg.fail("Unknown view_id, choose from choice or textbox.", exits=True)
 
     # Hide meta
-    config["hide_meta"] = True
+    config["hide_meta"] = not show_meta
 
     return {
         "view_id": view_id,
