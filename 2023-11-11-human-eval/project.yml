@@ -34,7 +34,7 @@ directories:
 # via "spacy project run [command] [path]". The help message is optional and
 # shown when executing "spacy project run [optional command] [path] --help".
 commands:
-  - name: "setup"
+  - name: "download"
     help: "Download dataset from HuggingFace and convert them into Prodigy format"
     script:
       - >-
