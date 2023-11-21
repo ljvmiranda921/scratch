@@ -24,6 +24,7 @@ vars:
 # These are the directories that the project needs. The project CLI will make
 # sure that they always exist.
 directories:
+  - "annotations"
   - "assets"
   - "corpus"
   - "scripts"
@@ -49,3 +50,8 @@ commands:
 
   - name: "export"
     help: "Export into JSONL format"
+    script:
+      - mkdir -p annotations/${vars.dataset}/
+      - prodigy db-out humaneval_${vars.dataset}_${vars.interface} annotations/${vars.dataset}/
+    outputs:
+      - annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
