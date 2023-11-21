@@ -19,7 +19,20 @@ def humaneval_recipe(dataset, source, view_id="choice", show_meta=False):
         config = {"choice_style": "single", "choice_auto_accept": True}
     elif view_id == "textbox":
         view_id = "blocks"
-        config = {"blocks": [{"view_id": "text_input"}]}
+        config = {
+            "blocks": [
+                {"view_id": "text"},
+                {
+                    "view_id": "text_input",
+                    "field_id": "user_input",
+                    "field_label": "",
+                    "field_rows": 5,
+                    "field_placeholder": "Type here...",
+                    "field_autofocus": False,
+                },
+            ]
+        }
+
     else:
         msg.fail("Unknown view_id, choose from choice or textbox.", exits=True)
 

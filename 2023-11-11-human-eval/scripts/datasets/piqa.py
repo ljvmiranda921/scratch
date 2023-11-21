@@ -34,11 +34,6 @@ class PIQADataset:
                 annotation_tasks.append(
                     {
                         "text": eg.get("goal"),
-                        "field_id": "user_input",
-                        "field_label": "",
-                        "field_rows": 5,
-                        "field_placeholder": "Type here...",
-                        "field_autofocus": False,
                         "meta": {"label": cls.CLASS_LABELS[eg.get("label")]},
                     }
                 )
