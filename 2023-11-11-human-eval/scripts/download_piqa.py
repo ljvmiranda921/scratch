@@ -22,7 +22,7 @@ def download_piqa(
     # fmt: off
     output_path: Path = typer.Argument(..., help="Path to save the JSONL file."),
     split: Split = typer.Option(Split.validation, help="Dataset split to convert."),
-    interface: Interface = typer.Option(Interface.choice, help="Prodigy interface to use.")
+    interface: Interface = typer.Option(Interface.choice, help="Prodigy interface to use."),
     # fmt: on
 ):
     """Download PIQA dataset from HuggingFace and convert it into Prodigy format."""
@@ -38,6 +38,7 @@ def download_piqa(
                         {"id": "sol1", "text": eg.get("sol1")},
                         {"id": "sol2", "text": eg.get("sol2")},
                     ],
+                    "meta": {"label": eg.get("label")},
                 }
             )
         elif interface == Interface.textbox.value:
@@ -49,6 +50,7 @@ def download_piqa(
                     "field_rows": 5,
                     "field_placeholder": "Type here...",
                     "field_autofocus": False,
+                    "meta": {"label": eg.get("label")},
                 }
             )
         else:

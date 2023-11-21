@@ -22,6 +22,9 @@ def humaneval_recipe(dataset, source, view_id="choice"):
     else:
         msg.fail("Unknown view_id, choose from choice or textbox.", exits=True)
 
+    # Hide meta
+    config["hide_meta"] = True
+
     return {
         "view_id": view_id,
         "dataset": dataset,
