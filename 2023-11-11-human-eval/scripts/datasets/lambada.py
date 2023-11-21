@@ -17,26 +17,25 @@ class LAMBADADataset:
     ) -> List[Dict[str, Any]]:
         """Convert each HuggingFace example into Prodigy instances"""
         annotation_tasks = []
+        if interface == Interface.choice.value:
+            msg.fail(
+                "Annotation interface 'choice' unavailable for this dataset.", exits=1
+            )
         for eg in examples:
-            if interface == Interface.choice.value:
-                msg.fail("Annotation interface 'choice' unavailable for this dataset.")
-            elif interface == Interface.textbox.value:
-                text = eg.get("text").rsplit(" ", 1)[0] + " ____. ->"
-                label = eg.get("text").rsplit(" ", 1)[1]
+            text = eg.get("text").rsplit(" ", 1)[0] + " ____. ->"
+            label = eg.get("text").rsplit(" ", 1)[1]
 
-                annotation_tasks.append(
-                    {
-                        "text": text,
-                        "field_id": "user_input",
-                        "field_label": "",
-                        "field_rows": 5,
-                        "field_placeholder": "Type here...",
-                        "field_autofocus": False,
-                        "meta": {"label": label},
-                    }
-                )
-            else:
-                msg.fail("Unknown annotation interface.", exits=True)
+            annotation_tasks.append(
+                {
+                    "text": text,
+                    "field_id": "user_input",
+                    "field_label": "",
+                    "field_rows": 5,
+                    "field_placeholder": "Type here...",
+                    "field_autofocus": False,
+                    "meta": {"label": label},
+                }
+            )
         return annotation_tasks
 
     @classmethod
