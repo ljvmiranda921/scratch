@@ -8,9 +8,8 @@ from wasabi import msg
 from ..utils import Interface, make_doc
 
 
-class WinograndeDataset:
-    CLASS_LABELS = ["option1", "option2"]
-    TASK_TYPE = "multi_choice"
+class LAMBADADataset:
+    TASK_TYPE = "sentence_completion"
 
     @classmethod
     def convert_to_prodigy(
@@ -20,26 +19,20 @@ class WinograndeDataset:
         annotation_tasks = []
         for eg in examples:
             if interface == Interface.choice.value:
-                annotation_tasks.append(
-                    {
-                        "text": eg.get("sentence"),
-                        "options": [
-                            {"id": "option1", "text": eg.get("option1")},
-                            {"id": "option2", "text": eg.get("option2")},
-                        ],
-                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("answer"))]},
-                    }
-                )
+                msg.fail("Annotation interface 'choice' unavailable for this dataset.")
             elif interface == Interface.textbox.value:
+                text = eg.get("text").rsplit(" ", 1)[0] + " ____. ->"
+                label = eg.get("text").rsplit(" ", 1)[1]
+
                 annotation_tasks.append(
                     {
-                        "text": eg.get("goal"),
+                        "text": text,
                         "field_id": "user_input",
                         "field_label": "",
                         "field_rows": 5,
                         "field_placeholder": "Type here...",
                         "field_autofocus": False,
-                        "meta": {"label": cls.CLASS_LABELS[(eg.get("answer"))]},
+                        "meta": {"label": label},
                     }
                 )
             else:
@@ -50,20 +43,10 @@ class WinograndeDataset:
     def get_reference_docs(
         cls, nlp, references: Iterable["srsly.util.JSONOutput"]
     ) -> List[Doc]:
-        ref_records = list(srsly.read_jsonl(references))
-        ref_labels = [rec.get("meta").get("label") for rec in ref_records]
-        return [
-            make_doc(nlp, rec, label, cls.CLASS_LABELS)
-            for rec, label in zip(ref_records, ref_labels)
-        ]
+        pass
 
     @classmethod
     def get_predicted_docs(
         cls, nlp, predictions: Iterable["srsly.util.JSONOutput"]
     ) -> List[Doc]:
-        pred_records = list(srsly.read_jsonl(predictions))
-        pred_labels = list([rec.get("accept")[0] for rec in pred_records])
-        return [
-            make_doc(nlp, rec, label, cls.CLASS_LABELS)
-            for rec, label in zip(pred_records, pred_labels)
-        ]
+        pass

@@ -20,20 +20,26 @@ def evaluate_gold(
 ):
     """Compare results on gold-standard data."""
     nlp = spacy.blank("en")
+    dataset_task = DATASETS[dataset.value]
 
-    ref_docs = DATASETS[dataset.value].get_reference_docs(nlp, references)
-    pred_docs = DATASETS[dataset.value].get_predicted_docs(nlp, predictions)
+    ref_docs = dataset_task.get_reference_docs(nlp, references)
+    pred_docs = dataset_task.get_predicted_docs(nlp, predictions)
 
-    # Create spacy Examples
-    examples = [Example(pred, ref) for pred, ref in zip(pred_docs, ref_docs)]
-    msg.text(f"Found {len(examples)} examples")
-    scores = Scorer.score_cats(
-        examples,
-        attr="cats",
-        labels=DATASETS[dataset.value].CLASS_LABELS,
-        multi_label=multi_label,
-    )
-    msg.text(title="Scores", text=scores)
+    if dataset_task.TASK_TYPE == "multi_choice":
+        # Create spacy Examples
+        examples = [Example(pred, ref) for pred, ref in zip(pred_docs, ref_docs)]
+        msg.text(f"Found {len(examples)} examples")
+        scores = Scorer.score_cats(
+            examples,
+            attr="cats",
+            labels=dataset_task.CLASS_LABELS,
+            multi_label=multi_label,
+        )
+        msg.text(title="Scores", text=scores)
+    elif dataset_task.TASK_TYPE == "sentence_completion":
+        pass
+    else:
+        msg.fail("Unknown task type.")
 
 
 if __name__ == "__main__":
