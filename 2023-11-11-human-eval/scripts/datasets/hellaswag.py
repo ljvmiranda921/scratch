@@ -29,7 +29,7 @@ class HellaSwagDataset:
 
                 annotation_tasks.append(
                     {
-                        "text": eg.get("activity_label"),
+                        "text": eg.get("ctx"),
                         "options": options,
                         "meta": {"labels": cls.CLASS_LABELS[int(eg.get("label"))]},
                     }
@@ -37,7 +37,7 @@ class HellaSwagDataset:
             elif interface == Interface.textbox.value:
                 annotation_tasks.append(
                     {
-                        "text": eg.get("activity_text"),
+                        "text": eg.get("ctx"),
                         "meta": {"label": cls.CLASS_LABELS[int(eg.get("label"))]},
                     }
                 )
