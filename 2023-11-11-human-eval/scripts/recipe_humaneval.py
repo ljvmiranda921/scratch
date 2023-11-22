@@ -8,7 +8,7 @@ from wasabi import msg
     dataset=("Dataset to save answers to", "positional", None, str),
     source=("The source data as a JSONL file", "positional", None, str),
     view_id=("Annotation interface (choice/textbox)", "option", "v", str),
-    show_meta=("Hide meta containing the label", "option", None, bool),
+    show_meta=("Hide meta containing the label", "flag", "m", bool),
 )
 def humaneval_recipe(dataset, source, view_id="choice", show_meta=False):
     # Load the stream from a JSONL file and return a generator that yields a
