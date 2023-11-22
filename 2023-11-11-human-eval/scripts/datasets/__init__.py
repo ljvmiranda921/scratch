@@ -9,7 +9,7 @@ from .lambada import LAMBADADataset
 class Dataset(str, Enum):
     piqa = "piqa"
     hellaswag = "hellaswag"
-    winogrande = "winogrande"
+    winogrande = "winogrande_debiased"
     lambada = "lambada"
 
 
