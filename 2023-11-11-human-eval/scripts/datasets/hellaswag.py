@@ -32,7 +32,7 @@ class HellaSwagDataset:
                     {
                         "text": eg.get("ctx"),
                         "options": options,
-                        "meta": {"labels": cls.CLASS_LABELS[int(eg.get("label"))]},
+                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("label"))]},
                     }
                 )
             elif interface == Interface.textbox.value:
