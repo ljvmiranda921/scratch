@@ -33,8 +33,18 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `setup` | Download dataset from HuggingFace and convert them into Prodigy format |
+| `download` | Download dataset from HuggingFace and convert them into Prodigy format |
 | `annotate` | Annotate a dataset using Prodigy. |
 | `export` | Export into JSONL format |
+
+### 🗂 Assets
+
+The following assets are defined by the project. They can
+be fetched by running [`weasel assets`](https://github.com/explosion/weasel/tree/main/docs/cli.md#open_file_folder-assets)
+in the project directory.
+
+| File | Source | Description |
+| --- | --- | --- |
+| [`annotations/piqa/humaneval_piqa_choice.jsonl`](annotations/piqa/humaneval_piqa_choice.jsonl) | Local | PIQA Human annotations by Lj |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
