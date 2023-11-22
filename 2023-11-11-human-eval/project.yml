@@ -29,6 +29,12 @@ directories:
   - "corpus"
   - "scripts"
 
+# Assets that should be downloaded or available in the directory. But the
+# 'project assets' command still lets you verify that the checksums match.
+assets:
+  - dest: "annotations/piqa/humaneval_piqa_choice.jsonl"
+    description: "PIQA Human annotations by Lj"
+
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
 # via "spacy project run [command] [path]". The help message is optional and
