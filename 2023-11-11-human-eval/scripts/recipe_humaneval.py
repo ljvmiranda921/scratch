@@ -10,7 +10,12 @@ from wasabi import msg
     view_id=("Annotation interface (choice/textbox)", "option", "v", str),
     show_meta=("Hide meta containing the label", "flag", "m", bool),
 )
-def humaneval_recipe(dataset, source, view_id="choice", show_meta=False):
+def humaneval_recipe(
+    dataset: str,
+    source: str,
+    view_id: str = "choice",
+    show_meta: bool = False,
+):
     # Load the stream from a JSONL file and return a generator that yields a
     # dictionary for each example in the data.
     stream = JSONL(source)
