@@ -67,3 +67,14 @@ commands:
       - prodigy db-out humaneval_${vars.dataset}_${vars.interface} annotations/${vars.dataset}/
     outputs:
       - annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
+
+  - name: "evaluate-gold"
+    help: "Evaluate against gold dataset"
+    script:
+      - >-
+        python -m scripts.evaluate_gold ${vars.dataset}
+        corpus/${vars.dataset}_${vars.interface}.jsonl
+        annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
+    deps:
+      - corpus/${vars.dataset}_${vars.interface}.jsonl
+      - annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl

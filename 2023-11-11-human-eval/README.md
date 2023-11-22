@@ -36,6 +36,7 @@ Commands are only re-run if their inputs have changed.
 | `download` | Download dataset from HuggingFace and convert them into Prodigy format |
 | `annotate` | Annotate a dataset using Prodigy. |
 | `export` | Export into JSONL format |
+| `evaluate-gold` | Evaluate against gold dataset |
 
 ### 🗂 Assets
 
@@ -46,5 +47,6 @@ in the project directory.
 | File | Source | Description |
 | --- | --- | --- |
 | [`annotations/piqa/humaneval_piqa_choice.jsonl`](annotations/piqa/humaneval_piqa_choice.jsonl) | Local | PIQA Human annotations by Lj |
+| [`annotations/hellaswag/humaneval_hellaswag_choice.jsonl`](annotations/hellaswag/humaneval_hellaswag_choice.jsonl) | Local | HellaSwag Human annotations by Lj |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
