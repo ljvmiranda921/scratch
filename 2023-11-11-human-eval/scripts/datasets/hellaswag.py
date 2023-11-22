@@ -11,6 +11,7 @@ from ..utils import Interface, make_doc
 class HellaSwagDataset:
     CLASS_LABELS = ["end0", "end1", "end2", "end3"]
     TASK_TYPE = "multi_choice"
+    HF_CONFIG = None
 
     @classmethod
     def convert_to_prodigy(

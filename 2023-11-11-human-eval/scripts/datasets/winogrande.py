@@ -11,6 +11,7 @@ from ..utils import Interface, make_doc
 class WinograndeDataset:
     CLASS_LABELS = ["option1", "option2"]
     TASK_TYPE = "multi_choice"
+    HF_CONFIG = "winogrande_debiased"
 
     @classmethod
     def convert_to_prodigy(
@@ -27,7 +28,7 @@ class WinograndeDataset:
                             {"id": "option1", "text": eg.get("option1")},
                             {"id": "option2", "text": eg.get("option2")},
                         ],
-                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("answer"))]},
+                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("answer")) - 1]},
                     }
                 )
             elif interface == Interface.textbox.value:

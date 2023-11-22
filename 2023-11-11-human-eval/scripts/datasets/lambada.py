@@ -10,6 +10,7 @@ from ..utils import Interface, make_doc
 
 class LAMBADADataset:
     TASK_TYPE = "sentence_completion"
+    HF_CONFIG = "plain_text"
 
     @classmethod
     def convert_to_prodigy(

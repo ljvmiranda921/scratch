@@ -1,5 +1,5 @@
-from enum import Enum
 from pathlib import Path
+from typing import Optional
 
 import srsly
 import typer
@@ -19,7 +19,8 @@ def download(
     # fmt: on
 ):
     """Download datasets from HuggingFace and convert them into Prodigy format"""
-    examples = load_dataset(dataset.value, split=split.value)
+    config = DATASETS[dataset.value].HF_CONFIG
+    examples = load_dataset(dataset.value, config, split=split.value)
 
     # Get converter
     converter = DATASETS[dataset.value].convert_to_prodigy

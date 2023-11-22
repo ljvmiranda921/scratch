@@ -11,6 +11,7 @@ from ..utils import Interface, make_doc
 class PIQADataset:
     CLASS_LABELS = ["sol1", "sol2"]
     TASK_TYPE = "multi_choice"
+    HF_CONFIG = "plain_text"
 
     @classmethod
     def convert_to_prodigy(
