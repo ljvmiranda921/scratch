@@ -14,6 +14,38 @@ class WinograndeDataset:
     HF_CONFIG = "winogrande_debiased"
 
     @classmethod
+    def get_prompt(cls, eg: Dict[str, Any]) -> str:
+        """Use for sentence completion task (textbox)
+
+        This evaluation of Winogrande uses partial evaluation as described by
+        Trinh & Le in Simple Method for Commonsense Reasoning (2018).
+        See: https://arxiv.org/abs/1806.02847
+        """
+
+        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/winogrande.py#L66-L70
+        def _partial_ctx(eg: Dict[str, Any], option: str):
+            pronoun_loc = eg.get("sentence").index("_")
+            return eg.get("sentence")[:pronoun_loc] + option
+
+        return _partial_ctx(eg, eg.get(f"option{eg.get('answer')}"))
+
+    @classmethod
+    def get_target(cls, eg: Dict[str, Any]) -> str:
+        """Use for sentence completion task (textbox)
+
+        This evaluation of Winogrande uses partial evaluation as described by
+        Trinh & Le in Simple Method for Commonsense Reasoning (2018).
+        See: https://arxiv.org/abs/1806.02847
+        """
+
+        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/winogrande.py#L76-L79
+        def _partial_target(eg: Dict[str, Any]) -> str:
+            pronoun_loc = eg.get("sentence").index("_") + 1
+            return " " + eg.get("sentence")[pronoun_loc:].strip()
+
+        return _partial_target(eg)
+
+    @classmethod
     def convert_to_prodigy(
         cls, examples: "Dataset", interface: str
     ) -> List[Dict[str, Any]]:
@@ -33,10 +65,7 @@ class WinograndeDataset:
                 )
             elif interface == Interface.textbox.value:
                 annotation_tasks.append(
-                    {
-                        "text": eg.get("goal"),
-                        "meta": {"label": cls.CLASS_LABELS[(eg.get("answer"))]},
-                    }
+                    {"text": cls.get_prompt(eg), "meta": {"label": cls.get_target(eg)}}
                 )
             else:
                 msg.fail("Unknown annotation interface.", exits=True)

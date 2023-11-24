@@ -14,6 +14,13 @@ class HellaSwagDataset:
     HF_CONFIG = None
 
     @classmethod
+    def get_prompt(cls, eg: Dict[str, Any]) -> str:
+        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/hellaswag.py#L53-L55
+        ctx = eg.get("ctx_a") + " " + eg.get("ctx_b").capitalize()
+        prompt = eg.get("activity_label") + ": " + ctx
+        return prompt
+
+    @classmethod
     def convert_to_prodigy(
         cls, examples: "Dataset", interface: str
     ) -> List[Dict[str, Any]]:
@@ -30,7 +37,7 @@ class HellaSwagDataset:
 
                 annotation_tasks.append(
                     {
-                        "text": eg.get("ctx"),
+                        "text": cls.get_prompt(eg),
                         "options": options,
                         "meta": {"label": cls.CLASS_LABELS[int(eg.get("label"))]},
                     }
@@ -38,7 +45,7 @@ class HellaSwagDataset:
             elif interface == Interface.textbox.value:
                 annotation_tasks.append(
                     {
-                        "text": eg.get("ctx"),
+                        "text": cls.get_prompt(eg),
                         "meta": {"label": cls.CLASS_LABELS[int(eg.get("label"))]},
                     }
                 )

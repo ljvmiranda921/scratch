@@ -14,6 +14,12 @@ class PIQADataset:
     HF_CONFIG = "plain_text"
 
     @classmethod
+    def get_prompt(cls, eg: Dict[str, Any]) -> str:
+        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/piqa.py#L60
+        prompt = "Question: " + eg.get("goal") + "\nAnswer:"
+        return prompt
+
+    @classmethod
     def convert_to_prodigy(
         cls, examples: "Dataset", interface: str
     ) -> List[Dict[str, Any]]:
@@ -23,7 +29,7 @@ class PIQADataset:
             if interface == Interface.choice.value:
                 annotation_tasks.append(
                     {
-                        "text": eg.get("goal"),
+                        "text": cls.get_prompt(eg),
                         "options": [
                             {"id": "sol1", "text": eg.get("sol1")},
                             {"id": "sol2", "text": eg.get("sol2")},
@@ -34,7 +40,7 @@ class PIQADataset:
             elif interface == Interface.textbox.value:
                 annotation_tasks.append(
                     {
-                        "text": eg.get("goal"),
+                        "text": cls.get_prompt(eg),
                         "meta": {"label": cls.CLASS_LABELS[eg.get("label")]},
                     }
                 )
