@@ -1,41 +1,51 @@
-from typing import Any, Dict, Iterable, List
+import abc
+from typing import Any, Dict, Iterable, List, Optional
 
 import srsly
 from datasets import Dataset
+from spacy.language import Language
 from spacy.tokens import Doc
-from wasabi import msg
 
-from ..utils import Interface, make_doc
-from .base import DatasetReader
+from ..utils import Interface
 
 
-class Lambada(DatasetReader):
-    @property
+class DatasetReader(abc.ABC):
+    """Dataset reader implementation"""
+
+    @abc.abstractproperty
+    def class_labels(self) -> Optional[List[str]]:
+        """Class labels to get the options from"""
+        return None
+
+    @abc.abstractproperty
     def task_type(self) -> str:
-        return "sentence_completion"
+        """Task type to implement"""
+        ...
 
-    @property
+    @abc.abstractproperty
     def hf_config(self) -> str:
-        return "plain_text"
+        """HuggingFace configuration to use"""
+        ...
 
+    @abc.abstractmethod
     def get_prompt(self, eg: Dict[str, Any]) -> str:
         """Construct the prompt
 
         eg (Dict[str, Any]): an example from the dataset.
         RETURNS (str): the prompt for that given example.
         """
-        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/lambada_cloze.py#L36-L37
-        return eg.get("text").rsplit(" ", 1)[0] + " ___. ->"
+        ...
 
+    @abc.abstractmethod
     def get_targets(self, eg: Dict[str, Any]) -> List[str]:
-        """Get the target for sentence completion
+        """Get the targets for evaluating LM performance
 
         eg (Dict[str, Any]): an example from the dataset.
         RETURNS (List[str]): a list of targets to compute evals.
         """
-        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/lambada_cloze.py#L45-L46
-        return [eg.get("text").rsplit(" ", 1)[1]]
+        ...
 
+    @abc.abstractmethod
     def convert_to_prodigy(
         self, examples: "Dataset", interface: Interface
     ) -> List[Dict[str, Any]]:
@@ -45,22 +55,11 @@ class Lambada(DatasetReader):
         interface (Interface): the Prodigy annotation interface to build task examples upon.
         RETURNS (List[Dict[str, Any]]): an iterable containing all annotation tasks formatted for Prodigy.
         """
-        if interface == Interface.choice.value:
-            msg.fail(
-                "Annotation interface 'choice' unavailable for this dataset.", exits=1
-            )
-        annotation_tasks = []
-        for eg in examples:
-            annotation_tasks.append(
-                {
-                    "text": self.get_prompt(eg),
-                    "meta": {"label": [self.get_targets(eg)]},
-                }
-            )
-        return annotation_tasks
+        ...
 
+    @abc.abstractmethod
     def get_reference_docs(
-        self, nlp, references: Iterable["srsly.util.JSONOutput"]
+        self, nlp: Language, references: Iterable["srsly.util.JSONOutput"]
     ) -> List[Doc]:
         """Get reference documents to compare human annotations against
 
@@ -70,6 +69,7 @@ class Lambada(DatasetReader):
         """
         ...
 
+    @abc.abstractmethod
     def get_predicted_docs(
         self, nlp, predictions: Iterable["srsly.util.JSONOutput"]
     ) -> List[Doc]:

@@ -1,4 +1,12 @@
-weasel
+# data
 datasets==2.15.0
+# project
+weasel
 srsly
 typer
+tqdm
+# models
+accelerate
+optimum
+auto-gptq
+transformers

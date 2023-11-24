@@ -1,9 +1,11 @@
 from enum import Enum
+from typing import Dict
 
-from .hellaswag import HellaSwagDataset
-from .piqa import PIQADataset
-from .winogrande import WinograndeDataset
-from .lambada import LAMBADADataset
+from .base import DatasetReader
+from .hellaswag import HellaSwag
+from .lambada import Lambada
+from .piqa import PIQA
+from .winogrande import Winogrande
 
 
 class Dataset(str, Enum):
@@ -13,9 +15,13 @@ class Dataset(str, Enum):
     lambada = "lambada"
 
 
-DATASETS = {
-    Dataset.piqa.value: PIQADataset,
-    Dataset.hellaswag.value: HellaSwagDataset,
-    Dataset.winogrande.value: WinograndeDataset,
-    Dataset.lambada.value: LAMBADADataset,
-}
+def get_dataset_reader(name: Dataset) -> DatasetReader:
+    reader_map: Dict[str, DatasetReader] = {
+        Dataset.piqa.value: PIQA,
+        Dataset.hellaswag.value: HellaSwag,
+        Dataset.winogrande.value: Winogrande,
+        Dataset.lambada.value: Lambada,
+    }
+
+    reader_instance = reader_map[name.value]()
+    return reader_instance

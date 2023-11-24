@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, Iterable, List, Optional
 
 import srsly
 from datasets import Dataset
@@ -6,20 +6,33 @@ from spacy.tokens import Doc
 from wasabi import msg
 
 from ..utils import Interface, make_doc
+from .base import DatasetReader
 
 
-class WinograndeDataset:
-    CLASS_LABELS = ["option1", "option2"]
-    TASK_TYPE = "multi_choice"
-    HF_CONFIG = "winogrande_debiased"
+class Winogrande(DatasetReader):
+    @property
+    def class_labels(self) -> Optional[List[str]]:
+        return ["option1", "option2"]
 
-    @classmethod
-    def get_prompt(cls, eg: Dict[str, Any]) -> str:
-        """Use for sentence completion task (textbox)
+    @property
+    def task_type(self) -> str:
+        return "sentence_completion"
+
+    @property
+    def hf_config(self) -> str:
+        return "winogrande_debiased"
+
+    def get_prompt(self, eg: Dict[str, Any]) -> str:
+        """Construct the prompt
+
+        Use for sentence completion task (textbox)
 
         This evaluation of Winogrande uses partial evaluation as described by
         Trinh & Le in Simple Method for Commonsense Reasoning (2018).
         See: https://arxiv.org/abs/1806.02847
+
+        eg (Dict[str, Any]): an example from the dataset.
+        RETURNS (str): the prompt for that given example.
         """
 
         # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/winogrande.py#L66-L70
@@ -29,13 +42,15 @@ class WinograndeDataset:
 
         return _partial_ctx(eg, eg.get(f"option{eg.get('answer')}"))
 
-    @classmethod
-    def get_target(cls, eg: Dict[str, Any]) -> str:
-        """Use for sentence completion task (textbox)
+    def get_targets(self, eg: Dict[str, Any]) -> List[str]:
+        """Get the targets for sentence completion
 
         This evaluation of Winogrande uses partial evaluation as described by
         Trinh & Le in Simple Method for Commonsense Reasoning (2018).
         See: https://arxiv.org/abs/1806.02847
+
+        eg (Dict[str, Any]): an example from the dataset.
+        RETURNS (List[str]): a list of targets to compute evals.
         """
 
         # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/winogrande.py#L76-L79
@@ -43,16 +58,20 @@ class WinograndeDataset:
             pronoun_loc = eg.get("sentence").index("_") + 1
             return " " + eg.get("sentence")[pronoun_loc:].strip()
 
-        return _partial_target(eg)
+        return [_partial_target(eg)]
 
-    @classmethod
     def convert_to_prodigy(
-        cls, examples: "Dataset", interface: str
+        self, examples: "Dataset", interface: Interface
     ) -> List[Dict[str, Any]]:
-        """Convert each HuggingFace example into Prodigy instances"""
+        """Convert each HuggingFace example into Prodigy instances
+
+        examples (datasets.Dataset): a particular split from a Huggingface dataset
+        interface (Interface): the Prodigy annotation interface to build task examples upon.
+        RETURNS (List[Dict[str, Any]]): an iterable containing all annotation tasks formatted for Prodigy.
+        """
         annotation_tasks = []
         for eg in examples:
-            if interface == Interface.choice.value:
+            if interface == Interface.choice:
                 annotation_tasks.append(
                     {
                         "text": eg.get("sentence"),
@@ -60,35 +79,38 @@ class WinograndeDataset:
                             {"id": "option1", "text": eg.get("option1")},
                             {"id": "option2", "text": eg.get("option2")},
                         ],
-                        "meta": {"label": cls.CLASS_LABELS[int(eg.get("answer")) - 1]},
+                        "meta": {"label": self.class_labels[int(eg.get("answer")) - 1]},
                     }
                 )
-            elif interface == Interface.textbox.value:
+            elif interface == Interface.textbox:
                 annotation_tasks.append(
-                    {"text": cls.get_prompt(eg), "meta": {"label": cls.get_target(eg)}}
+                    {
+                        "text": self.get_prompt(eg),
+                        "meta": {"label": [self.get_targets(eg)]},
+                    }
                 )
             else:
                 msg.fail("Unknown annotation interface.", exits=True)
         return annotation_tasks
 
-    @classmethod
     def get_reference_docs(
-        cls, nlp, references: Iterable["srsly.util.JSONOutput"]
+        self, nlp, references: Iterable["srsly.util.JSONOutput"]
     ) -> List[Doc]:
-        ref_records = list(srsly.read_jsonl(references))
-        ref_labels = [rec.get("meta").get("label") for rec in ref_records]
-        return [
-            make_doc(nlp, rec, label, cls.CLASS_LABELS)
-            for rec, label in zip(ref_records, ref_labels)
-        ]
+        """Get reference documents to compare human annotations against
 
-    @classmethod
+        nlp (Language): a spaCy language pipeline to obtain the vocabulary.
+        references (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
+        """
+        ...
+
     def get_predicted_docs(
-        cls, nlp, predictions: Iterable["srsly.util.JSONOutput"]
+        self, nlp, predictions: Iterable["srsly.util.JSONOutput"]
     ) -> List[Doc]:
-        pred_records = list(srsly.read_jsonl(predictions))
-        pred_labels = list([rec.get("accept")[0] for rec in pred_records])
-        return [
-            make_doc(nlp, rec, label, cls.CLASS_LABELS)
-            for rec, label in zip(pred_records, pred_labels)
-        ]
+        """Get predicted documents to compare on the gold-reference data.
+
+        nlp (Language): a spaCy language pipeline to obtain the vocabulary.
+        predictions (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
+        """
+        ...

@@ -1,4 +1,3 @@
-from enum import Enum
 from pathlib import Path
 
 import spacy
@@ -7,7 +6,7 @@ from spacy.scorer import Scorer
 from spacy.training import Example
 from wasabi import msg
 
-from .datasets import DATASETS, Dataset
+from .datasets import Dataset, get_dataset_reader
 
 
 def evaluate_gold(
@@ -20,23 +19,23 @@ def evaluate_gold(
 ):
     """Compare results on gold-standard data."""
     nlp = spacy.blank("en")
-    dataset_task = DATASETS[dataset.value]
+    dataset_reader = get_dataset_reader(dataset)
 
-    ref_docs = dataset_task.get_reference_docs(nlp, references)
-    pred_docs = dataset_task.get_predicted_docs(nlp, predictions)
+    ref_docs = dataset_reader.get_reference_docs(nlp, references)
+    pred_docs = dataset_reader.get_predicted_docs(nlp, predictions)
 
-    if dataset_task.TASK_TYPE == "multi_choice":
+    if dataset_reader.task_type == "multi_choice":
         # Create spacy Examples
         examples = [Example(pred, ref) for pred, ref in zip(pred_docs, ref_docs)]
         msg.text(f"Found {len(examples)} examples")
         scores = Scorer.score_cats(
             examples,
             attr="cats",
-            labels=dataset_task.CLASS_LABELS,
+            labels=dataset_reader.class_labels,
             multi_label=multi_label,
         )
         msg.text(title="Scores", text=scores)
-    elif dataset_task.TASK_TYPE == "sentence_completion":
+    elif dataset_reader.task_type == "sentence_completion":
         pass
     else:
         msg.fail("Unknown task type.")

@@ -46,7 +46,7 @@ commands:
     help: "Download dataset from HuggingFace and convert them into Prodigy format"
     script:
       - >-
-        python -m scripts.download corpus/${vars.dataset}_${vars.interface}.jsonl 
+        python -m scripts.download_dataset corpus/${vars.dataset}_${vars.interface}.jsonl 
         --dataset ${vars.dataset}
         --split ${vars.split}
         --interface ${vars.interface}
