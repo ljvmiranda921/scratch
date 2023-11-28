@@ -2,7 +2,6 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import srsly
 from datasets import Dataset
-from spacy.language import Language
 from spacy.tokens import Doc
 from wasabi import msg
 
@@ -10,10 +9,10 @@ from ..utils import Interface, make_doc
 from .base import DatasetReader
 
 
-class PIQA(DatasetReader):
+class HellaSwag(DatasetReader):
     @property
     def class_labels(self) -> Optional[List[str]]:
-        return ["sol1", "sol2"]
+        return ["end0", "end1", "end2", "end3"]
 
     @property
     def task_type(self) -> str:
@@ -21,7 +20,7 @@ class PIQA(DatasetReader):
 
     @property
     def hf_config(self) -> str:
-        return "plain_text"
+        return None
 
     def get_prompt(self, eg: Dict[str, Any]) -> str:
         """Construct the prompt
@@ -29,8 +28,9 @@ class PIQA(DatasetReader):
         eg (Dict[str, Any]): an example from the dataset.
         RETURNS (str): the prompt for that given example.
         """
-        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/piqa.py#L60
-        prompt = "Question: " + eg.get("goal") + "\nAnswer:"
+        # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/hellaswag.py#L53-L55
+        ctx = eg.get("ctx_a") + " " + eg.get("ctx_b").capitalize()
+        prompt = eg.get("activity_label") + ": " + ctx
         return prompt
 
     def get_targets(self, eg: Dict[str, Any]) -> List[str]:
@@ -53,21 +53,31 @@ class PIQA(DatasetReader):
         annotation_tasks = []
         for eg in examples:
             if interface == Interface.choice:
+                num_labels = 3
+                endings = eg.get("endings")
+                options = [
+                    {"id": f"end{idx}", "text": end}
+                    for idx, end in zip(range(num_labels + 1), endings)
+                ]
+
                 annotation_tasks.append(
                     {
                         "text": self.get_prompt(eg),
-                        "options": [
-                            {"id": "sol1", "text": eg.get("sol1")},
-                            {"id": "sol2", "text": eg.get("sol2")},
-                        ],
-                        "meta": {"label": self.class_labels[eg.get("label")]},
+                        "options": options,
+                        "meta": {
+                            "label": self.class_labels[int(eg.get("label"))],
+                            "doc": eg,
+                        },
                     }
                 )
             elif interface == Interface.textbox:
                 annotation_tasks.append(
                     {
                         "text": self.get_prompt(eg),
-                        "meta": {"label": self.class_labels[eg.get("label")]},
+                        "meta": {
+                            "label": self.class_labels[int(eg.get("label"))],
+                            "doc": eg,
+                        },
                     }
                 )
             else:
@@ -75,7 +85,7 @@ class PIQA(DatasetReader):
         return annotation_tasks
 
     def get_reference_docs(
-        self, nlp: Language, references: Iterable["srsly.util.JSONOutput"]
+        self, nlp, references: Iterable["srsly.util.JSONOutput"]
     ) -> List[Doc]:
         """Get reference documents to compare human annotations against
 

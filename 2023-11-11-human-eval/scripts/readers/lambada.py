@@ -54,7 +54,7 @@ class Lambada(DatasetReader):
             annotation_tasks.append(
                 {
                     "text": self.get_prompt(eg),
-                    "meta": {"label": [self.get_targets(eg)]},
+                    "meta": {"label": [self.get_targets(eg)], "doc": eg},
                 }
             )
         return annotation_tasks

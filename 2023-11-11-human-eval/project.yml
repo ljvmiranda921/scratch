@@ -1,24 +1,70 @@
 title: "Am I smarter than a text generator?"
 description: |
-  Some Prodigy annotation tasks to try out some common LLM benchmarks
+  Revisiting human evaluation benchmarks in language models.
+
+  ## Annotation
+
+  This step requires a [Prodigy](https://prodigy.ai) installation.
   First, you need to download the dataset and specify the annotation interface (choice/textbox) it will be converted into.
 
   ```sh
-  weasel run setup . --vars.dataset piqa --vars.interface choice
+  # Download the PIQA dataset from HuggingFace and create Prodigy annotation tasks using the choice interface
+  weasel run convert-hf-to-prodigy . --vars.dataset piqa --vars.interface choice
   ```
 
-  Then, you can run [Prodigy](https://prodigy.ai) to start annotating:
+  Then, you can run [Prodigy](https://prodigy.ai) to start annotating (by default, it opens in https://localhost:8080):
 
   ```sh
-  weasel run annotate . --vars.dataset piqa --vars.interface choice
+  # Annotate PIQA dataset using the "choice" annotation interface (radio button)
+  weasel run annotate-lm-task . --vars.dataset piqa --vars.interface choice
   ```
 
   This saves all your annotations to the `humaneval_{dataset}_{interface}`
   Prodigy dataset, which you can then export using [`prodigy db-out`](https://prodi.gy/docs/recipes#db-out) command.
+  Alternatively, you can also run the `export` command:
+
+  ```sh
+  # Export 
+  weasel export-annotations . --vars.dataset piqa
+  ```
+
+  This will generate a file: `annotations/piqa/humaneval_piqa_choice.jsonl` that contains the human annotations that you can use for gold evaluation.
+  This JSONL file will also be used later on for LM evaluation. In the custom task, the nested meta.doc features will be used.
+
+  ## Gold evaluation
+
+  We want to compare how well we annotated based on the gold-standard data.
+  To do this, you can run the `evaluate-gold` command and supplying the dataset we want:
+
+  ```sh
+  weasel run evaluate-gold . --vars.dataset piqa 
+  ```
+
+  ## LM evaluation
+
+  LM evaluation is done via Eleuther AI's [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) repository (`big-refactor` branch).
+  You need to install its dependencies via:
+
+  ```sh
+  weasel run setup-eleuther-harness
+  ```
+
+  It requires a YAML file (and an optional `utils.py`) to define a task.
+  Since we're only concerned with a particular subset (e.g., only the annotated instances of PIQA), we define our own in the `custom_harness_tasks` directory.
+  We can then run an evaluation by running the `evaluate-lm` command:
+
+  ```sh
+  weasel run evaluate-lm . --vars.dataset piqa
+  ```
+
+  Under the hood, what it does is that it runs the harness repo's `lm_eval` script, and passes the task supplied in `custom_harness_tasks`.
+  Note that each custom implementation of a harness task compares the HF dataset from the annotated one, 
+  so it is **important** that you already have exported the annotations from Prodigy in the `annotations/${vars.dataset}/*.jsonl` directory.
 
 vars:
   interface: "choice"
   dataset: "piqa"
+  model: "togethercomputer/LlaMA-2-7B-32K"
   split: "validation"
 
 # These are the directories that the project needs. The project CLI will make
@@ -32,17 +78,33 @@ directories:
 # Assets that should be downloaded or available in the directory. But the
 # 'project assets' command still lets you verify that the checksums match.
 assets:
+  - dest: "lm-evaluation-harness"
+    git:
+      repo: "https://github.com/EleutherAI/lm-evaluation-harness"
+      branch: "big-refactor"
+      path: "."
+    description: "The framework to use for evaluation. Custom tasks are defined in `custom_harness_tasks`."
   - dest: "annotations/piqa/humaneval_piqa_choice.jsonl"
     description: "PIQA Human annotations by Lj"
+  - dest: "annotations/piqa/lmeval_piqa_choice.jsonl"
+    description: "PIQA instances for LM evaluation"
   - dest: "annotations/hellaswag/humaneval_hellaswag_choice.jsonl"
     description: "HellaSwag Human annotations by Lj"
+  - dest: "annotations/piqa/lmeval_hellaswag_choice.jsonl"
+    description: "HellaSwag instances for LM evaluation"
 
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
 # via "spacy project run [command] [path]". The help message is optional and
 # shown when executing "spacy project run [optional command] [path] --help".
 commands:
-  - name: "download"
+  - name: "setup-eleuther-harness"
+    help: "Install necessary dependencies to run EleutherAI harness"
+    script:
+      - sh -c "cd lm-evaluation-harness && pip install -e ."
+      - lm-eval --help
+
+  - name: "convert-hf-to-prodigy"
     help: "Download dataset from HuggingFace and convert them into Prodigy format"
     script:
       - >-
@@ -53,20 +115,25 @@ commands:
     outputs:
       - corpus/${vars.dataset}_${vars.interface}.jsonl
 
-  - name: "annotate"
-    help: "Annotate a dataset using Prodigy."
+  - name: "annotate-lm-task"
+    help: "Annotate a dataset using Prodigy. Requires a Prodigy installation"
     script:
       - prodigy humaneval humaneval_${vars.dataset}_${vars.interface} corpus/${vars.dataset}_${vars.interface}.jsonl -v ${vars.interface} -F scripts/recipe_humaneval.py
     deps:
       - corpus/${vars.dataset}_${vars.interface}.jsonl
 
-  - name: "export"
-    help: "Export into JSONL format"
+  - name: "export-annotations"
+    help: "Export your annotations into JSONL format for later evaluation"
     script:
       - mkdir -p annotations/${vars.dataset}/
       - prodigy db-out humaneval_${vars.dataset}_${vars.interface} annotations/${vars.dataset}/
+      - >-
+        python -m scripts.create_lmeval
+        annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
+        annotations/${vars.dataset}/lmeval_${vars.dataset}_${vars.interface}.jsonl
     outputs:
       - annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
+      - annotations/${vars.dataset}/lmeval_${vars.dataset}_${vars.interface}.jsonl
 
   - name: "evaluate-gold"
     help: "Evaluate against gold dataset"
@@ -78,3 +145,29 @@ commands:
     deps:
       - corpus/${vars.dataset}_${vars.interface}.jsonl
       - annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
+
+  - name: "evaluate-lm"
+    help: "Evaluate an LM on a given task"
+    script:
+      # This script is just for checking if the task description in the
+      # custom_harness_tasks/${vars.dataset}_custom/ works
+      - >-
+        python -m lm-evaluation-harness.scripts.write_out
+        --output_base_path . 
+        --tasks ${vars.dataset}_custom
+        --verbosity DEBUG
+        --include_path custom_harness_tasks/${vars.dataset}_custom/
+      - cat ${vars.dataset}_custom
+      # The actual evaluation step
+      - >-
+        lm-eval
+        --model hf
+        --model_args pretrained=${vars.model} 
+        --tasks ${vars.dataset}_custom
+        --device cuda:0
+        --include_path custom_harness_tasks/${vars.dataset}_custom/
+        --batch_size auto
+    deps:
+      - annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
+    outputs:
+      - ${vars.dataset}_custom

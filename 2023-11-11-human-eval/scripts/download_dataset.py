@@ -6,7 +6,7 @@ import typer
 from datasets import load_dataset
 from wasabi import msg
 
-from .datasets import Dataset, get_dataset_reader
+from .readers import Dataset, get_dataset_reader
 from .utils import Interface, Split
 
 

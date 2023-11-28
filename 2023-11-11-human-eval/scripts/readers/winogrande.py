@@ -79,14 +79,17 @@ class Winogrande(DatasetReader):
                             {"id": "option1", "text": eg.get("option1")},
                             {"id": "option2", "text": eg.get("option2")},
                         ],
-                        "meta": {"label": self.class_labels[int(eg.get("answer")) - 1]},
+                        "meta": {
+                            "label": self.class_labels[int(eg.get("answer")) - 1],
+                            "doc": eg,
+                        },
                     }
                 )
             elif interface == Interface.textbox:
                 annotation_tasks.append(
                     {
                         "text": self.get_prompt(eg),
-                        "meta": {"label": [self.get_targets(eg)]},
+                        "meta": {"label": [self.get_targets(eg)], "doc": eg},
                     }
                 )
             else:

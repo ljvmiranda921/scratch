@@ -1,0 +1,21 @@
+task: piqa_custom #
+dataset_path: json # the name of the dataset in the HF Hub
+dataset_name: null # the dataset configuration to use. Leave `null` if your dataset does not require a config to be passed.
+dataset_kwargs: # any extra keyword arguments that should be passed to the dataset constructor, e.g. `data_dir`.
+  data_files:
+    validation: annotations/piqa/humaneval_piqa_choice.jsonl
+output_type: multiple_choice
+validation_split: validation
+test_split: null
+doc_to_text: "Question: {{meta.doc.goal}}\nAnswer:"
+doc_to_target: "{{meta.doc.label}}"
+doc_to_choice: "{{[meta.doc.sol1, meta.doc.sol2]}}"
+should_decontaminate: true
+doc_to_decontamination_query: "{{meta.doc.goal}}"
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: acc_norm
+    aggregation: mean
+    higher_is_better: true

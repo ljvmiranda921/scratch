@@ -6,7 +6,7 @@ from spacy.scorer import Scorer
 from spacy.training import Example
 from wasabi import msg
 
-from .datasets import Dataset, get_dataset_reader
+from .readers import Dataset, get_dataset_reader
 
 
 def evaluate_gold(
