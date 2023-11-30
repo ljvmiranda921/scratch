@@ -119,7 +119,10 @@ commands:
   - name: "annotate-lm-task"
     help: "Annotate a dataset using Prodigy. Requires a Prodigy installation"
     script:
-      - prodigy humaneval humaneval_${vars.dataset}_${vars.interface} corpus/${vars.dataset}_${vars.interface}.jsonl -v ${vars.interface} -F scripts/recipe_humaneval.py
+      - >-
+        prodigy humaneval humaneval_${vars.dataset}_${vars.interface} corpus/${vars.dataset}_${vars.interface}.jsonl 
+        -v ${vars.interface} 
+        -F scripts/prodigy_recipe.py
     deps:
       - corpus/${vars.dataset}_${vars.interface}.jsonl
 
