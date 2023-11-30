@@ -5,7 +5,7 @@ import srsly
 import typer
 from wasabi import msg
 
-from .readers import get_dataset_reader, Dataset
+from .readers import Dataset, get_dataset_reader
 
 
 def evaluate_agreement(
@@ -69,7 +69,8 @@ def evaluate_agreement(
         msg.table(metrics, divider=True, header=["Metric", "Score"])
 
     if output_path:
-        pass
+        srsly.write_jsonl(output_path)
+        msg.good(f"File saved to {output_path}")
 
 
 if __name__ == "__main__":
