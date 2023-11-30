@@ -73,6 +73,7 @@ directories:
   - "annotations"
   - "assets"
   - "corpus"
+  - "outputs"
   - "scripts"
 
 # Assets that should be downloaded or available in the directory. But the
@@ -149,15 +150,7 @@ commands:
   - name: "evaluate-lm"
     help: "Evaluate an LM on a given task"
     script:
-      # This script is just for checking if the task description in the
-      # custom_harness_tasks/${vars.dataset}_custom/ works
-      - >-
-        python -m lm-evaluation-harness.scripts.write_out
-        --output_base_path . 
-        --tasks ${vars.dataset}_custom
-        --verbosity DEBUG
-        --include_path custom_harness_tasks/${vars.dataset}_custom/
-      - cat ${vars.dataset}_custom
+      - mkdir -p outputs/${vars.dataset}/
       # The actual evaluation step
       - >-
         lm-eval
@@ -167,7 +160,19 @@ commands:
         --device cuda:0
         --include_path custom_harness_tasks/${vars.dataset}_custom/
         --batch_size auto
+        --log_samples
+        --output_path outputs/${vars.dataset}/
+      # This script is just for checking if the task description in the
+      # custom_harness_tasks/${vars.dataset}_custom/ works
+      - >-
+        python -m lm-evaluation-harness.scripts.write_out
+        --output_base_path . 
+        --tasks ${vars.dataset}_custom
+        --verbosity DEBUG
+        --include_path custom_harness_tasks/${vars.dataset}_custom/
+      - cat ${vars.dataset}_custom
     deps:
       - annotations/${vars.dataset}/humaneval_${vars.dataset}_${vars.interface}.jsonl
     outputs:
       - ${vars.dataset}_custom
+      - outputs/${vars.dataset}/
