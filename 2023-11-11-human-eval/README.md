@@ -88,8 +88,6 @@ in the project directory.
 | --- | --- | --- |
 | `lm-evaluation-harness` | Git | The framework to use for evaluation. Custom tasks are defined in `custom_harness_tasks`. |
 | [`annotations/piqa/humaneval_piqa_choice.jsonl`](annotations/piqa/humaneval_piqa_choice.jsonl) | Local | PIQA Human annotations by Lj |
-| `annotations/piqa/lmeval_piqa_choice.jsonl` | Local | PIQA instances for LM evaluation |
 | [`annotations/hellaswag/humaneval_hellaswag_choice.jsonl`](annotations/hellaswag/humaneval_hellaswag_choice.jsonl) | Local | HellaSwag Human annotations by Lj |
-| `annotations/piqa/lmeval_hellaswag_choice.jsonl` | Local | HellaSwag instances for LM evaluation |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->

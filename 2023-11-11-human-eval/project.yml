@@ -87,12 +87,8 @@ assets:
     description: "The framework to use for evaluation. Custom tasks are defined in `custom_harness_tasks`."
   - dest: "annotations/piqa/humaneval_piqa_choice.jsonl"
     description: "PIQA Human annotations by Lj"
-  - dest: "annotations/piqa/lmeval_piqa_choice.jsonl"
-    description: "PIQA instances for LM evaluation"
   - dest: "annotations/hellaswag/humaneval_hellaswag_choice.jsonl"
     description: "HellaSwag Human annotations by Lj"
-  - dest: "annotations/piqa/lmeval_hellaswag_choice.jsonl"
-    description: "HellaSwag instances for LM evaluation"
 
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
