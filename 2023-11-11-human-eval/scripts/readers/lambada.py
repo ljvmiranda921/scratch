@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, Iterable, List, Optional
 
 import srsly
 from datasets import Dataset
@@ -17,6 +17,10 @@ class Lambada(DatasetReader):
     @property
     def hf_config(self) -> str:
         return "plain_text"
+
+    @property
+    def class_labels(self) -> Optional[List[str]]:
+        return super().class_labels
 
     def get_prompt(self, eg: Dict[str, Any]) -> str:
         """Construct the prompt
