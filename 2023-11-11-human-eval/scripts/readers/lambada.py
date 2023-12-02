@@ -5,8 +5,10 @@ from datasets import Dataset
 from spacy.tokens import Doc
 from wasabi import msg
 
-from ..utils import Interface, make_doc
+from ..utils import Interface, make_sentence_completion_doc
 from .base import DatasetReader
+
+Doc.set_extension("target", default=None)
 
 
 class Lambada(DatasetReader):
@@ -38,7 +40,7 @@ class Lambada(DatasetReader):
         RETURNS (List[str]): a list of targets to compute evals.
         """
         # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/lambada_cloze.py#L45-L46
-        return [eg.get("text").rsplit(" ", 1)[1]]
+        return eg.get("text").rsplit(" ", 1)[1]
 
     def convert_to_prodigy(
         self, examples: "Dataset", interface: Interface
@@ -58,7 +60,7 @@ class Lambada(DatasetReader):
             annotation_tasks.append(
                 {
                     "text": self.get_prompt(eg),
-                    "meta": {"label": [self.get_targets(eg)], "doc": eg},
+                    "meta": {"label": self.get_targets(eg), "doc": eg},
                 }
             )
         return annotation_tasks
@@ -72,7 +74,12 @@ class Lambada(DatasetReader):
         references (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
-        ...
+        ref_records = list(srsly.read_jsonl(references))
+        ref_labels = [rec.get("meta").get("label") for rec in ref_records]
+        return [
+            make_sentence_completion_doc(nlp, rec, label)
+            for rec, label in zip(ref_records, ref_labels)
+        ]
 
     def get_predicted_docs(
         self, nlp, predictions: Iterable["srsly.util.JSONOutput"]
@@ -83,4 +90,9 @@ class Lambada(DatasetReader):
         predictions (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
-        ...
+        pred_records = list(srsly.read_jsonl(predictions))
+        pred_labels = [rec.get("user_input") for rec in pred_records]
+        return [
+            make_sentence_completion_doc(nlp, rec, label)
+            for rec, label in zip(pred_records, pred_labels)
+        ]

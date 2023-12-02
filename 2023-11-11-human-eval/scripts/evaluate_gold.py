@@ -3,6 +3,7 @@ from pathlib import Path
 import spacy
 import typer
 from spacy.scorer import Scorer
+from spacy.tokens import Doc
 from spacy.training import Example
 from wasabi import msg
 
@@ -36,7 +37,11 @@ def evaluate_gold(
         )
         msg.text(title="Scores", text=scores)
     elif dataset_reader.task_type == "sentence_completion":
-        pass
+        score = 0
+        for ref, pred in zip(ref_docs, pred_docs):
+            if ref._.target == pred._.target:
+                score += 1
+        msg.text(title="Scores", text=(score / len(ref)) * 100)
     else:
         msg.fail("Unknown task type.")
 

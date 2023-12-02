@@ -1,11 +1,12 @@
-from typing import Any, Dict, Iterable, List, Optional
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 import srsly
 from datasets import Dataset
 from spacy.tokens import Doc
 from wasabi import msg
 
-from ..utils import Interface, make_doc
+from ..utils import Interface, make_textcat_doc
 from .base import DatasetReader
 
 
@@ -84,34 +85,30 @@ class HellaSwag(DatasetReader):
                 msg.fail("Unknown annotation interface.", exits=True)
         return annotation_tasks
 
-    def get_reference_docs(
-        self, nlp, references: Iterable["srsly.util.JSONOutput"]
-    ) -> List[Doc]:
+    def get_reference_docs(self, nlp, references: Path) -> List[Doc]:
         """Get reference documents to compare human annotations against
 
         nlp (Language): a spaCy language pipeline to obtain the vocabulary.
-        references (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        references (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
         ref_records = list(srsly.read_jsonl(references))
         ref_labels = [rec.get("meta").get("label") for rec in ref_records]
         return [
-            make_doc(nlp, rec, label, self.class_labels)
+            make_textcat_doc(nlp, rec, label, self.class_labels)
             for rec, label in zip(ref_records, ref_labels)
         ]
 
-    def get_predicted_docs(
-        self, nlp, predictions: Iterable["srsly.util.JSONOutput"]
-    ) -> List[Doc]:
+    def get_predicted_docs(self, nlp, predictions: Path) -> List[Doc]:
         """Get predicted documents to compare on the gold-reference data.
 
         nlp (Language): a spaCy language pipeline to obtain the vocabulary.
-        predictions (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        predictions (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
         pred_records = list(srsly.read_jsonl(predictions))
         pred_labels = list([rec.get("accept")[0] for rec in pred_records])
         return [
-            make_doc(nlp, rec, label, self.class_labels)
+            make_textcat_doc(nlp, rec, label, self.class_labels)
             for rec, label in zip(pred_records, pred_labels)
         ]

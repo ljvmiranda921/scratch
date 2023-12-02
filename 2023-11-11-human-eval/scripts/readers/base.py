@@ -1,7 +1,7 @@
 import abc
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
-import srsly
 from datasets import Dataset
 from spacy.language import Language
 from spacy.tokens import Doc
@@ -58,25 +58,21 @@ class DatasetReader(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def get_reference_docs(
-        self, nlp: Language, references: Iterable["srsly.util.JSONOutput"]
-    ) -> List[Doc]:
+    def get_reference_docs(self, nlp: Language, references: Path) -> List[Doc]:
         """Get reference documents to compare human annotations against
 
         nlp (Language): a spaCy language pipeline to obtain the vocabulary.
-        references (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        references (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
         ...
 
     @abc.abstractmethod
-    def get_predicted_docs(
-        self, nlp, predictions: Iterable["srsly.util.JSONOutput"]
-    ) -> List[Doc]:
+    def get_predicted_docs(self, nlp, predictions: Path) -> List[Doc]:
         """Get predicted documents to compare on the gold-reference data.
 
         nlp (Language): a spaCy language pipeline to obtain the vocabulary.
-        predictions (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        predictions (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
         ...

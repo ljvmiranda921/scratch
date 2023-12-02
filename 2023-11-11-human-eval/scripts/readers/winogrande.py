@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 import srsly
@@ -5,7 +6,7 @@ from datasets import Dataset
 from spacy.tokens import Doc
 from wasabi import msg
 
-from ..utils import Interface, make_doc
+from ..utils import Interface, make_textcat_doc
 from .base import DatasetReader
 
 
@@ -16,11 +17,11 @@ class Winogrande(DatasetReader):
 
     @property
     def task_type(self) -> str:
-        return "sentence_completion"
+        return "multi_choice"
 
     @property
     def hf_config(self) -> str:
-        return "winogrande_debiased"
+        return "winogrande_xl"
 
     def get_prompt(self, eg: Dict[str, Any]) -> str:
         """Construct the prompt
@@ -34,6 +35,7 @@ class Winogrande(DatasetReader):
         eg (Dict[str, Any]): an example from the dataset.
         RETURNS (str): the prompt for that given example.
         """
+        breakpoint()
 
         # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/winogrande.py#L66-L70
         def _partial_ctx(eg: Dict[str, Any], option: str):
@@ -67,8 +69,10 @@ class Winogrande(DatasetReader):
 
         examples (datasets.Dataset): a particular split from a Huggingface dataset
         interface (Interface): the Prodigy annotation interface to build task examples upon.
+
         RETURNS (List[Dict[str, Any]]): an iterable containing all annotation tasks formatted for Prodigy.
         """
+        breakpoint()
         annotation_tasks = []
         for eg in examples:
             if interface == Interface.choice:
@@ -96,24 +100,20 @@ class Winogrande(DatasetReader):
                 msg.fail("Unknown annotation interface.", exits=True)
         return annotation_tasks
 
-    def get_reference_docs(
-        self, nlp, references: Iterable["srsly.util.JSONOutput"]
-    ) -> List[Doc]:
+    def get_reference_docs(self, nlp, references: Path) -> List[Doc]:
         """Get reference documents to compare human annotations against
 
         nlp (Language): a spaCy language pipeline to obtain the vocabulary.
-        references (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        references (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
         ...
 
-    def get_predicted_docs(
-        self, nlp, predictions: Iterable["srsly.util.JSONOutput"]
-    ) -> List[Doc]:
+    def get_predicted_docs(self, nlp, predictions: Path) -> List[Doc]:
         """Get predicted documents to compare on the gold-reference data.
 
         nlp (Language): a spaCy language pipeline to obtain the vocabulary.
-        predictions (Iterable[srsly.util.JSONOutput]): dictionary-like containing relevant information for evals.
+        predictions (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
         ...

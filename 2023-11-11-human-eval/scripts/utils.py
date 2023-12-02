@@ -20,7 +20,7 @@ class Split(str, Enum):
     validation = "validation"
 
 
-def make_doc(
+def make_textcat_doc(
     nlp: "spacy.language.Language",
     record: Dict[str, Any],
     label: str,
@@ -30,4 +30,15 @@ def make_doc(
     doc = nlp.make_doc(record.get("text"))
     doc.cats = {class_label: 0 for class_label in set(class_labels)}
     doc.cats[label] = 1
+    return doc
+
+
+def make_sentence_completion_doc(
+    nlp: "spacy.language.Language",
+    record: Dict[str, Any],
+    label: str,
+) -> Doc:
+    """Make spaCy Doc for a sentence completion task"""
+    doc = nlp.make_doc(record.get("text"))
+    doc._.target = label
     return doc
