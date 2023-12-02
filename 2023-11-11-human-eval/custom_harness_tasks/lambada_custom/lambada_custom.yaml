@@ -1,5 +1,5 @@
 task: lambada_custom
-dataset_path: lambada
+dataset_path: json
 dataset_name: null
 dataset_kwargs:
   data_files:

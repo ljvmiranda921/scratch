@@ -60,7 +60,7 @@ class Winogrande(DatasetReader):
             pronoun_loc = eg.get("sentence").index("_") + 1
             return " " + eg.get("sentence")[pronoun_loc:].strip()
 
-        return [_partial_target(eg)]
+        return _partial_target(eg)
 
     def convert_to_prodigy(
         self, examples: "Dataset", interface: Interface
@@ -72,7 +72,6 @@ class Winogrande(DatasetReader):
 
         RETURNS (List[Dict[str, Any]]): an iterable containing all annotation tasks formatted for Prodigy.
         """
-        breakpoint()
         annotation_tasks = []
         for eg in examples:
             if interface == Interface.choice:
@@ -93,7 +92,7 @@ class Winogrande(DatasetReader):
                 annotation_tasks.append(
                     {
                         "text": self.get_prompt(eg),
-                        "meta": {"label": [self.get_targets(eg)], "doc": eg},
+                        "meta": {"label": self.get_targets(eg), "doc": eg},
                     }
                 )
             else:
