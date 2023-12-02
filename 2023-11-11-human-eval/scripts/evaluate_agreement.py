@@ -32,17 +32,17 @@ def evaluate_agreement(
 
     docs: List[Dict[str, Any]] = []
     for lm, human in zip(lm_outputs, human_outputs):
-        # They're just the same to be honest, but we just wanna make sure
-        gold_lm = lm.get("target")
-        gold_human = human.get("meta").get("doc").get("label")
-        if gold_human != gold_lm:
-            msg.fail(
-                f"Gold labels do not match for doc_id '{lm.get('doc_id')}'!",
-                exits=1,
-            )
-        gold = reader.class_labels[gold_human]  # just use gold_human
-
         if reader.task_type == "multi_choice":
+            # They're just the same to be honest, but we just wanna make sure
+            gold_lm = int(lm.get("target"))
+            gold_human = int(human.get("meta").get("doc").get("label"))
+            if gold_human != gold_lm:
+                msg.fail(
+                    f"Gold labels do not match for doc_id '{lm.get('doc_id')}'!",
+                    exits=1,
+                )
+            gold = reader.class_labels[gold_human]  # just use gold_human
+
             logits = [probs for probs, _ in lm.get("filtered_resps")]
             lm_ans = reader.class_labels[logits.index(max(logits))]
             human_ans = human.get("accept")[0]
