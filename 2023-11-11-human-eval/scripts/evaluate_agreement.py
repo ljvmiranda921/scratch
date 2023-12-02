@@ -38,7 +38,8 @@ def evaluate_agreement(
             gold_human = int(human.get("meta").get("doc").get("label"))
             if gold_human != gold_lm:
                 msg.fail(
-                    f"Gold labels do not match for doc_id '{lm.get('doc_id')}'!",
+                    f"Gold labels do not match for doc_id '{lm.get('doc_id')}'!"
+                    f" {gold_human} ({type(gold_human)}) != {gold_lm} ({type(gold_lm)})",
                     exits=1,
                 )
             gold = reader.class_labels[gold_human]  # just use gold_human
