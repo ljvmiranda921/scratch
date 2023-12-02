@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, List, Optional
 
 import srsly
 from datasets import Dataset
@@ -35,7 +35,6 @@ class Winogrande(DatasetReader):
         eg (Dict[str, Any]): an example from the dataset.
         RETURNS (str): the prompt for that given example.
         """
-        breakpoint()
 
         # https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/winogrande.py#L66-L70
         def _partial_ctx(eg: Dict[str, Any], option: str):
@@ -106,7 +105,12 @@ class Winogrande(DatasetReader):
         references (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
-        ...
+        ref_records = list(srsly.read_jsonl(references))
+        ref_labels = [rec.get("meta").get("label") for rec in ref_records]
+        return [
+            make_textcat_doc(nlp, rec, label, self.class_labels)
+            for rec, label in zip(ref_records, ref_labels)
+        ]
 
     def get_predicted_docs(self, nlp, predictions: Path) -> List[Doc]:
         """Get predicted documents to compare on the gold-reference data.
@@ -115,4 +119,9 @@ class Winogrande(DatasetReader):
         predictions (Path): Path to the examples file.
         RETURNS (List[Doc]): list of spaCy Doc objects for later evaluation.
         """
-        ...
+        pred_records = list(srsly.read_jsonl(predictions))
+        pred_labels = list([rec.get("accept")[0] for rec in pred_records])
+        return [
+            make_textcat_doc(nlp, rec, label, self.class_labels)
+            for rec, label in zip(pred_records, pred_labels)
+        ]

@@ -1,0 +1,7476 @@
+[
+  {
+    "doc_id": 0,
+    "doc": {
+      "text": "Sarah was a much better surgeon than Maria so _ always got the easier cases.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Sarah"
+        },
+        {
+          "id": "option2",
+          "text": "Maria"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Sarah was a much better surgeon than Maria so _ always got the easier cases.",
+          "option1": "Sarah",
+          "option2": "Maria",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1542001562,
+      "_task_hash": -831705139,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524424,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "always got the easier cases.",
+    "arguments": [
+      [
+        "Sarah was a much better surgeon than Maria so Sarah",
+        " always got the easier cases."
+      ],
+      [
+        "Sarah was a much better surgeon than Maria so Maria",
+        " always got the easier cases."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -14.421875,
+          false
+        ]
+      ],
+      [
+        [
+          -14.2734375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -14.421875,
+        false
+      ],
+      [
+        -14.2734375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 1,
+    "doc": {
+      "text": "Sarah was a much better surgeon than Maria so _ always got the harder cases.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Sarah"
+        },
+        {
+          "id": "option2",
+          "text": "Maria"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Sarah was a much better surgeon than Maria so _ always got the harder cases.",
+          "option1": "Sarah",
+          "option2": "Maria",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -825832931,
+      "_task_hash": 920716642,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524425,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "always got the harder cases.",
+    "arguments": [
+      [
+        "Sarah was a much better surgeon than Maria so Sarah",
+        " always got the harder cases."
+      ],
+      [
+        "Sarah was a much better surgeon than Maria so Maria",
+        " always got the harder cases."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -15.1875,
+          false
+        ]
+      ],
+      [
+        [
+          -15.2734375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -15.1875,
+        false
+      ],
+      [
+        -15.2734375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 2,
+    "doc": {
+      "text": "They were worried the wine would ruin the bed and the blanket, but the _ was't ruined.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "blanket"
+        },
+        {
+          "id": "option2",
+          "text": "bed"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "They were worried the wine would ruin the bed and the blanket, but the _ was't ruined.",
+          "option1": "blanket",
+          "option2": "bed",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1831090131,
+      "_task_hash": 1827935321,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524439,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was't ruined.",
+    "arguments": [
+      [
+        "They were worried the wine would ruin the bed and the blanket, but the blanket",
+        " was't ruined."
+      ],
+      [
+        "They were worried the wine would ruin the bed and the blanket, but the bed",
+        " was't ruined."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -17.4375,
+          false
+        ]
+      ],
+      [
+        [
+          -18.5,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -17.4375,
+        false
+      ],
+      [
+        -18.5,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 3,
+    "doc": {
+      "text": "Terry tried to bake the eggplant in the toaster oven but the _ was too big.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "eggplant"
+        },
+        {
+          "id": "option2",
+          "text": "toaster"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Terry tried to bake the eggplant in the toaster oven but the _ was too big.",
+          "option1": "eggplant",
+          "option2": "toaster",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -536503830,
+      "_task_hash": -1819555727,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524449,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too big.",
+    "arguments": [
+      [
+        "Terry tried to bake the eggplant in the toaster oven but the eggplant",
+        " was too big."
+      ],
+      [
+        "Terry tried to bake the eggplant in the toaster oven but the toaster",
+        " was too big."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -5.6484375,
+          false
+        ]
+      ],
+      [
+        [
+          -8.921875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -5.6484375,
+        false
+      ],
+      [
+        -8.921875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 4,
+    "doc": {
+      "text": "At night, Jeffrey always stays up later than Hunter to watch TV because _ wakes up late.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Jeffrey"
+        },
+        {
+          "id": "option2",
+          "text": "Hunter"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "At night, Jeffrey always stays up later than Hunter to watch TV because _ wakes up late.",
+          "option1": "Jeffrey",
+          "option2": "Hunter",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -186561994,
+      "_task_hash": -1566418791,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524482,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "wakes up late.",
+    "arguments": [
+      [
+        "At night, Jeffrey always stays up later than Hunter to watch TV because Jeffrey",
+        " wakes up late."
+      ],
+      [
+        "At night, Jeffrey always stays up later than Hunter to watch TV because Hunter",
+        " wakes up late."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -11.8125,
+          false
+        ]
+      ],
+      [
+        [
+          -10.1953125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -11.8125,
+        false
+      ],
+      [
+        -10.1953125,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 5,
+    "doc": {
+      "text": "The cat of Sarah has some mouth problems, so she takes it to see Maria. _ is a responsible cat owner.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Sarah"
+        },
+        {
+          "id": "option2",
+          "text": "Maria"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The cat of Sarah has some mouth problems, so she takes it to see Maria. _ is a responsible cat owner.",
+          "option1": "Sarah",
+          "option2": "Maria",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1958023813,
+      "_task_hash": -1602083398,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524489,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is a responsible cat owner.",
+    "arguments": [
+      [
+        "The cat of Sarah has some mouth problems, so she takes it to see Maria. Sarah",
+        " is a responsible cat owner."
+      ],
+      [
+        "The cat of Sarah has some mouth problems, so she takes it to see Maria. Maria",
+        " is a responsible cat owner."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -16.078125,
+          false
+        ]
+      ],
+      [
+        [
+          -18.1875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -16.078125,
+        false
+      ],
+      [
+        -18.1875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 6,
+    "doc": {
+      "text": "The home that my parents had when I was in school was a lot nicer than my house now because the _ was sophisticated.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "home"
+        },
+        {
+          "id": "option2",
+          "text": "house"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The home that my parents had when I was in school was a lot nicer than my house now because the _ was sophisticated.",
+          "option1": "home",
+          "option2": "house",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 2124082849,
+      "_task_hash": -848573475,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524506,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was sophisticated.",
+    "arguments": [
+      [
+        "The home that my parents had when I was in school was a lot nicer than my house now because the home",
+        " was sophisticated."
+      ],
+      [
+        "The home that my parents had when I was in school was a lot nicer than my house now because the house",
+        " was sophisticated."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -16.984375,
+          false
+        ]
+      ],
+      [
+        [
+          -17.875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -16.984375,
+        false
+      ],
+      [
+        -17.875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 7,
+    "doc": {
+      "text": "The home that my parents had when I was in school was a lot nicer than my house now because the _ is trashy.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "home"
+        },
+        {
+          "id": "option2",
+          "text": "house"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The home that my parents had when I was in school was a lot nicer than my house now because the _ is trashy.",
+          "option1": "home",
+          "option2": "house",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 873113870,
+      "_task_hash": 1661684124,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524509,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is trashy.",
+    "arguments": [
+      [
+        "The home that my parents had when I was in school was a lot nicer than my house now because the home",
+        " is trashy."
+      ],
+      [
+        "The home that my parents had when I was in school was a lot nicer than my house now because the house",
+        " is trashy."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -17.515625,
+          false
+        ]
+      ],
+      [
+        [
+          -14.4296875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -17.515625,
+        false
+      ],
+      [
+        -14.4296875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 8,
+    "doc": {
+      "text": "Natalie has a rich husband and lots of money, Jennifer is poor _ needs to make her clothes.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Natalie"
+        },
+        {
+          "id": "option2",
+          "text": "Jennifer"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Natalie has a rich husband and lots of money, Jennifer is poor _ needs to make her clothes.",
+          "option1": "Natalie",
+          "option2": "Jennifer",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1301723216,
+      "_task_hash": -782812016,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524518,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "needs to make her clothes.",
+    "arguments": [
+      [
+        "Natalie has a rich husband and lots of money, Jennifer is poor Natalie",
+        " needs to make her clothes."
+      ],
+      [
+        "Natalie has a rich husband and lots of money, Jennifer is poor Jennifer",
+        " needs to make her clothes."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -22.390625,
+          false
+        ]
+      ],
+      [
+        [
+          -22.125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -22.390625,
+        false
+      ],
+      [
+        -22.125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 9,
+    "doc": {
+      "text": "Joe immediately went to bakery before the bank because the _ had a limited supply of what he wanted.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "bakery"
+        },
+        {
+          "id": "option2",
+          "text": "bank"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Joe immediately went to bakery before the bank because the _ had a limited supply of what he wanted.",
+          "option1": "bakery",
+          "option2": "bank",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -694143166,
+      "_task_hash": -1565421583,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524526,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "had a limited supply of what he wanted.",
+    "arguments": [
+      [
+        "Joe immediately went to bakery before the bank because the bakery",
+        " had a limited supply of what he wanted."
+      ],
+      [
+        "Joe immediately went to bakery before the bank because the bank",
+        " had a limited supply of what he wanted."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -23.140625,
+          false
+        ]
+      ],
+      [
+        [
+          -24.09375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -23.140625,
+        false
+      ],
+      [
+        -24.09375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 10,
+    "doc": {
+      "text": "Joe immediately went to bakery before the bank because the _ had a substantial supply of what he wanted.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "bakery"
+        },
+        {
+          "id": "option2",
+          "text": "bank"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Joe immediately went to bakery before the bank because the _ had a substantial supply of what he wanted.",
+          "option1": "bakery",
+          "option2": "bank",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1314641247,
+      "_task_hash": 563863752,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524536,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "had a substantial supply of what he wanted.",
+    "arguments": [
+      [
+        "Joe immediately went to bakery before the bank because the bakery",
+        " had a substantial supply of what he wanted."
+      ],
+      [
+        "Joe immediately went to bakery before the bank because the bank",
+        " had a substantial supply of what he wanted."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -25.75,
+          false
+        ]
+      ],
+      [
+        [
+          -30.609375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -25.75,
+        false
+      ],
+      [
+        -30.609375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 11,
+    "doc": {
+      "text": "I had to read an entire story for class tomorrow. Luckily, the _ was canceled.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "story"
+        },
+        {
+          "id": "option2",
+          "text": "class"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "I had to read an entire story for class tomorrow. Luckily, the _ was canceled.",
+          "option1": "story",
+          "option2": "class",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1441616471,
+      "_task_hash": 774191665,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524540,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was canceled.",
+    "arguments": [
+      [
+        "I had to read an entire story for class tomorrow. Luckily, the story",
+        " was canceled."
+      ],
+      [
+        "I had to read an entire story for class tomorrow. Luckily, the class",
+        " was canceled."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -11.5078125,
+          false
+        ]
+      ],
+      [
+        [
+          -7.2578125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -11.5078125,
+        false
+      ],
+      [
+        -7.2578125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 12,
+    "doc": {
+      "text": "I had to read an entire story for class tomorrow. Luckily, the _ was short.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "story"
+        },
+        {
+          "id": "option2",
+          "text": "class"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "I had to read an entire story for class tomorrow. Luckily, the _ was short.",
+          "option1": "story",
+          "option2": "class",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1450316836,
+      "_task_hash": 347746927,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524542,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was short.",
+    "arguments": [
+      [
+        "I had to read an entire story for class tomorrow. Luckily, the story",
+        " was short."
+      ],
+      [
+        "I had to read an entire story for class tomorrow. Luckily, the class",
+        " was short."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -4.77734375,
+          false
+        ]
+      ],
+      [
+        [
+          -6.39453125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -4.77734375,
+        false
+      ],
+      [
+        -6.39453125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 13,
+    "doc": {
+      "text": "He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper could wait.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "cafe"
+        },
+        {
+          "id": "option2",
+          "text": "library"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper could wait.",
+          "option1": "cafe",
+          "option2": "library",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 992337164,
+      "_task_hash": 372760039,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524549,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "because his paper could wait.",
+    "arguments": [
+      [
+        "He had enough time between classes to go to a cafe or to the library. He went to the cafe",
+        " because his paper could wait."
+      ],
+      [
+        "He had enough time between classes to go to a cafe or to the library. He went to the library",
+        " because his paper could wait."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -24.03125,
+          false
+        ]
+      ],
+      [
+        [
+          -23.5625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -24.03125,
+        false
+      ],
+      [
+        -23.5625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 14,
+    "doc": {
+      "text": "He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper was due soon.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "cafe"
+        },
+        {
+          "id": "option2",
+          "text": "library"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper was due soon.",
+          "option1": "cafe",
+          "option2": "library",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 480406026,
+      "_task_hash": -1048225009,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524551,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "because his paper was due soon.",
+    "arguments": [
+      [
+        "He had enough time between classes to go to a cafe or to the library. He went to the cafe",
+        " because his paper was due soon."
+      ],
+      [
+        "He had enough time between classes to go to a cafe or to the library. He went to the library",
+        " because his paper was due soon."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -20.40625,
+          false
+        ]
+      ],
+      [
+        [
+          -19.359375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -20.40625,
+        false
+      ],
+      [
+        -19.359375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 15,
+    "doc": {
+      "text": "Lindsey like to read graphic novels but Natalie liked classic literature to read. _ bought the new Frank Miller comic at the book store.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Lindsey"
+        },
+        {
+          "id": "option2",
+          "text": "Natalie"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Lindsey like to read graphic novels but Natalie liked classic literature to read. _ bought the new Frank Miller comic at the book store.",
+          "option1": "Lindsey",
+          "option2": "Natalie",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1502165971,
+      "_task_hash": 855378415,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524747,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "bought the new Frank Miller comic at the book store.",
+    "arguments": [
+      [
+        "Lindsey like to read graphic novels but Natalie liked classic literature to read. Lindsey",
+        " bought the new Frank Miller comic at the book store."
+      ],
+      [
+        "Lindsey like to read graphic novels but Natalie liked classic literature to read. Natalie",
+        " bought the new Frank Miller comic at the book store."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -35.4375,
+          false
+        ]
+      ],
+      [
+        [
+          -34.96875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -35.4375,
+        false
+      ],
+      [
+        -34.96875,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 16,
+    "doc": {
+      "text": "Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were new and perfect.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Michael"
+        },
+        {
+          "id": "option2",
+          "text": "Leslie"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were new and perfect.",
+          "option1": "Michael",
+          "option2": "Leslie",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 791016181,
+      "_task_hash": 2041687929,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524768,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "wheels were new and perfect.",
+    "arguments": [
+      [
+        "Michael just bought brand new wheels for his truck unlike Leslie because Michael",
+        " wheels were new and perfect."
+      ],
+      [
+        "Michael just bought brand new wheels for his truck unlike Leslie because Leslie",
+        " wheels were new and perfect."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -26.359375,
+          false
+        ]
+      ],
+      [
+        [
+          -25.53125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -26.359375,
+        false
+      ],
+      [
+        -25.53125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 17,
+    "doc": {
+      "text": "Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were old and used.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Michael"
+        },
+        {
+          "id": "option2",
+          "text": "Leslie"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were old and used.",
+          "option1": "Michael",
+          "option2": "Leslie",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -507937826,
+      "_task_hash": -1192674493,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524771,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "wheels were old and used.",
+    "arguments": [
+      [
+        "Michael just bought brand new wheels for his truck unlike Leslie because Michael",
+        " wheels were old and used."
+      ],
+      [
+        "Michael just bought brand new wheels for his truck unlike Leslie because Leslie",
+        " wheels were old and used."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -22.953125,
+          false
+        ]
+      ],
+      [
+        [
+          -19.609375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -22.953125,
+        false
+      ],
+      [
+        -19.609375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 18,
+    "doc": {
+      "text": "Leslie was nervous around parrots but Neil was not, since _ was bitten by a bird early in life.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Leslie"
+        },
+        {
+          "id": "option2",
+          "text": "Neil"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Leslie was nervous around parrots but Neil was not, since _ was bitten by a bird early in life.",
+          "option1": "Leslie",
+          "option2": "Neil",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -859475255,
+      "_task_hash": 1595553077,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524776,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was bitten by a bird early in life.",
+    "arguments": [
+      [
+        "Leslie was nervous around parrots but Neil was not, since Leslie",
+        " was bitten by a bird early in life."
+      ],
+      [
+        "Leslie was nervous around parrots but Neil was not, since Neil",
+        " was bitten by a bird early in life."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -24.625,
+          false
+        ]
+      ],
+      [
+        [
+          -23.5625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -24.625,
+        false
+      ],
+      [
+        -23.5625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 19,
+    "doc": {
+      "text": "Christmas was a special holiday to Eric but not Adam since _ was a Jew.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Eric"
+        },
+        {
+          "id": "option2",
+          "text": "Adam"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Christmas was a special holiday to Eric but not Adam since _ was a Jew.",
+          "option1": "Eric",
+          "option2": "Adam",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -211413405,
+      "_task_hash": 1021634629,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524785,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was a Jew.",
+    "arguments": [
+      [
+        "Christmas was a special holiday to Eric but not Adam since Eric",
+        " was a Jew."
+      ],
+      [
+        "Christmas was a special holiday to Eric but not Adam since Adam",
+        " was a Jew."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -8.0703125,
+          false
+        ]
+      ],
+      [
+        [
+          -7.015625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -8.0703125,
+        false
+      ],
+      [
+        -7.015625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 20,
+    "doc": {
+      "text": "To make frosting I needed pudding that was at a store 15 minutes away but pre-made frosting was at a store 5 minutes away.  The _ was closer.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "pudding"
+        },
+        {
+          "id": "option2",
+          "text": "frosting"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "To make frosting I needed pudding that was at a store 15 minutes away but pre-made frosting was at a store 5 minutes away.  The _ was closer.",
+          "option1": "pudding",
+          "option2": "frosting",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -2139902939,
+      "_task_hash": -1686683560,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524797,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was closer.",
+    "arguments": [
+      [
+        "To make frosting I needed pudding that was at a store 15 minutes away but pre-made frosting was at a store 5 minutes away.  The pudding",
+        " was closer."
+      ],
+      [
+        "To make frosting I needed pudding that was at a store 15 minutes away but pre-made frosting was at a store 5 minutes away.  The frosting",
+        " was closer."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.34375,
+          false
+        ]
+      ],
+      [
+        [
+          -11.0859375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.34375,
+        false
+      ],
+      [
+        -11.0859375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 21,
+    "doc": {
+      "text": "Benjamin was chosen instead of Brett to be the makeup artist for the play because _ was less experienced.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Benjamin"
+        },
+        {
+          "id": "option2",
+          "text": "Brett"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Benjamin was chosen instead of Brett to be the makeup artist for the play because _ was less experienced.",
+          "option1": "Benjamin",
+          "option2": "Brett",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -103709563,
+      "_task_hash": -33547959,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524805,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was less experienced.",
+    "arguments": [
+      [
+        "Benjamin was chosen instead of Brett to be the makeup artist for the play because Benjamin",
+        " was less experienced."
+      ],
+      [
+        "Benjamin was chosen instead of Brett to be the makeup artist for the play because Brett",
+        " was less experienced."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.2109375,
+          false
+        ]
+      ],
+      [
+        [
+          -11.4140625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.2109375,
+        false
+      ],
+      [
+        -11.4140625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 22,
+    "doc": {
+      "text": "Cynthia violated the rights of Amy, because _ had too much passivity with other people.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Cynthia"
+        },
+        {
+          "id": "option2",
+          "text": "Amy"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Cynthia violated the rights of Amy, because _ had too much passivity with other people.",
+          "option1": "Cynthia",
+          "option2": "Amy",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1363979418,
+      "_task_hash": 1674454568,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524810,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "had too much passivity with other people.",
+    "arguments": [
+      [
+        "Cynthia violated the rights of Amy, because Cynthia",
+        " had too much passivity with other people."
+      ],
+      [
+        "Cynthia violated the rights of Amy, because Amy",
+        " had too much passivity with other people."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -39.96875,
+          false
+        ]
+      ],
+      [
+        [
+          -41.21875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -39.96875,
+        false
+      ],
+      [
+        -41.21875,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 23,
+    "doc": {
+      "text": "They had to eat a lot to gain the strength they had lost and be able to work, the _ was too much.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "work"
+        },
+        {
+          "id": "option2",
+          "text": "strength"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "They had to eat a lot to gain the strength they had lost and be able to work, the _ was too much.",
+          "option1": "work",
+          "option2": "strength",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1466974920,
+      "_task_hash": 1441615002,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524816,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too much.",
+    "arguments": [
+      [
+        "They had to eat a lot to gain the strength they had lost and be able to work, the work",
+        " was too much."
+      ],
+      [
+        "They had to eat a lot to gain the strength they had lost and be able to work, the strength",
+        " was too much."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.6328125,
+          false
+        ]
+      ],
+      [
+        [
+          -13.578125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.6328125,
+        false
+      ],
+      [
+        -13.578125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 24,
+    "doc": {
+      "text": "They had to eat a lot to gain the strength they had lost and be able to work, the _ was too little.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "work"
+        },
+        {
+          "id": "option2",
+          "text": "strength"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "They had to eat a lot to gain the strength they had lost and be able to work, the _ was too little.",
+          "option1": "work",
+          "option2": "strength",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 15642718,
+      "_task_hash": 717091357,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524819,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too little.",
+    "arguments": [
+      [
+        "They had to eat a lot to gain the strength they had lost and be able to work, the work",
+        " was too little."
+      ],
+      [
+        "They had to eat a lot to gain the strength they had lost and be able to work, the strength",
+        " was too little."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -15.59375,
+          false
+        ]
+      ],
+      [
+        [
+          -13.15625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -15.59375,
+        false
+      ],
+      [
+        -13.15625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 25,
+    "doc": {
+      "text": "The roof of Rachel's home is old and falling apart, while Betty's is new. The home value of _ is lower.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Rachel"
+        },
+        {
+          "id": "option2",
+          "text": "Betty"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The roof of Rachel's home is old and falling apart, while Betty's is new. The home value of _ is lower.",
+          "option1": "Rachel",
+          "option2": "Betty",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -1193653793,
+      "_task_hash": 1912528744,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524829,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is lower.",
+    "arguments": [
+      [
+        "The roof of Rachel's home is old and falling apart, while Betty's is new. The home value of Rachel",
+        " is lower."
+      ],
+      [
+        "The roof of Rachel's home is old and falling apart, while Betty's is new. The home value of Betty",
+        " is lower."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.5,
+          false
+        ]
+      ],
+      [
+        [
+          -10.984375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.5,
+        false
+      ],
+      [
+        -10.984375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 26,
+    "doc": {
+      "text": "All the clutter in the house excited Leslie but not Derrick because cleaning energized _ very much.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Leslie"
+        },
+        {
+          "id": "option2",
+          "text": "Derrick"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "All the clutter in the house excited Leslie but not Derrick because cleaning energized _ very much.",
+          "option1": "Leslie",
+          "option2": "Derrick",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 561015873,
+      "_task_hash": -304002409,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524834,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "very much.",
+    "arguments": [
+      [
+        "All the clutter in the house excited Leslie but not Derrick because cleaning energized Leslie",
+        " very much."
+      ],
+      [
+        "All the clutter in the house excited Leslie but not Derrick because cleaning energized Derrick",
+        " very much."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -9.046875,
+          false
+        ]
+      ],
+      [
+        [
+          -8.3515625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -9.046875,
+        false
+      ],
+      [
+        -8.3515625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 27,
+    "doc": {
+      "text": "The portions of food today were bigger than the sizes yesterday because the _ fed more people.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "portions"
+        },
+        {
+          "id": "option2",
+          "text": "sizes"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The portions of food today were bigger than the sizes yesterday because the _ fed more people.",
+          "option1": "portions",
+          "option2": "sizes",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -104939859,
+      "_task_hash": 56378641,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524839,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "fed more people.",
+    "arguments": [
+      [
+        "The portions of food today were bigger than the sizes yesterday because the portions",
+        " fed more people."
+      ],
+      [
+        "The portions of food today were bigger than the sizes yesterday because the sizes",
+        " fed more people."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -16.28125,
+          false
+        ]
+      ],
+      [
+        [
+          -15.3203125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -16.28125,
+        false
+      ],
+      [
+        -15.3203125,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 28,
+    "doc": {
+      "text": "Since Craig threw aluminum cans in the trash and Benjamin recycled, _ was environmentally irresponsible.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Craig"
+        },
+        {
+          "id": "option2",
+          "text": "Benjamin"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Since Craig threw aluminum cans in the trash and Benjamin recycled, _ was environmentally irresponsible.",
+          "option1": "Craig",
+          "option2": "Benjamin",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -15539072,
+      "_task_hash": -163257035,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524845,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was environmentally irresponsible.",
+    "arguments": [
+      [
+        "Since Craig threw aluminum cans in the trash and Benjamin recycled, Craig",
+        " was environmentally irresponsible."
+      ],
+      [
+        "Since Craig threw aluminum cans in the trash and Benjamin recycled, Benjamin",
+        " was environmentally irresponsible."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -18.65625,
+          false
+        ]
+      ],
+      [
+        [
+          -19.078125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -18.65625,
+        false
+      ],
+      [
+        -19.078125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 29,
+    "doc": {
+      "text": "Christine was going to Jessica's house to do some cleaning in the kitchen, because _ was a energetic person.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Christine"
+        },
+        {
+          "id": "option2",
+          "text": "Jessica"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Christine was going to Jessica's house to do some cleaning in the kitchen, because _ was a energetic person.",
+          "option1": "Christine",
+          "option2": "Jessica",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 133476953,
+      "_task_hash": 1631080763,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524854,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was a energetic person.",
+    "arguments": [
+      [
+        "Christine was going to Jessica's house to do some cleaning in the kitchen, because Christine",
+        " was a energetic person."
+      ],
+      [
+        "Christine was going to Jessica's house to do some cleaning in the kitchen, because Jessica",
+        " was a energetic person."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -20.796875,
+          false
+        ]
+      ],
+      [
+        [
+          -23.4375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -20.796875,
+        false
+      ],
+      [
+        -23.4375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 30,
+    "doc": {
+      "text": "The students were at their desks taking tests with pencils, they used the _ to hold the papers.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "desks"
+        },
+        {
+          "id": "option2",
+          "text": "pencils"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The students were at their desks taking tests with pencils, they used the _ to hold the papers.",
+          "option1": "desks",
+          "option2": "pencils",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -1511363381,
+      "_task_hash": 1817378401,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524858,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "to hold the papers.",
+    "arguments": [
+      [
+        "The students were at their desks taking tests with pencils, they used the desks",
+        " to hold the papers."
+      ],
+      [
+        "The students were at their desks taking tests with pencils, they used the pencils",
+        " to hold the papers."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -11.34375,
+          false
+        ]
+      ],
+      [
+        [
+          -11.515625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -11.34375,
+        false
+      ],
+      [
+        -11.515625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 31,
+    "doc": {
+      "text": "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. _ bought a small dog bed for their pet.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Mary"
+        },
+        {
+          "id": "option2",
+          "text": "Rachel"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. _ bought a small dog bed for their pet.",
+          "option1": "Mary",
+          "option2": "Rachel",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -1601127254,
+      "_task_hash": -1142671272,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701524865,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "bought a small dog bed for their pet.",
+    "arguments": [
+      [
+        "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. Mary",
+        " bought a small dog bed for their pet."
+      ],
+      [
+        "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. Rachel",
+        " bought a small dog bed for their pet."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -31.5625,
+          false
+        ]
+      ],
+      [
+        [
+          -32.03125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -31.5625,
+        false
+      ],
+      [
+        -32.03125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 32,
+    "doc": {
+      "text": "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. _ bought a gigantic dog bed for their pet.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Mary"
+        },
+        {
+          "id": "option2",
+          "text": "Rachel"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. _ bought a gigantic dog bed for their pet.",
+          "option1": "Mary",
+          "option2": "Rachel",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 354979212,
+      "_task_hash": -1563449118,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701525058,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "bought a gigantic dog bed for their pet.",
+    "arguments": [
+      [
+        "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. Mary",
+        " bought a gigantic dog bed for their pet."
+      ],
+      [
+        "Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. Rachel",
+        " bought a gigantic dog bed for their pet."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -32.28125,
+          false
+        ]
+      ],
+      [
+        [
+          -32.4375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -32.28125,
+        false
+      ],
+      [
+        -32.4375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 33,
+    "doc": {
+      "text": "Leslie had a lot of issues that Kyle was tired of dealing with, so _ felt abandoned when they finally moved out.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Leslie"
+        },
+        {
+          "id": "option2",
+          "text": "Kyle"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Leslie had a lot of issues that Kyle was tired of dealing with, so _ felt abandoned when they finally moved out.",
+          "option1": "Leslie",
+          "option2": "Kyle",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -325075866,
+      "_task_hash": -800495464,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701525063,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "felt abandoned when they finally moved out.",
+    "arguments": [
+      [
+        "Leslie had a lot of issues that Kyle was tired of dealing with, so Leslie",
+        " felt abandoned when they finally moved out."
+      ],
+      [
+        "Leslie had a lot of issues that Kyle was tired of dealing with, so Kyle",
+        " felt abandoned when they finally moved out."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -28.53125,
+          false
+        ]
+      ],
+      [
+        [
+          -31.578125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -28.53125,
+        false
+      ],
+      [
+        -31.578125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 34,
+    "doc": {
+      "text": "Jessica enjoyed a simple, basic life with Betty, but _ was bored having a quiet existence.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Jessica"
+        },
+        {
+          "id": "option2",
+          "text": "Betty"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Jessica enjoyed a simple, basic life with Betty, but _ was bored having a quiet existence.",
+          "option1": "Jessica",
+          "option2": "Betty",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1176671526,
+      "_task_hash": -1183194138,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701525072,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was bored having a quiet existence.",
+    "arguments": [
+      [
+        "Jessica enjoyed a simple, basic life with Betty, but Jessica",
+        " was bored having a quiet existence."
+      ],
+      [
+        "Jessica enjoyed a simple, basic life with Betty, but Betty",
+        " was bored having a quiet existence."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -25.9375,
+          false
+        ]
+      ],
+      [
+        [
+          -26.125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -25.9375,
+        false
+      ],
+      [
+        -26.125,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 35,
+    "doc": {
+      "text": "I wanted to build a bathroom on the third floor of the house but I couldn't because the _ would be too full.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "bathroom"
+        },
+        {
+          "id": "option2",
+          "text": "floor"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "I wanted to build a bathroom on the third floor of the house but I couldn't because the _ would be too full.",
+          "option1": "bathroom",
+          "option2": "floor",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 716037544,
+      "_task_hash": 2037652934,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701525078,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "would be too full.",
+    "arguments": [
+      [
+        "I wanted to build a bathroom on the third floor of the house but I couldn't because the bathroom",
+        " would be too full."
+      ],
+      [
+        "I wanted to build a bathroom on the third floor of the house but I couldn't because the floor",
+        " would be too full."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -14.8515625,
+          false
+        ]
+      ],
+      [
+        [
+          -15.390625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -14.8515625,
+        false
+      ],
+      [
+        -15.390625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 36,
+    "doc": {
+      "text": "Joel researched laws and helped to open a preschool for Eric. Because _ is very good with kids.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Joel"
+        },
+        {
+          "id": "option2",
+          "text": "Eric"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Joel researched laws and helped to open a preschool for Eric. Because _ is very good with kids.",
+          "option1": "Joel",
+          "option2": "Eric",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1894811422,
+      "_task_hash": 1250055631,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701525082,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is very good with kids.",
+    "arguments": [
+      [
+        "Joel researched laws and helped to open a preschool for Eric. Because Joel",
+        " is very good with kids."
+      ],
+      [
+        "Joel researched laws and helped to open a preschool for Eric. Because Eric",
+        " is very good with kids."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -17.796875,
+          false
+        ]
+      ],
+      [
+        [
+          -19.75,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -17.796875,
+        false
+      ],
+      [
+        -19.75,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 37,
+    "doc": {
+      "text": "Tanya told Emily she couldn't come to work because her cat had an infection, but _ was lying.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Tanya"
+        },
+        {
+          "id": "option2",
+          "text": "Emily"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Tanya told Emily she couldn't come to work because her cat had an infection, but _ was lying.",
+          "option1": "Tanya",
+          "option2": "Emily",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1920048303,
+      "_task_hash": 52118044,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701525086,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was lying.",
+    "arguments": [
+      [
+        "Tanya told Emily she couldn't come to work because her cat had an infection, but Tanya",
+        " was lying."
+      ],
+      [
+        "Tanya told Emily she couldn't come to work because her cat had an infection, but Emily",
+        " was lying."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -4.984375,
+          false
+        ]
+      ],
+      [
+        [
+          -12.171875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -4.984375,
+        false
+      ],
+      [
+        -12.171875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 38,
+    "doc": {
+      "text": "Angela thinks her husband might be cheating with Lindsey, and _ confesses at the dinner party.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Angela"
+        },
+        {
+          "id": "option2",
+          "text": "Lindsey"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Angela thinks her husband might be cheating with Lindsey, and _ confesses at the dinner party.",
+          "option1": "Angela",
+          "option2": "Lindsey",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1157422577,
+      "_task_hash": -1496371649,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701525091,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "confesses at the dinner party.",
+    "arguments": [
+      [
+        "Angela thinks her husband might be cheating with Lindsey, and Angela",
+        " confesses at the dinner party."
+      ],
+      [
+        "Angela thinks her husband might be cheating with Lindsey, and Lindsey",
+        " confesses at the dinner party."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -19.6875,
+          false
+        ]
+      ],
+      [
+        [
+          -20.34375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -19.6875,
+        false
+      ],
+      [
+        -20.34375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 39,
+    "doc": {
+      "text": "Brian was jealous of Brett's new car because _ couldn't afford to buy a new car.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Brian"
+        },
+        {
+          "id": "option2",
+          "text": "Brett"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Brian was jealous of Brett's new car because _ couldn't afford to buy a new car.",
+          "option1": "Brian",
+          "option2": "Brett",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1613496794,
+      "_task_hash": 1872870073,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526449,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "couldn't afford to buy a new car.",
+    "arguments": [
+      [
+        "Brian was jealous of Brett's new car because Brian",
+        " couldn't afford to buy a new car."
+      ],
+      [
+        "Brian was jealous of Brett's new car because Brett",
+        " couldn't afford to buy a new car."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -9.5546875,
+          false
+        ]
+      ],
+      [
+        [
+          -13.203125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -9.5546875,
+        false
+      ],
+      [
+        -13.203125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 40,
+    "doc": {
+      "text": "The man used  his eyes to read the letters but the _ were too small.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "letters"
+        },
+        {
+          "id": "option2",
+          "text": "eyes"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The man used  his eyes to read the letters but the _ were too small.",
+          "option1": "letters",
+          "option2": "eyes",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -1683173303,
+      "_task_hash": -1108661890,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526521,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "were too small.",
+    "arguments": [
+      [
+        "The man used  his eyes to read the letters but the letters",
+        " were too small."
+      ],
+      [
+        "The man used  his eyes to read the letters but the eyes",
+        " were too small."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -5.6796875,
+          false
+        ]
+      ],
+      [
+        [
+          -9.0703125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -5.6796875,
+        false
+      ],
+      [
+        -9.0703125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 41,
+    "doc": {
+      "text": "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the _ would be less noticeable.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "dress"
+        },
+        {
+          "id": "option2",
+          "text": "hat"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the _ would be less noticeable.",
+          "option1": "dress",
+          "option2": "hat",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -583131579,
+      "_task_hash": 666763816,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526535,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "would be less noticeable.",
+    "arguments": [
+      [
+        "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the dress",
+        " would be less noticeable."
+      ],
+      [
+        "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the hat",
+        " would be less noticeable."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -13.2421875,
+          false
+        ]
+      ],
+      [
+        [
+          -10.6640625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -13.2421875,
+        false
+      ],
+      [
+        -10.6640625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 42,
+    "doc": {
+      "text": "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the _ would be more noticeable.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "dress"
+        },
+        {
+          "id": "option2",
+          "text": "hat"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the _ would be more noticeable.",
+          "option1": "dress",
+          "option2": "hat",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1361600253,
+      "_task_hash": -1999893983,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526539,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "would be more noticeable.",
+    "arguments": [
+      [
+        "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the dress",
+        " would be more noticeable."
+      ],
+      [
+        "Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the hat",
+        " would be more noticeable."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -16.296875,
+          false
+        ]
+      ],
+      [
+        [
+          -15.015625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -16.296875,
+        false
+      ],
+      [
+        -15.015625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 43,
+    "doc": {
+      "text": "On Monday, Patricia made Felicia eggs for an early breakfast, but _ does not like fried eggs.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Patricia"
+        },
+        {
+          "id": "option2",
+          "text": "Felicia"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "On Monday, Patricia made Felicia eggs for an early breakfast, but _ does not like fried eggs.",
+          "option1": "Patricia",
+          "option2": "Felicia",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 606303331,
+      "_task_hash": 1524564166,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526545,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "does not like fried eggs.",
+    "arguments": [
+      [
+        "On Monday, Patricia made Felicia eggs for an early breakfast, but Patricia",
+        " does not like fried eggs."
+      ],
+      [
+        "On Monday, Patricia made Felicia eggs for an early breakfast, but Felicia",
+        " does not like fried eggs."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -13.8359375,
+          false
+        ]
+      ],
+      [
+        [
+          -15.40625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -13.8359375,
+        false
+      ],
+      [
+        -15.40625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 44,
+    "doc": {
+      "text": "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that _ loves the color of their eyes.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Craig"
+        },
+        {
+          "id": "option2",
+          "text": "William"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that _ loves the color of their eyes.",
+          "option1": "Craig",
+          "option2": "William",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1463897961,
+      "_task_hash": 580781888,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526551,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "loves the color of their eyes.",
+    "arguments": [
+      [
+        "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that Craig",
+        " loves the color of their eyes."
+      ],
+      [
+        "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that William",
+        " loves the color of their eyes."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -22.40625,
+          false
+        ]
+      ],
+      [
+        [
+          -22.0,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -22.40625,
+        false
+      ],
+      [
+        -22.0,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 45,
+    "doc": {
+      "text": "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that _ dislikes the color of their eyes.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Craig"
+        },
+        {
+          "id": "option2",
+          "text": "William"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that _ dislikes the color of their eyes.",
+          "option1": "Craig",
+          "option2": "William",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 15389999,
+      "_task_hash": 954908831,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526553,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "dislikes the color of their eyes.",
+    "arguments": [
+      [
+        "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that Craig",
+        " dislikes the color of their eyes."
+      ],
+      [
+        "Since Craig wears clear contacts and William wears colored ones, it is safe to assume that William",
+        " dislikes the color of their eyes."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -21.734375,
+          false
+        ]
+      ],
+      [
+        [
+          -21.9375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -21.734375,
+        false
+      ],
+      [
+        -21.9375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 46,
+    "doc": {
+      "text": "It was easy for Angela to become a vegetarian although Kayla couldn't do it. _ really missed the taste of chicken.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Angela"
+        },
+        {
+          "id": "option2",
+          "text": "Kayla"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "It was easy for Angela to become a vegetarian although Kayla couldn't do it. _ really missed the taste of chicken.",
+          "option1": "Angela",
+          "option2": "Kayla",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -736191928,
+      "_task_hash": 1852418721,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526561,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "really missed the taste of chicken.",
+    "arguments": [
+      [
+        "It was easy for Angela to become a vegetarian although Kayla couldn't do it. Angela",
+        " really missed the taste of chicken."
+      ],
+      [
+        "It was easy for Angela to become a vegetarian although Kayla couldn't do it. Kayla",
+        " really missed the taste of chicken."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -18.328125,
+          false
+        ]
+      ],
+      [
+        [
+          -16.6875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -18.328125,
+        false
+      ],
+      [
+        -16.6875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 47,
+    "doc": {
+      "text": "Hunter was a better baker than Logan so _ made the kitchen a mess when they tried to make an apple pie.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Hunter"
+        },
+        {
+          "id": "option2",
+          "text": "Logan"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Hunter was a better baker than Logan so _ made the kitchen a mess when they tried to make an apple pie.",
+          "option1": "Hunter",
+          "option2": "Logan",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -630746322,
+      "_task_hash": 977122744,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526566,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "made the kitchen a mess when they tried to make an apple pie.",
+    "arguments": [
+      [
+        "Hunter was a better baker than Logan so Hunter",
+        " made the kitchen a mess when they tried to make an apple pie."
+      ],
+      [
+        "Hunter was a better baker than Logan so Logan",
+        " made the kitchen a mess when they tried to make an apple pie."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -39.84375,
+          false
+        ]
+      ],
+      [
+        [
+          -41.0,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -39.84375,
+        false
+      ],
+      [
+        -41.0,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 48,
+    "doc": {
+      "text": "Tanya spent more on the children's birthday party than Amy. _ thought a magician was a good use of funds.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Tanya"
+        },
+        {
+          "id": "option2",
+          "text": "Amy"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Tanya spent more on the children's birthday party than Amy. _ thought a magician was a good use of funds.",
+          "option1": "Tanya",
+          "option2": "Amy",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 912429604,
+      "_task_hash": -869609296,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526577,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "thought a magician was a good use of funds.",
+    "arguments": [
+      [
+        "Tanya spent more on the children's birthday party than Amy. Tanya",
+        " thought a magician was a good use of funds."
+      ],
+      [
+        "Tanya spent more on the children's birthday party than Amy. Amy",
+        " thought a magician was a good use of funds."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -32.40625,
+          false
+        ]
+      ],
+      [
+        [
+          -33.90625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -32.40625,
+        false
+      ],
+      [
+        -33.90625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 49,
+    "doc": {
+      "text": "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The _ was too wide.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "brush"
+        },
+        {
+          "id": "option2",
+          "text": "crack"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The _ was too wide.",
+          "option1": "brush",
+          "option2": "crack",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 563560232,
+      "_task_hash": 410226831,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526588,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too wide.",
+    "arguments": [
+      [
+        "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The brush",
+        " was too wide."
+      ],
+      [
+        "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The crack",
+        " was too wide."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -5.6328125,
+          false
+        ]
+      ],
+      [
+        [
+          -4.84375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -5.6328125,
+        false
+      ],
+      [
+        -4.84375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 50,
+    "doc": {
+      "text": "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The _ was too narrow.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "brush"
+        },
+        {
+          "id": "option2",
+          "text": "crack"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The _ was too narrow.",
+          "option1": "brush",
+          "option2": "crack",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 716090001,
+      "_task_hash": 572861676,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526591,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too narrow.",
+    "arguments": [
+      [
+        "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The brush",
+        " was too narrow."
+      ],
+      [
+        "Judy bought new brushes to paint the etched glasses crack but it didn't fit. The crack",
+        " was too narrow."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -7.22265625,
+          false
+        ]
+      ],
+      [
+        [
+          -5.5546875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -7.22265625,
+        false
+      ],
+      [
+        -5.5546875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 51,
+    "doc": {
+      "text": "I look forward to the Sunday newspaper so I can look at the comics.  This is the only reason I still get the _ in this day and age.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "newspaper"
+        },
+        {
+          "id": "option2",
+          "text": "comics"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "I look forward to the Sunday newspaper so I can look at the comics.  This is the only reason I still get the _ in this day and age.",
+          "option1": "newspaper",
+          "option2": "comics",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1026797495,
+      "_task_hash": -622766536,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526597,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "in this day and age.",
+    "arguments": [
+      [
+        "I look forward to the Sunday newspaper so I can look at the comics.  This is the only reason I still get the newspaper",
+        " in this day and age."
+      ],
+      [
+        "I look forward to the Sunday newspaper so I can look at the comics.  This is the only reason I still get the comics",
+        " in this day and age."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -9.7265625,
+          false
+        ]
+      ],
+      [
+        [
+          -9.2734375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -9.7265625,
+        false
+      ],
+      [
+        -9.2734375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 52,
+    "doc": {
+      "text": "Jennifer was more of a morning person than Natalie although _ always went to bed early and got a good night's rest.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Jennifer"
+        },
+        {
+          "id": "option2",
+          "text": "Natalie"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Jennifer was more of a morning person than Natalie although _ always went to bed early and got a good night's rest.",
+          "option1": "Jennifer",
+          "option2": "Natalie",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1376771527,
+      "_task_hash": -2047787372,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526602,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "always went to bed early and got a good night's rest.",
+    "arguments": [
+      [
+        "Jennifer was more of a morning person than Natalie although Jennifer",
+        " always went to bed early and got a good night's rest."
+      ],
+      [
+        "Jennifer was more of a morning person than Natalie although Natalie",
+        " always went to bed early and got a good night's rest."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -25.03125,
+          false
+        ]
+      ],
+      [
+        [
+          -25.75,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -25.03125,
+        false
+      ],
+      [
+        -25.75,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 53,
+    "doc": {
+      "text": "Jennifer was more of a morning person than Natalie because _ always went to bed early and got a good night's rest.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Jennifer"
+        },
+        {
+          "id": "option2",
+          "text": "Natalie"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Jennifer was more of a morning person than Natalie because _ always went to bed early and got a good night's rest.",
+          "option1": "Jennifer",
+          "option2": "Natalie",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1690457365,
+      "_task_hash": 1029769878,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526606,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "always went to bed early and got a good night's rest.",
+    "arguments": [
+      [
+        "Jennifer was more of a morning person than Natalie because Jennifer",
+        " always went to bed early and got a good night's rest."
+      ],
+      [
+        "Jennifer was more of a morning person than Natalie because Natalie",
+        " always went to bed early and got a good night's rest."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -23.71875,
+          false
+        ]
+      ],
+      [
+        [
+          -24.65625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -23.71875,
+        false
+      ],
+      [
+        -24.65625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 54,
+    "doc": {
+      "text": "Alcohol is a love of Matthew's, but Ryan can't stand the stuff because _ is a sober alcoholic.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Matthew"
+        },
+        {
+          "id": "option2",
+          "text": "Ryan"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Alcohol is a love of Matthew's, but Ryan can't stand the stuff because _ is a sober alcoholic.",
+          "option1": "Matthew",
+          "option2": "Ryan",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1442591056,
+      "_task_hash": 770883333,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526613,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is a sober alcoholic.",
+    "arguments": [
+      [
+        "Alcohol is a love of Matthew's, but Ryan can't stand the stuff because Matthew",
+        " is a sober alcoholic."
+      ],
+      [
+        "Alcohol is a love of Matthew's, but Ryan can't stand the stuff because Ryan",
+        " is a sober alcoholic."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -13.40625,
+          false
+        ]
+      ],
+      [
+        [
+          -9.2890625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -13.40625,
+        false
+      ],
+      [
+        -9.2890625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 55,
+    "doc": {
+      "text": "Joe brought the horse out to the country quite a distance and gave him food but the _ was too much.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "food"
+        },
+        {
+          "id": "option2",
+          "text": "distance"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Joe brought the horse out to the country quite a distance and gave him food but the _ was too much.",
+          "option1": "food",
+          "option2": "distance",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -779724396,
+      "_task_hash": -83424259,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526619,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too much.",
+    "arguments": [
+      [
+        "Joe brought the horse out to the country quite a distance and gave him food but the food",
+        " was too much."
+      ],
+      [
+        "Joe brought the horse out to the country quite a distance and gave him food but the distance",
+        " was too much."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.9140625,
+          false
+        ]
+      ],
+      [
+        [
+          -6.1953125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.9140625,
+        false
+      ],
+      [
+        -6.1953125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 56,
+    "doc": {
+      "text": "Randy gave their heart to Brian, and _ soon told them that they should have kept their heart to themselves.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Randy"
+        },
+        {
+          "id": "option2",
+          "text": "Brian"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Randy gave their heart to Brian, and _ soon told them that they should have kept their heart to themselves.",
+          "option1": "Randy",
+          "option2": "Brian",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 801827182,
+      "_task_hash": -346606205,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526626,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "soon told them that they should have kept their heart to themselves.",
+    "arguments": [
+      [
+        "Randy gave their heart to Brian, and Randy",
+        " soon told them that they should have kept their heart to themselves."
+      ],
+      [
+        "Randy gave their heart to Brian, and Brian",
+        " soon told them that they should have kept their heart to themselves."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -38.625,
+          false
+        ]
+      ],
+      [
+        [
+          -37.46875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -38.625,
+        false
+      ],
+      [
+        -37.46875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 57,
+    "doc": {
+      "text": "Nick wanted to play a game on the floor, but Dennis was hesitant because of his knees. _ was disappointed.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Nick"
+        },
+        {
+          "id": "option2",
+          "text": "Dennis"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Nick wanted to play a game on the floor, but Dennis was hesitant because of his knees. _ was disappointed.",
+          "option1": "Nick",
+          "option2": "Dennis",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1617822215,
+      "_task_hash": 325202108,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526633,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was disappointed.",
+    "arguments": [
+      [
+        "Nick wanted to play a game on the floor, but Dennis was hesitant because of his knees. Nick",
+        " was disappointed."
+      ],
+      [
+        "Nick wanted to play a game on the floor, but Dennis was hesitant because of his knees. Dennis",
+        " was disappointed."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -8.609375,
+          false
+        ]
+      ],
+      [
+        [
+          -11.5546875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -8.609375,
+        false
+      ],
+      [
+        -11.5546875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 58,
+    "doc": {
+      "text": "Although she was being prosecuted, Monica was welcomed into the sanctuary of the church by Samantha because _ was a sinful criminal.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Monica"
+        },
+        {
+          "id": "option2",
+          "text": "Samantha"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Although she was being prosecuted, Monica was welcomed into the sanctuary of the church by Samantha because _ was a sinful criminal.",
+          "option1": "Monica",
+          "option2": "Samantha",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1764352765,
+      "_task_hash": -1381438587,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526639,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was a sinful criminal.",
+    "arguments": [
+      [
+        "Although she was being prosecuted, Monica was welcomed into the sanctuary of the church by Samantha because Monica",
+        " was a sinful criminal."
+      ],
+      [
+        "Although she was being prosecuted, Monica was welcomed into the sanctuary of the church by Samantha because Samantha",
+        " was a sinful criminal."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -21.46875,
+          false
+        ]
+      ],
+      [
+        [
+          -23.609375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -21.46875,
+        false
+      ],
+      [
+        -23.609375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 59,
+    "doc": {
+      "text": "The battle was less fierce than the great war, because the _ lasted one year.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "battle"
+        },
+        {
+          "id": "option2",
+          "text": "war"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The battle was less fierce than the great war, because the _ lasted one year.",
+          "option1": "battle",
+          "option2": "war",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -390350057,
+      "_task_hash": -1280928426,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526651,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "lasted one year.",
+    "arguments": [
+      [
+        "The battle was less fierce than the great war, because the battle",
+        " lasted one year."
+      ],
+      [
+        "The battle was less fierce than the great war, because the war",
+        " lasted one year."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -13.203125,
+          false
+        ]
+      ],
+      [
+        [
+          -12.015625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -13.203125,
+        false
+      ],
+      [
+        -12.015625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 60,
+    "doc": {
+      "text": "Laura used too much super glue on Erins hands, so _ needed to get to the doctor to separate their hands.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Laura"
+        },
+        {
+          "id": "option2",
+          "text": "Erin"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Laura used too much super glue on Erins hands, so _ needed to get to the doctor to separate their hands.",
+          "option1": "Laura",
+          "option2": "Erin",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 702960045,
+      "_task_hash": -1450505278,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526657,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "needed to get to the doctor to separate their hands.",
+    "arguments": [
+      [
+        "Laura used too much super glue on Erins hands, so Laura",
+        " needed to get to the doctor to separate their hands."
+      ],
+      [
+        "Laura used too much super glue on Erins hands, so Erin",
+        " needed to get to the doctor to separate their hands."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -34.96875,
+          false
+        ]
+      ],
+      [
+        [
+          -35.71875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -34.96875,
+        false
+      ],
+      [
+        -35.71875,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 61,
+    "doc": {
+      "text": "James panicked when his phone fell on the table thinking it will break but the _ is soft.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "phone"
+        },
+        {
+          "id": "option2",
+          "text": "table"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "James panicked when his phone fell on the table thinking it will break but the _ is soft.",
+          "option1": "phone",
+          "option2": "table",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1995713394,
+      "_task_hash": -1721057899,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526661,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is soft.",
+    "arguments": [
+      [
+        "James panicked when his phone fell on the table thinking it will break but the phone",
+        " is soft."
+      ],
+      [
+        "James panicked when his phone fell on the table thinking it will break but the table",
+        " is soft."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -11.828125,
+          false
+        ]
+      ],
+      [
+        [
+          -10.09375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -11.828125,
+        false
+      ],
+      [
+        -10.09375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 62,
+    "doc": {
+      "text": "James panicked when his phone fell on the table thinking it will break but the _ is strong.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "phone"
+        },
+        {
+          "id": "option2",
+          "text": "table"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "James panicked when his phone fell on the table thinking it will break but the _ is strong.",
+          "option1": "phone",
+          "option2": "table",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1164654157,
+      "_task_hash": -1341988931,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526664,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is strong.",
+    "arguments": [
+      [
+        "James panicked when his phone fell on the table thinking it will break but the phone",
+        " is strong."
+      ],
+      [
+        "James panicked when his phone fell on the table thinking it will break but the table",
+        " is strong."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -8.390625,
+          false
+        ]
+      ],
+      [
+        [
+          -5.890625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -8.390625,
+        false
+      ],
+      [
+        -5.890625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 63,
+    "doc": {
+      "text": "John cannot touch the cup as it was just brought out of the refrigerator. He wanted some air to blow around it. The _ is very warm.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "cup"
+        },
+        {
+          "id": "option2",
+          "text": "air"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "John cannot touch the cup as it was just brought out of the refrigerator. He wanted some air to blow around it. The _ is very warm.",
+          "option1": "cup",
+          "option2": "air",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 413880586,
+      "_task_hash": 1891907582,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526742,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is very warm.",
+    "arguments": [
+      [
+        "John cannot touch the cup as it was just brought out of the refrigerator. He wanted some air to blow around it. The cup",
+        " is very warm."
+      ],
+      [
+        "John cannot touch the cup as it was just brought out of the refrigerator. He wanted some air to blow around it. The air",
+        " is very warm."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -9.78125,
+          false
+        ]
+      ],
+      [
+        [
+          -10.625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -9.78125,
+        false
+      ],
+      [
+        -10.625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 64,
+    "doc": {
+      "text": "The fireman used several rags to polish the nozzles on the fire hose; when he was done the _ were dirty.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "nozzles"
+        },
+        {
+          "id": "option2",
+          "text": "rags"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The fireman used several rags to polish the nozzles on the fire hose; when he was done the _ were dirty.",
+          "option1": "nozzles",
+          "option2": "rags",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 498071375,
+      "_task_hash": 1582651345,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526747,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "were dirty.",
+    "arguments": [
+      [
+        "The fireman used several rags to polish the nozzles on the fire hose; when he was done the nozzles",
+        " were dirty."
+      ],
+      [
+        "The fireman used several rags to polish the nozzles on the fire hose; when he was done the rags",
+        " were dirty."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -12.1484375,
+          false
+        ]
+      ],
+      [
+        [
+          -7.234375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -12.1484375,
+        false
+      ],
+      [
+        -7.234375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 65,
+    "doc": {
+      "text": "Mary wanted to get another piercing in her ear, but the _ was much too tiny.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "ear"
+        },
+        {
+          "id": "option2",
+          "text": "piercing"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Mary wanted to get another piercing in her ear, but the _ was much too tiny.",
+          "option1": "ear",
+          "option2": "piercing",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -257958123,
+      "_task_hash": 2009389658,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526754,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was much too tiny.",
+    "arguments": [
+      [
+        "Mary wanted to get another piercing in her ear, but the ear",
+        " was much too tiny."
+      ],
+      [
+        "Mary wanted to get another piercing in her ear, but the piercing",
+        " was much too tiny."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -18.296875,
+          false
+        ]
+      ],
+      [
+        [
+          -18.140625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -18.296875,
+        false
+      ],
+      [
+        -18.140625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 66,
+    "doc": {
+      "text": "Mary wanted to get another piercing in her ear, but the _ was much too huge.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "ear"
+        },
+        {
+          "id": "option2",
+          "text": "piercing"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Mary wanted to get another piercing in her ear, but the _ was much too huge.",
+          "option1": "ear",
+          "option2": "piercing",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -885538436,
+      "_task_hash": -28020234,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526756,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was much too huge.",
+    "arguments": [
+      [
+        "Mary wanted to get another piercing in her ear, but the ear",
+        " was much too huge."
+      ],
+      [
+        "Mary wanted to get another piercing in her ear, but the piercing",
+        " was much too huge."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -20.984375,
+          false
+        ]
+      ],
+      [
+        [
+          -19.421875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -20.984375,
+        false
+      ],
+      [
+        -19.421875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 67,
+    "doc": {
+      "text": "Laura just loved the taste of green beans but Felicia hated the taste of them. _ didn't have a second serving.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Laura"
+        },
+        {
+          "id": "option2",
+          "text": "Felicia"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Laura just loved the taste of green beans but Felicia hated the taste of them. _ didn't have a second serving.",
+          "option1": "Laura",
+          "option2": "Felicia",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1707357092,
+      "_task_hash": 626327286,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526761,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "didn't have a second serving.",
+    "arguments": [
+      [
+        "Laura just loved the taste of green beans but Felicia hated the taste of them. Laura",
+        " didn't have a second serving."
+      ],
+      [
+        "Laura just loved the taste of green beans but Felicia hated the taste of them. Felicia",
+        " didn't have a second serving."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -20.984375,
+          false
+        ]
+      ],
+      [
+        [
+          -21.296875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -20.984375,
+        false
+      ],
+      [
+        -21.296875,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 68,
+    "doc": {
+      "text": "The bartender cut Carrie off but continued to serve Emily because _ was too drunk.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Carrie"
+        },
+        {
+          "id": "option2",
+          "text": "Emily"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The bartender cut Carrie off but continued to serve Emily because _ was too drunk.",
+          "option1": "Carrie",
+          "option2": "Emily",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 370432164,
+      "_task_hash": -748859609,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526766,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too drunk.",
+    "arguments": [
+      [
+        "The bartender cut Carrie off but continued to serve Emily because Carrie",
+        " was too drunk."
+      ],
+      [
+        "The bartender cut Carrie off but continued to serve Emily because Emily",
+        " was too drunk."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -9.0859375,
+          false
+        ]
+      ],
+      [
+        [
+          -10.0390625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -9.0859375,
+        false
+      ],
+      [
+        -10.0390625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 69,
+    "doc": {
+      "text": "Blaze always wore a t-shirt instead of a shirt because he thought that the _ was stuffy and old fashioned.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "shirt"
+        },
+        {
+          "id": "option2",
+          "text": "t-shirt"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Blaze always wore a t-shirt instead of a shirt because he thought that the _ was stuffy and old fashioned.",
+          "option1": "shirt",
+          "option2": "t-shirt",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1892618875,
+      "_task_hash": -1865021364,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526773,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was stuffy and old fashioned.",
+    "arguments": [
+      [
+        "Blaze always wore a t-shirt instead of a shirt because he thought that the shirt",
+        " was stuffy and old fashioned."
+      ],
+      [
+        "Blaze always wore a t-shirt instead of a shirt because he thought that the t-shirt",
+        " was stuffy and old fashioned."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -16.09375,
+          false
+        ]
+      ],
+      [
+        [
+          -18.59375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -16.09375,
+        false
+      ],
+      [
+        -18.59375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 70,
+    "doc": {
+      "text": "The paint would melt in the sun, so we used a varnish instead, since the _ was susceptible to heat.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "paint"
+        },
+        {
+          "id": "option2",
+          "text": "varnish"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The paint would melt in the sun, so we used a varnish instead, since the _ was susceptible to heat.",
+          "option1": "paint",
+          "option2": "varnish",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 894300672,
+      "_task_hash": 511464421,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526778,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was susceptible to heat.",
+    "arguments": [
+      [
+        "The paint would melt in the sun, so we used a varnish instead, since the paint",
+        " was susceptible to heat."
+      ],
+      [
+        "The paint would melt in the sun, so we used a varnish instead, since the varnish",
+        " was susceptible to heat."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -13.1953125,
+          false
+        ]
+      ],
+      [
+        [
+          -14.890625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -13.1953125,
+        false
+      ],
+      [
+        -14.890625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 71,
+    "doc": {
+      "text": "I tried to make mini lamps by using glow sticks in mason jars, but had to get larger jars because the _ were too big.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "glow sticks"
+        },
+        {
+          "id": "option2",
+          "text": "jars"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "I tried to make mini lamps by using glow sticks in mason jars, but had to get larger jars because the _ were too big.",
+          "option1": "glow sticks",
+          "option2": "jars",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -148803795,
+      "_task_hash": -1002338125,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526787,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "were too big.",
+    "arguments": [
+      [
+        "I tried to make mini lamps by using glow sticks in mason jars, but had to get larger jars because the glow sticks",
+        " were too big."
+      ],
+      [
+        "I tried to make mini lamps by using glow sticks in mason jars, but had to get larger jars because the jars",
+        " were too big."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -6.4453125,
+          false
+        ]
+      ],
+      [
+        [
+          -5.45703125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -6.4453125,
+        false
+      ],
+      [
+        -5.45703125,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 72,
+    "doc": {
+      "text": "Joel always liked to turn the heater up higher than Joseph did for the reason that _ was never cold.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Joel"
+        },
+        {
+          "id": "option2",
+          "text": "Joseph"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Joel always liked to turn the heater up higher than Joseph did for the reason that _ was never cold.",
+          "option1": "Joel",
+          "option2": "Joseph",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 2014629308,
+      "_task_hash": -12989514,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526792,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was never cold.",
+    "arguments": [
+      [
+        "Joel always liked to turn the heater up higher than Joseph did for the reason that Joel",
+        " was never cold."
+      ],
+      [
+        "Joel always liked to turn the heater up higher than Joseph did for the reason that Joseph",
+        " was never cold."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -9.3828125,
+          false
+        ]
+      ],
+      [
+        [
+          -11.1328125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -9.3828125,
+        false
+      ],
+      [
+        -11.1328125,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 73,
+    "doc": {
+      "text": "Joel always liked to turn the heater up higher than Joseph did for the reason that _ was always cold.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Joel"
+        },
+        {
+          "id": "option2",
+          "text": "Joseph"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Joel always liked to turn the heater up higher than Joseph did for the reason that _ was always cold.",
+          "option1": "Joel",
+          "option2": "Joseph",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1912447247,
+      "_task_hash": 356744452,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526794,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was always cold.",
+    "arguments": [
+      [
+        "Joel always liked to turn the heater up higher than Joseph did for the reason that Joel",
+        " was always cold."
+      ],
+      [
+        "Joel always liked to turn the heater up higher than Joseph did for the reason that Joseph",
+        " was always cold."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -7.17578125,
+          false
+        ]
+      ],
+      [
+        [
+          -7.1796875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -7.17578125,
+        false
+      ],
+      [
+        -7.1796875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 74,
+    "doc": {
+      "text": "The teen found the new hat was no substitute for his cool shirt.  The _ was just cool to wear to school.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "hat"
+        },
+        {
+          "id": "option2",
+          "text": "shirt"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The teen found the new hat was no substitute for his cool shirt.  The _ was just cool to wear to school.",
+          "option1": "hat",
+          "option2": "shirt",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -146156504,
+      "_task_hash": -2031602229,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526807,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was just cool to wear to school.",
+    "arguments": [
+      [
+        "The teen found the new hat was no substitute for his cool shirt.  The hat",
+        " was just cool to wear to school."
+      ],
+      [
+        "The teen found the new hat was no substitute for his cool shirt.  The shirt",
+        " was just cool to wear to school."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -21.984375,
+          false
+        ]
+      ],
+      [
+        [
+          -20.15625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -21.984375,
+        false
+      ],
+      [
+        -20.15625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 75,
+    "doc": {
+      "text": "Mary was helping Patricia's daughter put on makeup but  _ watches a lot of makeup tutorials.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Mary"
+        },
+        {
+          "id": "option2",
+          "text": "Patricia"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Mary was helping Patricia's daughter put on makeup but  _ watches a lot of makeup tutorials.",
+          "option1": "Mary",
+          "option2": "Patricia",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -215783918,
+      "_task_hash": -1624961312,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526817,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "watches a lot of makeup tutorials.",
+    "arguments": [
+      [
+        "Mary was helping Patricia's daughter put on makeup but  Mary",
+        " watches a lot of makeup tutorials."
+      ],
+      [
+        "Mary was helping Patricia's daughter put on makeup but  Patricia",
+        " watches a lot of makeup tutorials."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -30.125,
+          false
+        ]
+      ],
+      [
+        [
+          -31.40625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -30.125,
+        false
+      ],
+      [
+        -31.40625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 76,
+    "doc": {
+      "text": "Mary was helping Patricia's daughter put on makeup because _ watches a lot of makeup tutorials.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Mary"
+        },
+        {
+          "id": "option2",
+          "text": "Patricia"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Mary was helping Patricia's daughter put on makeup because _ watches a lot of makeup tutorials.",
+          "option1": "Mary",
+          "option2": "Patricia",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 642425473,
+      "_task_hash": 1587244742,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526820,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "watches a lot of makeup tutorials.",
+    "arguments": [
+      [
+        "Mary was helping Patricia's daughter put on makeup because Mary",
+        " watches a lot of makeup tutorials."
+      ],
+      [
+        "Mary was helping Patricia's daughter put on makeup because Patricia",
+        " watches a lot of makeup tutorials."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -23.03125,
+          false
+        ]
+      ],
+      [
+        [
+          -22.703125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -23.03125,
+        false
+      ],
+      [
+        -22.703125,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 77,
+    "doc": {
+      "text": "He wanted to kill time at the house instead of the playground, because everyone at the _ was fun.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "playground"
+        },
+        {
+          "id": "option2",
+          "text": "house"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "He wanted to kill time at the house instead of the playground, because everyone at the _ was fun.",
+          "option1": "playground",
+          "option2": "house",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -789766674,
+      "_task_hash": 934371716,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526825,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was fun.",
+    "arguments": [
+      [
+        "He wanted to kill time at the house instead of the playground, because everyone at the playground",
+        " was fun."
+      ],
+      [
+        "He wanted to kill time at the house instead of the playground, because everyone at the house",
+        " was fun."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -8.8125,
+          false
+        ]
+      ],
+      [
+        [
+          -8.65625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -8.8125,
+        false
+      ],
+      [
+        -8.65625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 78,
+    "doc": {
+      "text": "Aaron didn't know Dennis had a peanut allergy, so when _ made peanut chicken an ambulance was called.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Aaron"
+        },
+        {
+          "id": "option2",
+          "text": "Dennis"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Aaron didn't know Dennis had a peanut allergy, so when _ made peanut chicken an ambulance was called.",
+          "option1": "Aaron",
+          "option2": "Dennis",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1856138921,
+      "_task_hash": -1056024720,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526830,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "made peanut chicken an ambulance was called.",
+    "arguments": [
+      [
+        "Aaron didn't know Dennis had a peanut allergy, so when Aaron",
+        " made peanut chicken an ambulance was called."
+      ],
+      [
+        "Aaron didn't know Dennis had a peanut allergy, so when Dennis",
+        " made peanut chicken an ambulance was called."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -36.84375,
+          false
+        ]
+      ],
+      [
+        [
+          -40.0625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -36.84375,
+        false
+      ],
+      [
+        -40.0625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 79,
+    "doc": {
+      "text": "Aaron didn't know Dennis had a peanut allergy, so when _ ate peanut chicken an ambulance was called.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Aaron"
+        },
+        {
+          "id": "option2",
+          "text": "Dennis"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Aaron didn't know Dennis had a peanut allergy, so when _ ate peanut chicken an ambulance was called.",
+          "option1": "Aaron",
+          "option2": "Dennis",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1806690203,
+      "_task_hash": 34777698,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526833,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "ate peanut chicken an ambulance was called.",
+    "arguments": [
+      [
+        "Aaron didn't know Dennis had a peanut allergy, so when Aaron",
+        " ate peanut chicken an ambulance was called."
+      ],
+      [
+        "Aaron didn't know Dennis had a peanut allergy, so when Dennis",
+        " ate peanut chicken an ambulance was called."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -35.21875,
+          false
+        ]
+      ],
+      [
+        [
+          -33.71875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -35.21875,
+        false
+      ],
+      [
+        -33.71875,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 80,
+    "doc": {
+      "text": "God liked to control the day and the night, but the _ was too bright.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "day"
+        },
+        {
+          "id": "option2",
+          "text": "night"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "God liked to control the day and the night, but the _ was too bright.",
+          "option1": "day",
+          "option2": "night",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 508607276,
+      "_task_hash": 1082597689,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526836,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was too bright.",
+    "arguments": [
+      [
+        "God liked to control the day and the night, but the day",
+        " was too bright."
+      ],
+      [
+        "God liked to control the day and the night, but the night",
+        " was too bright."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.453125,
+          false
+        ]
+      ],
+      [
+        [
+          -11.5625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.453125,
+        false
+      ],
+      [
+        -11.5625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 81,
+    "doc": {
+      "text": "Brett asked Joel for advice and guidance about waxing his mustache, and afterwards _ felt burdened.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Brett"
+        },
+        {
+          "id": "option2",
+          "text": "Joel"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Brett asked Joel for advice and guidance about waxing his mustache, and afterwards _ felt burdened.",
+          "option1": "Brett",
+          "option2": "Joel",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 564135497,
+      "_task_hash": 1239174554,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526841,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "felt burdened.",
+    "arguments": [
+      [
+        "Brett asked Joel for advice and guidance about waxing his mustache, and afterwards Brett",
+        " felt burdened."
+      ],
+      [
+        "Brett asked Joel for advice and guidance about waxing his mustache, and afterwards Joel",
+        " felt burdened."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -17.125,
+          false
+        ]
+      ],
+      [
+        [
+          -17.171875,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -17.125,
+        false
+      ],
+      [
+        -17.171875,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 82,
+    "doc": {
+      "text": "The filter in the living room needed to be changed more often than the one in the bedroom because the _ was dirtier.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "living room"
+        },
+        {
+          "id": "option2",
+          "text": "bedroom"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The filter in the living room needed to be changed more often than the one in the bedroom because the _ was dirtier.",
+          "option1": "living room",
+          "option2": "bedroom",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 1699985736,
+      "_task_hash": -944086914,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526849,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was dirtier.",
+    "arguments": [
+      [
+        "The filter in the living room needed to be changed more often than the one in the bedroom because the living room",
+        " was dirtier."
+      ],
+      [
+        "The filter in the living room needed to be changed more often than the one in the bedroom because the bedroom",
+        " was dirtier."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -9.234375,
+          false
+        ]
+      ],
+      [
+        [
+          -10.3125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -9.234375,
+        false
+      ],
+      [
+        -10.3125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 83,
+    "doc": {
+      "text": "The filter in the living room needed to be changed more often than the one in the bedroom because the _ was cleaner.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "living room"
+        },
+        {
+          "id": "option2",
+          "text": "bedroom"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The filter in the living room needed to be changed more often than the one in the bedroom because the _ was cleaner.",
+          "option1": "living room",
+          "option2": "bedroom",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1943748028,
+      "_task_hash": -519134876,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526851,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was cleaner.",
+    "arguments": [
+      [
+        "The filter in the living room needed to be changed more often than the one in the bedroom because the living room",
+        " was cleaner."
+      ],
+      [
+        "The filter in the living room needed to be changed more often than the one in the bedroom because the bedroom",
+        " was cleaner."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -8.3359375,
+          false
+        ]
+      ],
+      [
+        [
+          -7.80078125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -8.3359375,
+        false
+      ],
+      [
+        -7.80078125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 84,
+    "doc": {
+      "text": "Amy went over to the waiting room at the hospital to calm Samantha because _ was placid.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Amy"
+        },
+        {
+          "id": "option2",
+          "text": "Samantha"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Amy went over to the waiting room at the hospital to calm Samantha because _ was placid.",
+          "option1": "Amy",
+          "option2": "Samantha",
+          "answer": "1"
+        }
+      },
+      "_input_hash": 775610691,
+      "_task_hash": -678175194,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526855,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was placid.",
+    "arguments": [
+      [
+        "Amy went over to the waiting room at the hospital to calm Samantha because Amy",
+        " was placid."
+      ],
+      [
+        "Amy went over to the waiting room at the hospital to calm Samantha because Samantha",
+        " was placid."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -19.46875,
+          false
+        ]
+      ],
+      [
+        [
+          -17.640625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -19.46875,
+        false
+      ],
+      [
+        -17.640625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 85,
+    "doc": {
+      "text": "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and _ never found out.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Megan"
+        },
+        {
+          "id": "option2",
+          "text": "Jessica"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and _ never found out.",
+          "option1": "Megan",
+          "option2": "Jessica",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1157370124,
+      "_task_hash": 1583692814,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526860,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "never found out.",
+    "arguments": [
+      [
+        "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and Megan",
+        " never found out."
+      ],
+      [
+        "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and Jessica",
+        " never found out."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -12.046875,
+          false
+        ]
+      ],
+      [
+        [
+          -11.375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -12.046875,
+        false
+      ],
+      [
+        -11.375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 86,
+    "doc": {
+      "text": "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and _ hoped they never found out.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Megan"
+        },
+        {
+          "id": "option2",
+          "text": "Jessica"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and _ hoped they never found out.",
+          "option1": "Megan",
+          "option2": "Jessica",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -281778962,
+      "_task_hash": 2118621787,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526862,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "hoped they never found out.",
+    "arguments": [
+      [
+        "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and Megan",
+        " hoped they never found out."
+      ],
+      [
+        "Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and Jessica",
+        " hoped they never found out."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -20.5625,
+          false
+        ]
+      ],
+      [
+        [
+          -20.453125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -20.5625,
+        false
+      ],
+      [
+        -20.453125,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 87,
+    "doc": {
+      "text": "Amy thought she was the mirror image of Natalie , but _ could not be convinced to see the similarity.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Amy"
+        },
+        {
+          "id": "option2",
+          "text": "Natalie"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Amy thought she was the mirror image of Natalie , but _ could not be convinced to see the similarity.",
+          "option1": "Amy",
+          "option2": "Natalie",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -836848181,
+      "_task_hash": 1100356256,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526867,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "could not be convinced to see the similarity.",
+    "arguments": [
+      [
+        "Amy thought she was the mirror image of Natalie , but Amy",
+        " could not be convinced to see the similarity."
+      ],
+      [
+        "Amy thought she was the mirror image of Natalie , but Natalie",
+        " could not be convinced to see the similarity."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -27.296875,
+          false
+        ]
+      ],
+      [
+        [
+          -25.984375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -27.296875,
+        false
+      ],
+      [
+        -25.984375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 88,
+    "doc": {
+      "text": "Amy thought she was the mirror image of Natalie , but _ could not persuade her to see the similarity.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Amy"
+        },
+        {
+          "id": "option2",
+          "text": "Natalie"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Amy thought she was the mirror image of Natalie , but _ could not persuade her to see the similarity.",
+          "option1": "Amy",
+          "option2": "Natalie",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -388446086,
+      "_task_hash": -225769003,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526869,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "could not persuade her to see the similarity.",
+    "arguments": [
+      [
+        "Amy thought she was the mirror image of Natalie , but Amy",
+        " could not persuade her to see the similarity."
+      ],
+      [
+        "Amy thought she was the mirror image of Natalie , but Natalie",
+        " could not persuade her to see the similarity."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -26.4375,
+          false
+        ]
+      ],
+      [
+        [
+          -25.890625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -26.4375,
+        false
+      ],
+      [
+        -25.890625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 89,
+    "doc": {
+      "text": "I helped my sister find her gold necklace. She couldn't wear her woven necklace to the ball because the _ was so casual.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "woven necklace"
+        },
+        {
+          "id": "option2",
+          "text": "ball"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "I helped my sister find her gold necklace. She couldn't wear her woven necklace to the ball because the _ was so casual.",
+          "option1": "woven necklace",
+          "option2": "ball",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -1208039386,
+      "_task_hash": -106393897,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526877,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was so casual.",
+    "arguments": [
+      [
+        "I helped my sister find her gold necklace. She couldn't wear her woven necklace to the ball because the woven necklace",
+        " was so casual."
+      ],
+      [
+        "I helped my sister find her gold necklace. She couldn't wear her woven necklace to the ball because the ball",
+        " was so casual."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -15.921875,
+          false
+        ]
+      ],
+      [
+        [
+          -12.265625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -15.921875,
+        false
+      ],
+      [
+        -12.265625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 90,
+    "doc": {
+      "text": "Emily never had as much money to spend as Carrie, because _ had a good job.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Emily"
+        },
+        {
+          "id": "option2",
+          "text": "Carrie"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Emily never had as much money to spend as Carrie, because _ had a good job.",
+          "option1": "Emily",
+          "option2": "Carrie",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -481298192,
+      "_task_hash": 1304591082,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526882,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "had a good job.",
+    "arguments": [
+      [
+        "Emily never had as much money to spend as Carrie, because Emily",
+        " had a good job."
+      ],
+      [
+        "Emily never had as much money to spend as Carrie, because Carrie",
+        " had a good job."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -11.4296875,
+          false
+        ]
+      ],
+      [
+        [
+          -10.1484375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -11.4296875,
+        false
+      ],
+      [
+        -10.1484375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 91,
+    "doc": {
+      "text": "The wooden doors at my friends work are worse than the wooden desks at my work, because the _ material is cheaper.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "doors"
+        },
+        {
+          "id": "option2",
+          "text": "desks"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The wooden doors at my friends work are worse than the wooden desks at my work, because the _ material is cheaper.",
+          "option1": "doors",
+          "option2": "desks",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -1737530579,
+      "_task_hash": 941463331,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526889,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "material is cheaper.",
+    "arguments": [
+      [
+        "The wooden doors at my friends work are worse than the wooden desks at my work, because the doors",
+        " material is cheaper."
+      ],
+      [
+        "The wooden doors at my friends work are worse than the wooden desks at my work, because the desks",
+        " material is cheaper."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -18.453125,
+          false
+        ]
+      ],
+      [
+        [
+          -22.0625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -18.453125,
+        false
+      ],
+      [
+        -22.0625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 92,
+    "doc": {
+      "text": "The wooden doors at my friends work are worse than the wooden desks at my work, because the _ material is stronger.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "doors"
+        },
+        {
+          "id": "option2",
+          "text": "desks"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The wooden doors at my friends work are worse than the wooden desks at my work, because the _ material is stronger.",
+          "option1": "doors",
+          "option2": "desks",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1947194190,
+      "_task_hash": 1026148374,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526891,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "material is stronger.",
+    "arguments": [
+      [
+        "The wooden doors at my friends work are worse than the wooden desks at my work, because the doors",
+        " material is stronger."
+      ],
+      [
+        "The wooden doors at my friends work are worse than the wooden desks at my work, because the desks",
+        " material is stronger."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -19.296875,
+          false
+        ]
+      ],
+      [
+        [
+          -21.625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -19.296875,
+        false
+      ],
+      [
+        -21.625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 93,
+    "doc": {
+      "text": "The arrow stuck to the bark but not the stone because the _ was flimsy.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "bark"
+        },
+        {
+          "id": "option2",
+          "text": "stone"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The arrow stuck to the bark but not the stone because the _ was flimsy.",
+          "option1": "bark",
+          "option2": "stone",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -233061595,
+      "_task_hash": 965204745,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526896,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was flimsy.",
+    "arguments": [
+      [
+        "The arrow stuck to the bark but not the stone because the bark",
+        " was flimsy."
+      ],
+      [
+        "The arrow stuck to the bark but not the stone because the stone",
+        " was flimsy."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.609375,
+          false
+        ]
+      ],
+      [
+        [
+          -12.4375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.609375,
+        false
+      ],
+      [
+        -12.4375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 94,
+    "doc": {
+      "text": "The arrow stuck to the bark but not the stone because the _ was hard.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "bark"
+        },
+        {
+          "id": "option2",
+          "text": "stone"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The arrow stuck to the bark but not the stone because the _ was hard.",
+          "option1": "bark",
+          "option2": "stone",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -1495376215,
+      "_task_hash": -75776922,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526897,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "was hard.",
+    "arguments": [
+      [
+        "The arrow stuck to the bark but not the stone because the bark",
+        " was hard."
+      ],
+      [
+        "The arrow stuck to the bark but not the stone because the stone",
+        " was hard."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -6.26171875,
+          false
+        ]
+      ],
+      [
+        [
+          -5.95703125,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -6.26171875,
+        false
+      ],
+      [
+        -5.95703125,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 95,
+    "doc": {
+      "text": "The leg of the pig body stuck out of the grave where it was buried because the _ is large.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "body"
+        },
+        {
+          "id": "option2",
+          "text": "grave"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The leg of the pig body stuck out of the grave where it was buried because the _ is large.",
+          "option1": "body",
+          "option2": "grave",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -637809112,
+      "_task_hash": 165856022,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526903,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is large.",
+    "arguments": [
+      [
+        "The leg of the pig body stuck out of the grave where it was buried because the body",
+        " is large."
+      ],
+      [
+        "The leg of the pig body stuck out of the grave where it was buried because the grave",
+        " is large."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -12.109375,
+          false
+        ]
+      ],
+      [
+        [
+          -12.734375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -12.109375,
+        false
+      ],
+      [
+        -12.734375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 96,
+    "doc": {
+      "text": "The sheet recovered can easily be hiding between the space in the door. The _ is thin.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "sheet"
+        },
+        {
+          "id": "option2",
+          "text": "space"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "The sheet recovered can easily be hiding between the space in the door. The _ is thin.",
+          "option1": "sheet",
+          "option2": "space",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -648488518,
+      "_task_hash": 721260007,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526912,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is thin.",
+    "arguments": [
+      [
+        "The sheet recovered can easily be hiding between the space in the door. The sheet",
+        " is thin."
+      ],
+      [
+        "The sheet recovered can easily be hiding between the space in the door. The space",
+        " is thin."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -10.359375,
+          false
+        ]
+      ],
+      [
+        [
+          -10.765625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -10.359375,
+        false
+      ],
+      [
+        -10.765625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 97,
+    "doc": {
+      "text": "The sheet recovered can easily be hiding between the space in the door. The _ is wide.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "sheet"
+        },
+        {
+          "id": "option2",
+          "text": "space"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "The sheet recovered can easily be hiding between the space in the door. The _ is wide.",
+          "option1": "sheet",
+          "option2": "space",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 1401971435,
+      "_task_hash": 505172885,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526913,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is wide.",
+    "arguments": [
+      [
+        "The sheet recovered can easily be hiding between the space in the door. The sheet",
+        " is wide."
+      ],
+      [
+        "The sheet recovered can easily be hiding between the space in the door. The space",
+        " is wide."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -12.46875,
+          false
+        ]
+      ],
+      [
+        [
+          -10.0625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -12.46875,
+        false
+      ],
+      [
+        -10.0625,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 98,
+    "doc": {
+      "text": "Mike doesn't like the table in his living room as much as the couch. The _ resonates with the other decorations.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "table"
+        },
+        {
+          "id": "option2",
+          "text": "couch"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Mike doesn't like the table in his living room as much as the couch. The _ resonates with the other decorations.",
+          "option1": "table",
+          "option2": "couch",
+          "answer": "2"
+        }
+      },
+      "_input_hash": -626494475,
+      "_task_hash": -1267285581,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526923,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "resonates with the other decorations.",
+    "arguments": [
+      [
+        "Mike doesn't like the table in his living room as much as the couch. The table",
+        " resonates with the other decorations."
+      ],
+      [
+        "Mike doesn't like the table in his living room as much as the couch. The couch",
+        " resonates with the other decorations."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -31.4375,
+          false
+        ]
+      ],
+      [
+        [
+          -33.59375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -31.4375,
+        false
+      ],
+      [
+        -33.59375,
+        false
+      ]
+    ],
+    "acc": 0.0
+  },
+  {
+    "doc_id": 99,
+    "doc": {
+      "text": "Steven believes they can buy happiness but Craig thinks otherwise as _ is very realistic.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Steven"
+        },
+        {
+          "id": "option2",
+          "text": "Craig"
+        }
+      ],
+      "meta": {
+        "label": "option2",
+        "doc": {
+          "sentence": "Steven believes they can buy happiness but Craig thinks otherwise as _ is very realistic.",
+          "option1": "Steven",
+          "option2": "Craig",
+          "answer": "2"
+        }
+      },
+      "_input_hash": 182798300,
+      "_task_hash": 1117884288,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option1"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526927,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is very realistic.",
+    "arguments": [
+      [
+        "Steven believes they can buy happiness but Craig thinks otherwise as Steven",
+        " is very realistic."
+      ],
+      [
+        "Steven believes they can buy happiness but Craig thinks otherwise as Craig",
+        " is very realistic."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -14.828125,
+          false
+        ]
+      ],
+      [
+        [
+          -12.8984375,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -14.828125,
+        false
+      ],
+      [
+        -12.8984375,
+        false
+      ]
+    ],
+    "acc": 1.0
+  },
+  {
+    "doc_id": 100,
+    "doc": {
+      "text": "Steven believes they can buy happiness but Craig thinks otherwise as _ is very materialistic.",
+      "options": [
+        {
+          "id": "option1",
+          "text": "Steven"
+        },
+        {
+          "id": "option2",
+          "text": "Craig"
+        }
+      ],
+      "meta": {
+        "label": "option1",
+        "doc": {
+          "sentence": "Steven believes they can buy happiness but Craig thinks otherwise as _ is very materialistic.",
+          "option1": "Steven",
+          "option2": "Craig",
+          "answer": "1"
+        }
+      },
+      "_input_hash": -1095465595,
+      "_task_hash": 1111749710,
+      "_view_id": "choice",
+      "config": {
+        "choice_style": "single"
+      },
+      "accept": [
+        "option2"
+      ],
+      "answer": "accept",
+      "_timestamp": 1701526929,
+      "_annotator_id": "2023-12-02_21-40-08",
+      "_session_id": "2023-12-02_21-40-08"
+    },
+    "target": "is very materialistic.",
+    "arguments": [
+      [
+        "Steven believes they can buy happiness but Craig thinks otherwise as Steven",
+        " is very materialistic."
+      ],
+      [
+        "Steven believes they can buy happiness but Craig thinks otherwise as Craig",
+        " is very materialistic."
+      ]
+    ],
+    "resps": [
+      [
+        [
+          -12.546875,
+          false
+        ]
+      ],
+      [
+        [
+          -12.265625,
+          false
+        ]
+      ]
+    ],
+    "filtered_resps": [
+      [
+        -12.546875,
+        false
+      ],
+      [
+        -12.265625,
+        false
+      ]
+    ],
+    "acc": 0.0
+  }
+]

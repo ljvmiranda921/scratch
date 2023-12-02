@@ -33,9 +33,18 @@ def evaluate_agreement(
     docs: List[Dict[str, Any]] = []
     for lm, human in zip(lm_outputs, human_outputs):
         if reader.task_type == "multi_choice":
-            # They're just the same to be honest, but we just wanna make sure
-            gold_lm = int(lm.get("target"))
-            gold_human = int(human.get("meta").get("doc").get("label"))
+            # A hacky patch for Winogrande
+            if dataset == Dataset.winogrande:
+                answer_to_num = {"1": 0, "2": 1}
+                gold_human = answer_to_num.get(
+                    human.get("meta").get("doc").get("answer")
+                )
+                gold_lm = gold_human
+            else:
+                # They're just the same to be honest, but we just wanna make sure
+                gold_lm = int(lm.get("target"))
+                gold_human = int(human.get("meta").get("doc").get("label"))
+
             if gold_human != gold_lm:
                 msg.fail(
                     f"Gold labels do not match for doc_id '{lm.get('doc_id')}'!"
@@ -70,7 +79,7 @@ def evaluate_agreement(
         msg.table(metrics, divider=True, header=["Metric", "Score"])
 
     if output_path:
-        srsly.write_jsonl(output_path)
+        srsly.write_jsonl(output_path, docs)
         msg.good(f"File saved to {output_path}")
 
 

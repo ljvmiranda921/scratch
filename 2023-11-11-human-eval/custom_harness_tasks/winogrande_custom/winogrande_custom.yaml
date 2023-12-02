@@ -1,0 +1,17 @@
+task: winogrande_custom
+dataset_path: json
+dataset_name: winogrande_xl
+dataset_kwargs:
+  data_files:
+    validation: annotations/winogrande/humaneval_winogrande_choice.jsonl
+output_type: multiple_choice
+validation_split: validation
+doc_to_text: !function preprocess_winogrande.doc_to_text
+doc_to_target: !function preprocess_winogrande.doc_to_target
+doc_to_choice: !function preprocess_winogrande.doc_to_choice
+should_decontaminate: true
+doc_to_decontamination_query: sentence
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
