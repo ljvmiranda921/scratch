@@ -1,13 +1,16 @@
 task: lambada_custom
 dataset_path: lambada
 dataset_name: null
+dataset_kwargs:
+  data_files:
+    validation: "annotations/lambada/humaneval_lambada_textbox.jsonl"
 output_type: loglikelihood
 validation_split: validation
-test_split: test
-doc_to_text: "{{text.split(' ')[:-1]|join(' ')}} ____. ->"
-doc_to_target: "{{' '+text.split(' ')[-1]}}"
+test_split: null
+doc_to_text: "{{meta.doc.text.split(' ')[:-1]|join(' ')}} ____. ->"
+doc_to_target: "{{' '+meta.doc.text.split(' ')[-1]}}"
 should_decontaminate: true
-doc_to_decontamination_query: "{{text}}"
+doc_to_decontamination_query: "{{meta.doc.text}}"
 metric_list:
   - metric: perplexity
     aggregation: perplexity
