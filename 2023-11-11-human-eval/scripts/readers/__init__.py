@@ -6,6 +6,7 @@ from .hellaswag import HellaSwag
 from .lambada import Lambada
 from .piqa import PIQA
 from .winogrande import Winogrande
+from .logiqa import LogiQA
 
 
 class Dataset(str, Enum):
@@ -13,6 +14,7 @@ class Dataset(str, Enum):
     hellaswag = "hellaswag"
     winogrande = "winogrande"
     lambada = "lambada"
+    logiqa = "lucasmccabe/logiqa"
 
 
 def get_dataset_reader(name: Dataset) -> DatasetReader:
@@ -21,6 +23,7 @@ def get_dataset_reader(name: Dataset) -> DatasetReader:
         Dataset.hellaswag.value: HellaSwag,
         Dataset.winogrande.value: Winogrande,
         Dataset.lambada.value: Lambada,
+        Dataset.logiqa.value: LogiQA,
     }
 
     reader_instance = reader_map[name.value]()

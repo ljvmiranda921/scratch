@@ -26,6 +26,7 @@ def download_dataset(
     # Get converter
     converter: Callable = dataset_reader.convert_to_prodigy
     annotation_tasks = converter(examples, interface.value)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     srsly.write_jsonl(output_path, annotation_tasks)
     msg.good(f"Saved {len(annotation_tasks)} annotation tasks to {output_path}")
 
