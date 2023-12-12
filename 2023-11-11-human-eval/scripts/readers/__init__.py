@@ -7,6 +7,7 @@ from .lambada import Lambada
 from .piqa import PIQA
 from .winogrande import Winogrande
 from .logiqa import LogiQA
+from .truthfulqa import TruthfulQA
 
 
 class Dataset(str, Enum):
@@ -15,6 +16,7 @@ class Dataset(str, Enum):
     winogrande = "winogrande"
     lambada = "lambada"
     logiqa = "lucasmccabe/logiqa"
+    truthfulqa = "truthful_qa"
 
 
 def get_dataset_reader(name: Dataset) -> DatasetReader:
@@ -24,6 +26,7 @@ def get_dataset_reader(name: Dataset) -> DatasetReader:
         Dataset.winogrande.value: Winogrande,
         Dataset.lambada.value: Lambada,
         Dataset.logiqa.value: LogiQA,
+        Dataset.truthfulqa.value: TruthfulQA,
     }
 
     reader_instance = reader_map[name.value]()
