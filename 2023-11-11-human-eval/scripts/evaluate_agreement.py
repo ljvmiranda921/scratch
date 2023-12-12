@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Optional
 
 import srsly
 import typer
+import pandas as pd
 from wasabi import msg
 
 from .readers import Dataset, get_dataset_reader
@@ -13,7 +14,7 @@ def evaluate_agreement(
     lm_outputs: Path = typer.Argument(..., help="Path to the LM output from EleutherAI when you pass --output_path and --log_samples."),
     human_outputs: Path = typer.Argument(..., help="Path to human annotations via Prodigy."),
     dataset: Dataset = typer.Option(..., help="Dataset name for parsing."),
-    output_path: Optional[Path] = typer.Option(None, help="If set, save the agreement values in a JSONL file."),
+    output_path: Optional[Path] = typer.Option(None, help="If set, save the agreement values in a CSV file."),
     compute_metrics: bool = typer.Option(False, help="If set, will compute human-agreement metrics and display them as the output."),
     # fmt: on
 ):
@@ -79,8 +80,37 @@ def evaluate_agreement(
         msg.table(metrics, divider=True, header=["Metric", "Score"])
 
     if output_path:
-        srsly.write_jsonl(output_path, docs)
-        msg.good(f"File saved to {output_path}")
+        # Additional information
+        export(docs, output_path)
+
+
+def export(docs: List[Dict[str, Any]], output_path: Path):
+    def _get_text_from_id(id_value: str, options: List[Dict[str, Any]]) -> str:
+        for option in options:
+            if option.get("id") == id_value:
+                return option.get("text")
+
+    updated_docs = []
+    for doc in docs:
+        options = doc.get("options")
+        human = doc.get("human")
+        lm = doc.get("lm")
+        gold = doc.get("gold")
+        doc["both_correct"] = (human == gold) & (lm == gold)
+        doc["both_wrong"] = (human != gold) & (lm != gold)
+        doc["human_correct_lm_wrong"] = (human == gold) & (lm != gold)
+        doc["human_wrong_lm_correct"] = (human != gold) & (lm == gold)
+        doc["human_answer"] = _get_text_from_id(human, options)
+        doc["lm_answer"] = _get_text_from_id(lm, options)
+        doc["gold_answer"] = _get_text_from_id(gold, options)
+        updated_docs.append(doc)
+
+    df = pd.DataFrame(docs)
+    # fmt: off
+    df = df[["both_correct", "both_wrong", "human_correct_lm_wrong", "human_wrong_lm_correct", "human_answer", "lm_answer", "gold_answer", "text", "options"]]
+    # fmt: on
+    df.to_csv(output_path, index=False)
+    msg.good(f"File saved to {output_path}")
 
 
 if __name__ == "__main__":
