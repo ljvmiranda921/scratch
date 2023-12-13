@@ -21,5 +21,4 @@ def doc_to_text(eg) -> str:
 
 def doc_to_target(eg) -> int:
     doc = eg["meta"]["doc"]
-    choices = ["a", "b", "c", "d"]
-    return choices.index(doc["correct_option"].strip())
+    return int(doc["correct_option"])
