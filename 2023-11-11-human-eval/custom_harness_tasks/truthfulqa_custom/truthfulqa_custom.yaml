@@ -1,4 +1,4 @@
-task: truthfulqa_custom
+task: truthful_qa_custom
 dataset_path: json
 dataset_name: null
 dataset_kwargs:
