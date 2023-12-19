@@ -41,11 +41,9 @@ commands:
     help: "Run validator script to all ConLLU files and store their results into outputs"
     script:
       - mkdir -p outputs/logs/
-      - >-
-        python -m scripts.validate_conllu corpus/ outputs/logs/
-        --validator-script assets/validate.py
+      - python -m scripts.validate_conllu corpus/ outputs/logs/ assets/tools/validate.py
     deps:
-      - assets/validate.py
+      - assets/tools/validate.py
       - corpus/
     outputs:
       - outputs/logs/

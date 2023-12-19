@@ -31,6 +31,6 @@ in the project directory.
 | File | Source | Description |
 | --- | --- | --- |
 | [`assets/conllu-verified.zip`](assets/conllu-verified.zip) | Local | Updated ConLLU files containing UD Tagalog data |
-| `assets/validate.py` | Git | Validation script for Universal Dependencies |
+| `assets/tools` | Git | Validation script for Universal Dependencies |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->

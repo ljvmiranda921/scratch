@@ -1,1 +1,4 @@
 regex
+typer
+weasel
+pyconll
