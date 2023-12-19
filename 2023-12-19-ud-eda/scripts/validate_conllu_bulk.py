@@ -35,7 +35,7 @@ def validate_conllu_bulk(
 
             # Save the parsed results
             df = pl.DataFrame(parsed_output)
-            output_file = output_dir / {file.parent.name} / f"{file.stem}.csv"
+            output_file = output_dir / file.parent.name / f"{file.stem}.csv"
             df.write_csv(output_file)
 
 
