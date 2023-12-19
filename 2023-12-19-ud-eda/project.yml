@@ -14,12 +14,12 @@ assets:
   - dest: assets/conllu-verified.zip
     description: "Updated ConLLU files containing UD Tagalog data"
     checksum: c3f953b6a58b6287cd7df2316108213b
-  - dest: assets/validate.py
+  - dest: assets/tools
+    description: "Validation script for Universal Dependencies"
     git:
       repo: "https://github.com/universaldependencies/tools"
       branch: "master"
-      path: "validate.py"
-    description: "Validation script for Universal Dependencies"
+      path: ""
 
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
