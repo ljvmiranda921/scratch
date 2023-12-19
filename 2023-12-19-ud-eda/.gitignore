@@ -162,3 +162,5 @@ cython_debug/
 # custom
 assets/
 corpus/
+outputs/
+project.lock
