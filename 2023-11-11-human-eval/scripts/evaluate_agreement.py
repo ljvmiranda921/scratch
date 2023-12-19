@@ -41,6 +41,18 @@ def evaluate_agreement(
                     human.get("meta").get("doc").get("answer")
                 )
                 gold_lm = gold_human
+            elif dataset == Dataset.logiqa:
+                gold_lm = int(lm.get("target"))
+                gold_human = int(human.get("meta").get("doc").get("correct_option"))
+            elif dataset == Dataset.truthfulqa:
+                gold_lm = int(lm.get("target"))
+                gold_human = int(
+                    human.get("meta")
+                    .get("doc")
+                    .get("mc1_targets")
+                    .get("labels")
+                    .index(1)
+                )
             else:
                 # They're just the same to be honest, but we just wanna make sure
                 gold_lm = int(lm.get("target"))
