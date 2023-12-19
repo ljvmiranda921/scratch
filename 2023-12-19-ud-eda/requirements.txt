@@ -3,3 +3,4 @@ typer
 weasel
 pyconll
 tqdm
+polars
