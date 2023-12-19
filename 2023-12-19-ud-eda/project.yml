@@ -1,3 +1,15 @@
 title: "Tagalog UD EDA"
 description: |
   EDA for Tagalog Universal Dependencies
+
+directories:
+  - "assets"
+  - "corpus"
+  - "scripts"
+
+# Assets that should be downloaded or available in the directory. But the
+# 'project assets' command still lets you verify that the checksums match.
+assets:
+  - dest: assets/conllu-verified.zip
+    description: "Updated ConLLU files containing UD Tagalog data"
+    checksum: c3f953b6a58b6287cd7df2316108213b
