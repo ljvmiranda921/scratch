@@ -2,3 +2,4 @@ regex
 typer
 weasel
 pyconll
+tqdm

@@ -30,6 +30,7 @@ commands:
     help: "Unzip CoNLLu data"
     script:
       - unzip assets/conllu-verified.zip -d corpus/
+      - rm -rf corpus/old
     deps:
       - assets/conllu-verified.zip
     outputs:
@@ -41,7 +42,7 @@ commands:
     help: "Run validator script to all ConLLU files and store their results into outputs"
     script:
       - mkdir -p outputs/logs/
-      - python -m scripts.validate_conllu_bulk corpus/ outputs/logs/ assets/tools/validate.py
+      - python -m scripts.validate_conllu_bulk corpus/ outputs/logs/ assets/tools/validate.py --verbose
     deps:
       - assets/tools/validate.py
       - corpus/
