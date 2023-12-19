@@ -1,0 +1,20 @@
+task: hellaswag_custom
+dataset_path: json
+dataset_name: null
+dataset_kwargs:
+  data_files:
+    validation: "annotations/hellaswag/humaneval_hellaswag_choice.jsonl"
+output_type: multiple_choice
+validation_split: validation
+test_split: null
+process_docs: !function utils.process_docs
+doc_to_text: "{{query}}"
+doc_to_target: "{{meta.doc.label}}"
+doc_to_choice: "{{choices}}"
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: acc_norm
+    aggregation: mean
+    higher_is_better: true
