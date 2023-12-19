@@ -20,7 +20,7 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `setup-data` | Unzip CoNLLu data |
-| `run-validator` | Run validator script to all ConLLU files and store their results into outputs |
+| `validate-all` | Run validator script to all ConLLU files and store their results into outputs |
 
 ### 🗂 Assets
 

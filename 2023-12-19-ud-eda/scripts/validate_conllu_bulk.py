@@ -12,7 +12,9 @@ def validate_conllu_bulk(
     validator_script: Path = typer.Argument(..., help="Path to the Universal Dependencies validator script."),
     # fmt: on
 ):
-    pass
+    breakpoint()
+    for dir in input_dir.iterdir():
+        pass
 
 
 if __name__ == "__main__":

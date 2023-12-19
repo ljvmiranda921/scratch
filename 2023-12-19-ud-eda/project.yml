@@ -37,7 +37,7 @@ commands:
       - corpus/50-next
       - corpus/75-last
 
-  - name: "run-validator"
+  - name: "validate-all"
     help: "Run validator script to all ConLLU files and store their results into outputs"
     script:
       - mkdir -p outputs/logs/
