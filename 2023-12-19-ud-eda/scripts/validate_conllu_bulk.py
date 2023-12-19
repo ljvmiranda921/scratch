@@ -27,6 +27,7 @@ def validate_conllu_bulk(
             )
             output = result.stderr.decode("utf-8")
             msg.text(output, show=verbose)
+            breakpoint()
 
 
 if __name__ == "__main__":
