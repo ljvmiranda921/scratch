@@ -13,3 +13,19 @@ assets:
   - dest: assets/conllu-verified.zip
     description: "Updated ConLLU files containing UD Tagalog data"
     checksum: c3f953b6a58b6287cd7df2316108213b
+  - dest: scripts/validate.py
+    git:
+      repo: "https://github.com/universaldependencies/tools"
+      branch: "master"
+      path: "validate.py"
+    description: "Validation script for Universal Dependencies"
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
+commands:
+  - name: "setup-data"
+    help: "Unzip CoNLLu data"
+    script:
+      - ls
