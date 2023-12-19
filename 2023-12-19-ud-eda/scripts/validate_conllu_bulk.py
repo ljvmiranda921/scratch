@@ -1,11 +1,11 @@
-from typing import Optional
+import subprocess
 from pathlib import Path
 
 import typer
 from wasabi import msg
 
 
-def validate_conllu(
+def validate_conllu_bulk(
     # fmt: off
     input_dir: Path = typer.Argument(..., help="Directory to search for CoNLLu files."),
     output_dir: Path = typer.Argument(..., help="Directory to save the logs."),
@@ -13,3 +13,7 @@ def validate_conllu(
     # fmt: on
 ):
     pass
+
+
+if __name__ == "__main__":
+    typer.run(validate_conllu_bulk)
