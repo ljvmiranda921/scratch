@@ -1,6 +1,8 @@
 title: "Tagalog UD EDA"
 description: |
-  EDA for Tagalog Universal Dependencies
+  EDA for Tagalog Universal Dependencies.
+  You need to download the actual `conllu-verified.zip` file (if you don't have access, then contact Angel or Ma'am Elsie), then place it in the
+  `assets/` directory.
 
 directories:
   - "assets"
