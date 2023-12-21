@@ -164,3 +164,4 @@ assets/
 corpus/
 outputs/
 project.lock
+notebooks/**/*.csv
