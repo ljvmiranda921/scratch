@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "valheim-viz"
+version = "0.1.0"
+description = ""
+authors = ["Lj Miranda <ljvmiranda@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.7.1,<4.0.0"
+jupyterlab = "^3.1.13"
+pandas = "^1.3.3"
+lxml = "^4.6.3"
+fandom-py = "^0.2.1"
+beautifulsoup4 = "^4.10.0"
+html5lib = "^1.1"
+requests = "^2.26.0"
+altair = "^4.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = "^21.9b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+# for compatibility with black
+# https://black.readthedocs.io/en/stable/the_black_code_style.html?highlight=isort#how-black-wraps-lines
+
+multi_line_output = 3
+include_trailing_comma = "True"
+force_grid_wrap = 0
+use_parentheses = "True"
+ensure_newline_before_comments = "True"
+line_length = 88
