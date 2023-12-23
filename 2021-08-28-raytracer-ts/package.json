@@ -1,0 +1,25 @@
+{
+    "name": "raytracer-weekend",
+    "version": "1.0.0",
+    "description": "Ray Tracing in One Weekend",
+    "main": "index.js",
+    "scripts": {
+        "all": "yarn lint && yarn types && yarn test && yarn build",
+        "build": "yarn --silent start > image.ppm",
+        "lint": "eslint --ext .js,.ts src/",
+        "start": "ts-node src/main.ts",
+        "test": "jest",
+        "types": "tsc --noEmit"
+    },
+    "author": "Lj V. Miranda",
+    "license": "MIT",
+    "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^2.0.4",
+        "eslint": "^7.32.0",
+        "jest": "^27.0.6",
+        "prettier": "^2.3.2",
+        "ts-jest": "^27.0.5",
+        "ts-node": "^10.2.1",
+        "typescript": "^4.3.5"
+    }
+}
