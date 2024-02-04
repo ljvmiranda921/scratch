@@ -1,0 +1,6 @@
+regex
+typer
+weasel
+pyconll
+tqdm
+polars

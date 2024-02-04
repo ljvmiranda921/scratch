@@ -1,0 +1,52 @@
+title: "Tagalog UD EDA"
+description: |
+  EDA for Tagalog Universal Dependencies.
+  You need to download the actual `conllu-verified.zip` file (if you don't have access, then contact Angel or Ma'am Elsie), then place it in the
+  `assets/` directory.
+
+directories:
+  - "assets"
+  - "corpus"
+  - "scripts"
+  - "outputs"
+
+# Assets that should be downloaded or available in the directory. But the
+# 'project assets' command still lets you verify that the checksums match.
+assets:
+  - dest: assets/conllu-verified.zip
+    description: "Updated ConLLU files containing UD Tagalog data"
+    checksum: c3f953b6a58b6287cd7df2316108213b
+  - dest: assets/tools
+    description: "Validation script for Universal Dependencies"
+    git:
+      repo: "https://github.com/universaldependencies/tools"
+      branch: "master"
+      path: ""
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
+commands:
+  - name: "setup-data"
+    help: "Unzip CoNLLu data"
+    script:
+      - unzip assets/conllu-verified.zip -d corpus/
+      - rm -rf corpus/old
+    deps:
+      - assets/conllu-verified.zip
+    outputs:
+      - corpus/25-first
+      - corpus/50-next
+      - corpus/75-last
+
+  - name: "validate-all"
+    help: "Run validator script to all ConLLU files and store their results into outputs"
+    script:
+      - mkdir -p outputs/logs/
+      - python -m scripts.validate_conllu_bulk corpus/ outputs/logs/ assets/tools/validate.py
+    deps:
+      - assets/tools/validate.py
+      - corpus/
+    outputs:
+      - outputs/logs/
