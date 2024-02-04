@@ -1,0 +1,6 @@
+weasel
+typer
+datasets
+transformers
+torch
+sentence-transformers
