@@ -3,6 +3,35 @@ from typing import List, Tuple
 from datasets import load_dataset
 
 
+def compute_elo_rankings(
+    matchups: List[Tuple[str, str, int]], initial_elo_rating: int = 1000, k: int = 32
+) -> List[str]:
+    """Compute ELO rankings given a list of matchups"""
+    elo_ratings = {}
+
+    for p1, p2, result in matchups:
+        if p1 not in elo_ratings:
+            elo_ratings[p1] = initial_elo_rating
+        if p2 not in elo_ratings:
+            elo_ratings[p2] = initial_elo_rating
+
+        # Compute expected scores
+        p1_expected = 1 / (1 + 10 ** ((elo_ratings[p2] - elo_ratings[p1]) / 400))
+        p2_expected = 1 - p1_expected
+
+        # Update Elo ratings based on result
+        if result == 0:  # Player 1 wins
+            elo_ratings[p1] += k * (1 - p1_expected)
+            elo_ratings[p2] += k * (0 - p2_expected)
+        else:
+            elo_ratings[p1] += k * (0 - p1_expected)
+            elo_ratings[p2] += k * (1 - p2_expected)
+
+    # Rank players on descending order
+    ranked_players = sorted(elo_ratings.items(), key=lambda x: x[1], reverse=True)
+    return ranked_players
+
+
 def preprocess_openai_summarize(include_prompt: bool) -> Tuple[List[str], List[str]]:
     """Preprocess OpenAI's Summarize from Human Feedback dataset"""
     dataset = load_dataset(
