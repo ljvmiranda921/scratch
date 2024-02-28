@@ -1,6 +1,9 @@
 from typing import List, Tuple
 
 from datasets import load_dataset
+from datasets.utils import disable_progress_bar
+from wasabi import msg
+from tqdm import tqdm
 
 
 def compute_elo_rankings(
@@ -32,75 +35,73 @@ def compute_elo_rankings(
     return ranked_players
 
 
-def preprocess_openai_summarize(include_prompt: bool) -> Tuple[List[str], List[str]]:
+def preprocess_openai_summarize() -> Tuple[List[str], List[str]]:
     """Preprocess OpenAI's Summarize from Human Feedback dataset"""
     dataset = load_dataset(
         "openai/summarize_from_feedback", name="comparisons", split="train"
     )
 
+    df = dataset.to_pandas()
+    df["id"] = df["info"].apply(lambda x: x.get("id"))
+
     chosen_texts = []
     rejected_texts = []
-    for example in dataset:
-        prompt = example["info"].get("post")
-        choice = example["choice"]
+    for _, instances in tqdm(df.groupby("id")):
+        matchups = [
+            (
+                instance["summaries"][0].get("text"),
+                instance["summaries"][1].get("text"),
+                instance["choice"],
+            )
+            for _, instance in instances.iterrows()
+        ]
+        ranked = compute_elo_rankings(matchups)
 
-        chosen = example["summaries"][choice].get("text")
-        rejected = example["summaries"][1 - choice].get("text")
-
-        chosen_texts.append(prompt + " " + chosen if include_prompt else chosen)
-        rejected_texts.append(prompt + " " + rejected if include_prompt else rejected)
+        # Get best and worst
+        chosen_texts.append(ranked[0][0])
+        rejected_texts.append(ranked[-1][0])
 
     return chosen_texts, rejected_texts
 
 
-def preprocess_stanford_shp(include_prompt: bool) -> Tuple[List[str], List[str]]:
+def preprocess_stanford_shp() -> Tuple[List[str], List[str]]:
     """Preprocess the explaimlikeimfive_train subset from Stanford SHP"""
     dataset = load_dataset("stanfordnlp/SHP", split="train").filter(
         lambda x: x["domain"] == "explainlikeimfive_train"
     )
 
+    df = dataset.to_pandas()
     chosen_texts = []
     rejected_texts = []
-    for example in dataset:
-        prompt = example["history"]
-        ref_chosen, ref_rejected = ("A", "B") if example["labels"] == 0 else ("B", "A")
-        chosen_texts.append(
-            prompt + " " + example[f"human_ref_{ref_chosen}"]
-            if include_prompt
-            else example[f"human_ref_{ref_chosen}"]
-        )
-        rejected_texts.append(
-            prompt + " " + example[f"human_ref_{ref_rejected}"]
-            if include_prompt
-            else example[f"human_ref_{ref_rejected}"]
-        )
+    for _, instances in tqdm(df.groupby("post_id")):
+        matchups = [
+            (instance["human_ref_A"], instance["human_ref_B"], instance["labels"])
+            for _, instance in instances.iterrows()
+        ]
+        ranked = compute_elo_rankings(matchups)
+        # Get best and worst
+        chosen_texts.append(ranked[0][0])
+        rejected_texts.append(ranked[-1][0])
 
     return chosen_texts, rejected_texts
 
 
-def preprocess_argilla_ultrafeedback(
-    include_prompt: bool,
-) -> Tuple[List[str], List[str]]:
+def preprocess_argilla_ultrafeedback() -> Tuple[List[str], List[str]]:
     """Preprocess the Flan-v2 subset of Argilla's cleaned Ultrafeedback dataset"""
     dataset = load_dataset(
         "argilla/ultrafeedback-multi-binarized-quality-preferences-cleaned",
         split="train",
     ).filter(lambda x: x["source"] == "flan_v2_niv2")
-
     chosen_texts = []
     rejected_texts = []
     for example in dataset:
-        prompt = example.get("prompt")
-        chosen = example.get("chosen")[1].get("content")
-        rejected = example.get("rejected")[1].get("content")
-
-        chosen_texts.append(prompt + " " + chosen if include_prompt else chosen)
-        rejected_texts.append(prompt + " " + rejected if include_prompt else rejected)
+        chosen_texts.append(example.get("chosen")[1].get("content"))
+        rejected_texts.append(example.get("rejected")[1].get("content"))
 
     return chosen_texts, rejected_texts
 
 
-def preprocess_tatsulab_alpacafarm(include_prompt: bool):
+def preprocess_tatsulab_alpacafarm():
     """Preprocess Tatsu Lab's AlpacaFarm dataset"""
     dataset = load_dataset(
         "tatsu-lab/alpaca_farm",
@@ -111,19 +112,9 @@ def preprocess_tatsulab_alpacafarm(include_prompt: bool):
     chosen_texts = []
     rejected_texts = []
     for example in dataset:
-        prompt = (
-            example.get("instruction") + " " + example.get("input")
-            if example.get("input")
-            else example.get("instruction")
-        )
-
         preference = example.get("preference")
-        chosen = example.get(f"output_{preference}")
-        rejected = example.get(f"output_{2 - preference + 1}")
-
-        chosen_texts.append(prompt + " " + chosen if include_prompt else chosen)
-        rejected_texts.append(prompt + " " + rejected if include_prompt else rejected)
-
+        chosen_texts.append(example.get(f"output_{preference}"))
+        rejected_texts.append(example.get(f"output_{2 - preference + 1}"))
     return chosen_texts, rejected_texts
 
 

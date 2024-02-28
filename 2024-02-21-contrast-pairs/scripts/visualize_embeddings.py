@@ -13,7 +13,6 @@ def visualize_embeddings(
     # fmt: off
     embeddings_dir: Path = typer.Argument(..., help="Directory to the embeddings dictionary."),
     outdir: Path = typer.Argument(..., help="Directory to save the plots.", dir_okay=True),
-    include_prompt: bool = typer.Option(False, help="Include the prompt when getting the text."),
     # fmt: on
 ):
     datasets: Dict[str, pd.DataFrame] = {}
@@ -32,7 +31,7 @@ def visualize_embeddings(
 
         dataset_name = dataset_dir.name.replace("___", "/")
         preprocessor = DATASET_PREPROCESSORS.get(dataset_name)
-        chosen, rejected = preprocessor(include_prompt=include_prompt)
+        chosen, rejected = preprocessor()
         df = pd.DataFrame(
             {
                 # fmt: off

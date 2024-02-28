@@ -14,7 +14,6 @@ def main(
     dataset_name: str = typer.Argument(..., help="HuggingFace dataset name."),
     output_dir: Path = typer.Argument(..., help="Directory to save the embeddings."),
     embedding_model: str = typer.Option("sentence-transformers/all-mpnet-base-v2", help="HuggingFace namespace for the embedding model."),
-    include_prompt: bool = typer.Option(False, help="Include prompt in the chosen and rejected texts."),
     # fmt: on
 ):
 
@@ -23,7 +22,7 @@ def main(
             f"No preprocessor found for {dataset_name}. Available: {', '.join(DATASET_PREPROCESSORS.keys())}",
             exits=1,
         )
-    chosen, rejected = DATASET_PREPROCESSORS.get(dataset_name)(include_prompt)
+    chosen, rejected = DATASET_PREPROCESSORS.get(dataset_name)()
 
     # Get the embeddings
     model = SentenceTransformer(embedding_model)

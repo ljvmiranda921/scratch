@@ -32,10 +32,10 @@ commands:
   - name: "embed-dataset"
     help: "Embed dataset using an embedding model."
     script:
-      - python3 -m scripts.embed_dataset openai/summarize_from_feedback embeddings 
-      - python3 -m scripts.embed_dataset stanford/SHP embeddings 
-      - python3 -m scripts.embed_dataset argilla/ultrafeedback-multi-binarized-quality-preferences-cleaned embeddings 
-      - python3 -m scripts.embed_dataset tatsu-lab/alpaca_farm embeddings 
+      - python3 -m scripts.embed_dataset openai/summarize_from_feedback embeddings
+      - python3 -m scripts.embed_dataset stanford/SHP embeddings
+      - python3 -m scripts.embed_dataset argilla/ultrafeedback-multi-binarized-quality-preferences-cleaned embeddings
+      - python3 -m scripts.embed_dataset tatsu-lab/alpaca_farm embeddings
     outputs:
       - embeddings
 
@@ -43,10 +43,8 @@ commands:
     help: "Compute Pearson correlation for each task."
     script:
       - ls
-      
+
   - name: "visualize-embeddings"
     help: "Visualize the chosen and rejected pairs for each task."
     script:
       - python3 -m scripts.visualize_embeddings embeddings outputs
-
-
