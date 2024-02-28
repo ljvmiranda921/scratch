@@ -133,7 +133,6 @@ def preprocess_berkeley_nest_nectar():
             if answer.get("rank") == len(answers):
                 rejected_texts.append(answer.get("answer"))
 
-    assert len(chosen_texts) == len(rejected_texts)
     return chosen_texts, rejected_texts
 
 

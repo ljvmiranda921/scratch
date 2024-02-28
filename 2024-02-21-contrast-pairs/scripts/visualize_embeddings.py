@@ -59,7 +59,6 @@ def visualize_embeddings(
 
     msg.info("Plotting the embeddings")
     for dataset, df in datasets.items():
-        breakpoint()
         fig = px.scatter(
             df,
             x="x",

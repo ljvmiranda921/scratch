@@ -13,7 +13,7 @@ def main(
     # fmt: off
     dataset_name: str = typer.Argument(..., help="HuggingFace dataset name."),
     output_dir: Path = typer.Argument(..., help="Directory to save the embeddings."),
-    embedding_model: str = typer.Option("sentence-transformers/all-mpnet-base-v2", help="HuggingFace namespace for the embedding model."),
+    embedding_model: str = typer.Option("sentence-transformers/all-MiniLM-L6-v2", help="HuggingFace namespace for the embedding model."),
     # fmt: on
 ):
 
@@ -42,7 +42,7 @@ def main(
 
     # Perform dimensionality reduction
     msg.info("Applying dimensionality reduction (n_components=2)")
-    model = TSNE(n_components=2, verbose=3)
+    model = TSNE(n_components=2, verbose=3, metric="cosine")
     combined = np.vstack((embeddings.get("chosen"), embeddings.get("rejected")))
     reduced_dims = model.fit_transform(combined)
     num_chosen = len(embeddings["chosen"])
