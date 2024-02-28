@@ -118,9 +118,29 @@ def preprocess_tatsulab_alpacafarm():
     return chosen_texts, rejected_texts
 
 
+def preprocess_berkeley_nest_nectar():
+    """Preprocess Berkeley NEST's Nectar dataset"""
+    dataset = load_dataset("berkeley-nest/Nectar", split="train")
+    dataset = dataset.filter(lambda eg: eg["turns"] == 1)
+
+    chosen_texts = []
+    rejected_texts = []
+    for example in dataset:
+        answers = example["answers"]
+        for answer in answers:
+            if answer.get("rank") == 1:
+                chosen_texts.append(answer.get("answer"))
+            if answer.get("rank") == len(answers):
+                rejected_texts.append(answer.get("answer"))
+
+    assert len(chosen_texts) == len(rejected_texts)
+    return chosen_texts, rejected_texts
+
+
 DATASET_PREPROCESSORS = {
     "openai/summarize_from_feedback": preprocess_openai_summarize,
     "stanford/SHP": preprocess_stanford_shp,
     "argilla/ultrafeedback-multi-binarized-quality-preferences-cleaned": preprocess_argilla_ultrafeedback,
     "tatsu-lab/alpaca_farm": preprocess_tatsulab_alpacafarm,
+    "berkeley-nest/Nectar": preprocess_berkeley_nest_nectar,
 }

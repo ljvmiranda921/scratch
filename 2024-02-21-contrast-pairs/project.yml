@@ -36,6 +36,7 @@ commands:
       - python3 -m scripts.embed_dataset stanford/SHP embeddings
       - python3 -m scripts.embed_dataset argilla/ultrafeedback-multi-binarized-quality-preferences-cleaned embeddings
       - python3 -m scripts.embed_dataset tatsu-lab/alpaca_farm embeddings
+      - python3 -m scripts.embed_dataset berkeley-nest/Nectar embeddings
     outputs:
       - embeddings
 
