@@ -14,6 +14,7 @@ def main(
     dataset_name: str = typer.Argument(..., help="HuggingFace dataset name."),
     output_dir: Path = typer.Argument(..., help="Directory to save the embeddings."),
     embedding_model: str = typer.Option("sentence-transformers/all-MiniLM-L6-v2", help="HuggingFace namespace for the embedding model."),
+    reduce_dims: bool = typer.Option(False, help="Reduce dimensions using t-SNE."),
     # fmt: on
 ):
 
@@ -41,13 +42,14 @@ def main(
     }
 
     # Perform dimensionality reduction
-    msg.info("Applying dimensionality reduction (n_components=2)")
-    model = TSNE(n_components=2, verbose=3, metric="cosine")
-    combined = np.vstack((embeddings.get("chosen"), embeddings.get("rejected")))
-    reduced_dims = model.fit_transform(combined)
-    num_chosen = len(embeddings["chosen"])
-    embeddings["chosen"] = reduced_dims[:num_chosen]
-    embeddings["rejected"] = reduced_dims[num_chosen:]
+    if reduce_dims:
+        msg.info("Applying dimensionality reduction (n_components=2)")
+        model = TSNE(n_components=2, verbose=3, metric="cosine")
+        combined = np.vstack((embeddings.get("chosen"), embeddings.get("rejected")))
+        reduced_dims = model.fit_transform(combined)
+        num_chosen = len(embeddings["chosen"])
+        embeddings["chosen"] = reduced_dims[:num_chosen]
+        embeddings["rejected"] = reduced_dims[num_chosen:]
 
     # Save the embeddings
     subdir = output_dir / dataset_name.replace("/", "___")
