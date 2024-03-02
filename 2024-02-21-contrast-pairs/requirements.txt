@@ -4,7 +4,7 @@ datasets
 transformers
 torch
 sentence-transformers
-umap-learn
+scikit-learn
 # Plotting and visuals
 plotly==5.19.0
 kaleido==0.2.1
