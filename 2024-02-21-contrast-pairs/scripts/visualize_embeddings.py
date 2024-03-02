@@ -1,11 +1,12 @@
 from pathlib import Path
 from typing import Dict
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import plotly.express as px
 import typer
 from wasabi import msg
+
 from scripts.preprocessors import DATASET_PREPROCESSORS
 
 
