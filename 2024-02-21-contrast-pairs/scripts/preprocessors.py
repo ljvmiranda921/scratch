@@ -1,9 +1,7 @@
 from typing import List, Tuple
 
 from datasets import load_dataset
-from datasets.utils import disable_progress_bar
 from tqdm import tqdm
-from wasabi import msg
 
 
 def compute_elo_rankings(
