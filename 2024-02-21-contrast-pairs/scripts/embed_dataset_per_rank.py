@@ -29,7 +29,7 @@ def main():
 
         rejected_texts = {
             rank: DATASET_PREPROCESSORS.get(dataset_name)(rejected_idx=rank)[1]
-            for rank in ("next", "mid", "last")
+            for rank in ranks
         }
 
         chosen_encodings = model.encode(
