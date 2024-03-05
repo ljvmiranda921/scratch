@@ -82,9 +82,12 @@ def preprocess_openai_summarize(
             for _, instance in instances.iterrows()
         ]
         ranked = compute_elo_rankings(matchups)
-        idx = handle_rejected_idx(idx=rejected_idx, n_answers=len(ranked))
 
-        # Get best and worst
+        idx = (
+            handle_rejected_idx(idx=rejected_idx, n_answers=len(ranked))
+            if len(ranked) > 1
+            else -1
+        )
         chosen_texts.append(ranked[0][0])
         rejected_texts.append(ranked[idx][0])
 
@@ -108,7 +111,11 @@ def preprocess_stanford_shp(
             for _, instance in instances.iterrows()
         ]
         ranked = compute_elo_rankings(matchups)
-        idx = handle_rejected_idx(idx=rejected_idx, n_answers=len(ranked))
+        idx = (
+            handle_rejected_idx(idx=rejected_idx, n_answers=len(ranked))
+            if len(ranked) > 1
+            else -1
+        )
 
         # Get best and worst
         chosen_texts.append(ranked[0][0])
