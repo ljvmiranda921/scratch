@@ -2,10 +2,15 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import typer
+from plotly.figure_factory import create_distplot
+from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
 from wasabi import msg
 
 from scripts.preprocessors import DATASET_PREPROCESSORS
+
+app = typer.Typer()
 
 ranked_datasets = [
     "openai/summarize_from_feedback",
@@ -14,7 +19,9 @@ ranked_datasets = [
 ]
 
 
-def main():
+@app.command("embed")
+def embed():
+    """Embed chosen and preference pairs into embeddings per rank."""
     output_dir = Path("embeddings/get-dist-ranking")
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
@@ -57,5 +64,11 @@ def main():
             msg.good(f"Saved rejected ({rank}) embeddings to {output_file}.")
 
 
+@app.command("visualize")
+def visualize():
+    """Visualize cosine distance distribution per rank."""
+    pass
+
+
 if __name__ == "__main__":
-    main()
+    app()

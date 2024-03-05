@@ -43,9 +43,10 @@ commands:
       - outputs/distance_hist_plot.html
 
   - name: "get-dist-ranking"
-    help: "Get cosine distances for each rank"
+    help: "Run experiment to get cosine distances for each rank"
     script:
-      - python3 -m scripts.embed_dataset_per_rank
+      - python3 -m scripts.experiment_embed_dataset_per_rank embed
+      - python3 -m scripts.experiment_embed_dataset_per_rank visualize
     outputs:
       - embeddings/get-dist-ranking/
       - outputs/distance_hist_ranking_plot.html
