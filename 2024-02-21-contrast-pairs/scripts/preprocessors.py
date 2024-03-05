@@ -1,5 +1,6 @@
-from typing import List, Tuple
+from typing import List, Literal, Tuple, Union
 
+import numpy as np
 from datasets import load_dataset
 from tqdm import tqdm
 from wasabi import msg
@@ -7,7 +8,7 @@ from wasabi import msg
 
 def compute_elo_rankings(
     matchups: List[Tuple[str, str, int]], initial_elo_rating: int = 1000, k: int = 32
-) -> List[str]:
+) -> List[Tuple[str, float]]:
     """Compute ELO rankings given a list of matchups"""
     elo_ratings = {}
 
@@ -34,8 +35,32 @@ def compute_elo_rankings(
     return ranked_players
 
 
+def handle_rejected_idx(
+    idx: Union[Literal["last", "next", "mid"], int], n_answers: int
+) -> int:
+    if isinstance(idx, int):
+        if abs(idx) > n_answers:
+            msg.warn(
+                f"Rejected idx {idx} is greater than number"
+                f" of ranks len={n_answers}. Using last rank."
+            )
+            rejected_idx = -1
+        rejected_idx = idx
+    if idx in ("last", "next", "mid"):
+        if idx == "last":
+            rejected_idx = -1
+        elif idx == "next":
+            rejected_idx = 1
+        elif idx == "mid":
+            rejected_idx = round(np.mean(np.arange(0, n_answers)))
+        else:
+            msg.fail(f"Unknown index value: {rejected_idx}", exits=1)
+
+    return rejected_idx
+
+
 def preprocess_openai_summarize(
-    bottom_rejected_idx: int = -1,
+    rejected_idx: Union[Literal["last", "next", "mid"], int] = -1,
 ) -> Tuple[List[str], List[str]]:
     """Preprocess OpenAI's Summarize from Human Feedback dataset"""
     dataset = load_dataset(
@@ -57,23 +82,17 @@ def preprocess_openai_summarize(
             for _, instance in instances.iterrows()
         ]
         ranked = compute_elo_rankings(matchups)
-
-        if abs(bottom_rejected_idx) > len(ranked):
-            msg.warn(
-                f"Rejected idx {bottom_rejected_idx} is greater than number"
-                " of ranks len={(len(ranked))}. Using last rank."
-            )
-            bottom_rejected_idx = -1
+        idx = handle_rejected_idx(idx=rejected_idx, n_answers=len(ranked))
 
         # Get best and worst
         chosen_texts.append(ranked[0][0])
-        rejected_texts.append(ranked[bottom_rejected_idx][0])
+        rejected_texts.append(ranked[idx][0])
 
     return chosen_texts, rejected_texts
 
 
 def preprocess_stanford_shp(
-    bottom_rejected_idx: int = -1,
+    rejected_idx: Union[Literal["last", "next", "mid"], int] = -1,
 ) -> Tuple[List[str], List[str]]:
     """Preprocess the explaimlikeimfive_train subset from Stanford SHP"""
     dataset = load_dataset("stanfordnlp/SHP", split="train").filter(
@@ -89,17 +108,11 @@ def preprocess_stanford_shp(
             for _, instance in instances.iterrows()
         ]
         ranked = compute_elo_rankings(matchups)
-
-        if abs(bottom_rejected_idx) > len(ranked):
-            msg.warn(
-                f"Rejected idx {bottom_rejected_idx} is greater than number"
-                " of ranks len={(len(ranked))}. Using last rank."
-            )
-            bottom_rejected_idx = -1
+        idx = handle_rejected_idx(idx=rejected_idx, n_answers=len(ranked))
 
         # Get best and worst
         chosen_texts.append(ranked[0][0])
-        rejected_texts.append(ranked[bottom_rejected_idx][0])
+        rejected_texts.append(ranked[idx][0])
 
     return chosen_texts, rejected_texts
 
@@ -136,7 +149,9 @@ def preprocess_tatsulab_alpacafarm():
     return chosen_texts, rejected_texts
 
 
-def preprocess_berkeley_nest_nectar(bottom_rejected_idx: int = 7):
+def preprocess_berkeley_nest_nectar(
+    rejected_idx: Union[Literal["last", "next", "mid"], int] = 7,
+):
     """Preprocess Berkeley NEST's Nectar dataset"""
     dataset = load_dataset("berkeley-nest/Nectar", split="train")
     dataset = dataset.filter(lambda eg: eg["turns"] == 1)
@@ -148,7 +163,7 @@ def preprocess_berkeley_nest_nectar(bottom_rejected_idx: int = 7):
         for answer in answers:
             if answer.get("rank") == 1:
                 chosen_texts.append(answer.get("answer"))
-            if answer.get("rank") == bottom_rejected_idx:
+            if answer.get("rank") == rejected_idx:
                 rejected_texts.append(answer.get("answer"))
 
     return chosen_texts, rejected_texts

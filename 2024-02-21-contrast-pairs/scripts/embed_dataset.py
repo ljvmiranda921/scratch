@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 from typing import Optional
 
@@ -10,13 +11,20 @@ from wasabi import msg
 from scripts.preprocessors import DATASET_PREPROCESSORS
 
 
+class Rank(str, Enum):
+    next = "next"
+    last = "last"
+    mid = "mid"
+
+
 def main(
     # fmt: off
     dataset_name: str = typer.Argument(..., help="HuggingFace dataset name."),
     output_dir: Path = typer.Argument(..., help="Directory to save the embeddings."),
     embedding_model: str = typer.Option("sentence-transformers/all-MiniLM-L6-v2", help="HuggingFace namespace for the embedding model."),
     reduce_dims: bool = typer.Option(False, help="Reduce dimensions using t-SNE."),
-    bottom_idx: Optional[int] = typer.Option(None, help="Bottom index ranking to use for rejected responses."),
+    bottom_idx: Optional[int] = typer.Option(None, help="Bottom index ranking to use for rejected responses. Prioritized over --bottom-rank."),
+    bottom_rank: Optional[Rank] = typer.Option(None, help="Bottom rank for rejected responses. The --bottom-idx is prioritized over this."),
     # fmt: on
 ):
 
@@ -26,7 +34,12 @@ def main(
             exits=1,
         )
 
-    options = {"bottom_rejected_idx": bottom_idx} if bottom_idx else {}
+    rejected_idx = None
+    if bottom_rank:
+        rejected_idx = bottom_rank
+    if bottom_idx:
+        rejected_idx = bottom_idx
+    options = {"rejected_idx": rejected_idx} if rejected_idx else {}
 
     chosen, rejected = DATASET_PREPROCESSORS.get(dataset_name)(**options)
 
