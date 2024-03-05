@@ -2,6 +2,7 @@ from typing import List, Tuple
 
 from datasets import load_dataset
 from tqdm import tqdm
+from wasabi import msg
 
 
 def compute_elo_rankings(
@@ -33,7 +34,9 @@ def compute_elo_rankings(
     return ranked_players
 
 
-def preprocess_openai_summarize() -> Tuple[List[str], List[str]]:
+def preprocess_openai_summarize(
+    bottom_rejected_idx: int = -1,
+) -> Tuple[List[str], List[str]]:
     """Preprocess OpenAI's Summarize from Human Feedback dataset"""
     dataset = load_dataset(
         "openai/summarize_from_feedback", name="comparisons", split="train"
@@ -55,14 +58,23 @@ def preprocess_openai_summarize() -> Tuple[List[str], List[str]]:
         ]
         ranked = compute_elo_rankings(matchups)
 
+        if abs(bottom_rejected_idx) > len(ranked):
+            msg.warn(
+                f"Rejected idx {bottom_rejected_idx} is greater than number"
+                " of ranks len={(len(ranked))}. Using last rank."
+            )
+            bottom_rejected_idx = -1
+
         # Get best and worst
         chosen_texts.append(ranked[0][0])
-        rejected_texts.append(ranked[-1][0])
+        rejected_texts.append(ranked[bottom_rejected_idx][0])
 
     return chosen_texts, rejected_texts
 
 
-def preprocess_stanford_shp() -> Tuple[List[str], List[str]]:
+def preprocess_stanford_shp(
+    bottom_rejected_idx: int = -1,
+) -> Tuple[List[str], List[str]]:
     """Preprocess the explaimlikeimfive_train subset from Stanford SHP"""
     dataset = load_dataset("stanfordnlp/SHP", split="train").filter(
         lambda x: x["domain"] == "explainlikeimfive_train"
@@ -77,9 +89,17 @@ def preprocess_stanford_shp() -> Tuple[List[str], List[str]]:
             for _, instance in instances.iterrows()
         ]
         ranked = compute_elo_rankings(matchups)
+
+        if abs(bottom_rejected_idx) > len(ranked):
+            msg.warn(
+                f"Rejected idx {bottom_rejected_idx} is greater than number"
+                " of ranks len={(len(ranked))}. Using last rank."
+            )
+            bottom_rejected_idx = -1
+
         # Get best and worst
         chosen_texts.append(ranked[0][0])
-        rejected_texts.append(ranked[-1][0])
+        rejected_texts.append(ranked[bottom_rejected_idx][0])
 
     return chosen_texts, rejected_texts
 
@@ -116,7 +136,7 @@ def preprocess_tatsulab_alpacafarm():
     return chosen_texts, rejected_texts
 
 
-def preprocess_berkeley_nest_nectar():
+def preprocess_berkeley_nest_nectar(bottom_rejected_idx: int = 7):
     """Preprocess Berkeley NEST's Nectar dataset"""
     dataset = load_dataset("berkeley-nest/Nectar", split="train")
     dataset = dataset.filter(lambda eg: eg["turns"] == 1)
@@ -128,7 +148,7 @@ def preprocess_berkeley_nest_nectar():
         for answer in answers:
             if answer.get("rank") == 1:
                 chosen_texts.append(answer.get("answer"))
-            if answer.get("rank") == len(answers):
+            if answer.get("rank") == bottom_rejected_idx:
                 rejected_texts.append(answer.get("answer"))
 
     return chosen_texts, rejected_texts
