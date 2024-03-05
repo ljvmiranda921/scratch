@@ -40,6 +40,7 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `get-dist-histogram` | Embed dataset using an embedding model. |
+| `get-dist-histogram` | Get cosine distances between preference pairs using an embedding model. |
+| `get-dist-ranking` |  |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
