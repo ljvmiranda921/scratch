@@ -29,7 +29,7 @@ directories:
   - "outputs"
 
 commands:
-  - name: "embed-dataset"
+  - name: "get-dist-histogram"
     help: "Embed dataset using an embedding model."
     script:
       - python3 -m scripts.embed_dataset openai/summarize_from_feedback embeddings
@@ -37,15 +37,6 @@ commands:
       - python3 -m scripts.embed_dataset argilla/ultrafeedback-multi-binarized-quality-preferences-cleaned embeddings
       - python3 -m scripts.embed_dataset tatsu-lab/alpaca_farm embeddings
       - python3 -m scripts.embed_dataset berkeley-nest/Nectar embeddings
+      - python3 -m scripts.visualize_distances embeddings/ outputs/
     outputs:
-      - embeddings
-
-  - name: "get-correlation"
-    help: "Compute Pearson correlation for each task."
-    script:
-      - ls
-
-  - name: "visualize-embeddings"
-    help: "Visualize the chosen and rejected pairs for each task."
-    script:
-      - python3 -m scripts.visualize_embeddings embeddings outputs
+      - outputs/distance_hist_plot.html

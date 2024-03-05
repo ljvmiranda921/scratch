@@ -40,8 +40,6 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `embed-dataset` | Embed dataset using an embedding model. |
-| `get-correlation` | Compute Pearson correlation for each task. |
-| `visualize-embeddings` | Visualize the chosen and rejected pairs for each task. |
+| `get-dist-histogram` | Embed dataset using an embedding model. |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->

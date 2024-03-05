@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
 import typer
@@ -15,6 +16,7 @@ def main(
     output_dir: Path = typer.Argument(..., help="Directory to save the embeddings."),
     embedding_model: str = typer.Option("sentence-transformers/all-MiniLM-L6-v2", help="HuggingFace namespace for the embedding model."),
     reduce_dims: bool = typer.Option(False, help="Reduce dimensions using t-SNE."),
+    bottom_idx: Optional[int] = typer.Option(None, help="Bottom index ranking to use for rejected responses."),
     # fmt: on
 ):
 
@@ -23,7 +25,10 @@ def main(
             f"No preprocessor found for {dataset_name}. Available: {', '.join(DATASET_PREPROCESSORS.keys())}",
             exits=1,
         )
-    chosen, rejected = DATASET_PREPROCESSORS.get(dataset_name)()
+
+    options = {"bottom_rejected_idx": bottom_idx} if bottom_idx else {}
+
+    chosen, rejected = DATASET_PREPROCESSORS.get(dataset_name)(**options)
 
     # Get the embeddings
     model = SentenceTransformer(embedding_model)
