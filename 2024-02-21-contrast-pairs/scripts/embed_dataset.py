@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 import numpy as np
+import torch
 import typer
 from sentence_transformers import SentenceTransformer
 from sklearn.manifold import TSNE
@@ -44,7 +45,8 @@ def main(
     chosen, rejected = DATASET_PREPROCESSORS.get(dataset_name)(**options)
 
     # Get the embeddings
-    model = SentenceTransformer(embedding_model)
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    model = SentenceTransformer(embedding_model, device=device)
     msg.info(f"Embedding the sentences using {embedding_model}")
     embeddings = {
         "chosen": model.encode(

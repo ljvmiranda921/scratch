@@ -1,10 +1,11 @@
 from pathlib import Path
+
+import numpy as np
+import torch
 from sentence_transformers import SentenceTransformer
 from wasabi import msg
-import numpy as np
 
 from scripts.preprocessors import DATASET_PREPROCESSORS
-
 
 ranked_datasets = [
     "openai/summarize_from_feedback",
@@ -15,7 +16,8 @@ ranked_datasets = [
 
 def main():
     output_dir = Path("embeddings/get-dist-ranking")
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
 
     for dataset_name in ranked_datasets:
         msg.divider(f"Embedding dataset: {dataset_name}")
