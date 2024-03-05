@@ -41,6 +41,6 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `get-dist-histogram` | Get cosine distances between preference pairs using an embedding model. |
-| `get-dist-ranking` |  |
+| `get-dist-ranking` | Get cosine distances for each rank |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
