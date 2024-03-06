@@ -185,6 +185,13 @@ def preprocess_berkeley_nest_nectar(
     dataset = load_dataset("berkeley-nest/Nectar", split="train")
     dataset = dataset.filter(lambda eg: eg["turns"] == 1)
 
+    if rejected_idx == "next":
+        rejected_idx = 2
+    if rejected_idx == "mid":
+        rejected_idx = 4
+    if rejected_idx == "last":
+        rejected_idx = 7
+
     chosen_texts = []
     rejected_texts = []
     for example in dataset:
