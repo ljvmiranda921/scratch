@@ -53,6 +53,9 @@ def handle_rejected_idx(
             rejected_idx = 1
         elif idx == "mid":
             rejected_idx = round(np.mean(np.arange(0, n_answers)))
+            if n_answers == 2 and rejected_idx == 0:
+                # Just use the largest
+                rejected_idx = 1
         else:
             msg.fail(f"Unknown index value: {rejected_idx}", exits=1)
 
@@ -72,6 +75,7 @@ def preprocess_openai_summarize(
 
     chosen_texts = []
     rejected_texts = []
+    mid_idx = []
     for _, instances in tqdm(df.groupby("id")):
         matchups = [
             (
@@ -88,8 +92,13 @@ def preprocess_openai_summarize(
             if len(ranked) > 1
             else -1
         )
+        if rejected_idx == "mid":
+            mid_idx.append(idx)
         chosen_texts.append(ranked[0][0])
         rejected_texts.append(ranked[idx][0])
+
+    if rejected_idx == "mid":
+        msg.text(f"Average mid rank: {np.mean(mid_idx)}")
 
     return chosen_texts, rejected_texts
 
@@ -105,6 +114,9 @@ def preprocess_stanford_shp(
     df = dataset.to_pandas()
     chosen_texts = []
     rejected_texts = []
+
+    num_real_matchups = 0
+    mid_idx = []
     for _, instances in tqdm(df.groupby("post_id")):
         matchups = [
             (instance["human_ref_A"], instance["human_ref_B"], instance["labels"])
@@ -116,10 +128,20 @@ def preprocess_stanford_shp(
             if len(ranked) > 1
             else -1
         )
+        if rejected_idx == "mid":
+            mid_idx.append(idx)
 
-        # Get best and worst
-        chosen_texts.append(ranked[0][0])
-        rejected_texts.append(ranked[idx][0])
+        if len(ranked) > 1:
+            num_real_matchups += 1
+
+        if idx != 0:  # we don't want the same indices to the chosen value
+            # Get best and worst
+            chosen_texts.append(ranked[0][0])
+            rejected_texts.append(ranked[idx][0])
+
+    msg.text(f"Number of instances with multiple annotations: {num_real_matchups}")
+    if rejected_idx == "mid":
+        msg.text(f"Average mid rank: {np.mean(mid_idx)}")
 
     return chosen_texts, rejected_texts
 

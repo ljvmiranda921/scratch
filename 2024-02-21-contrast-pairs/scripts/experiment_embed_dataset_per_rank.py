@@ -14,7 +14,7 @@ app = typer.Typer()
 
 ranked_datasets = [
     # "openai/summarize_from_feedback",
-    "stanford/SHP",
+    # "stanford/SHP",
     "berkeley-nest/Nectar",
 ]
 
@@ -95,7 +95,6 @@ def visualize():
                     )
                 ]
             )
-        breakpoint()
 
         layout_properties = {
             "autosize": False,
