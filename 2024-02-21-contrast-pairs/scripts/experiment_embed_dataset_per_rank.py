@@ -18,6 +18,15 @@ ranked_datasets = [
     "berkeley-nest/Nectar",
 ]
 
+colors = {
+    "crimson": "#a00000",
+    "silver": "#adadc9",
+    "pewter": "#696880",
+    "stone_gray": "#928E85",
+    "slate_gray": "#708090",
+    "medium_gray": "#bebebe",
+}
+
 
 @app.command("embed")
 def embed():
@@ -75,7 +84,8 @@ def visualize():
         dataset_dir = data_dir / dataset_name.replace("/", "___")
 
         embeddings = {}
-        ranks = ["last", "mid", "next"]
+        # ranks = ["last", "mid", "next"]
+        ranks = list(reversed([str(i) for i in range(2, 7 + 1)]))
 
         embeddings["chosen"] = np.load(list(dataset_dir.glob("chosen.npy"))[0])
         for rank in ranks:
@@ -111,11 +121,22 @@ def visualize():
             "legend_traceorder": "reversed",
         }
 
+        if len(hist_data) == 3:
+            brand_colors = [
+                colors.get("medium_gray"),
+                colors.get("silver"),
+                colors.get("crimson"),
+            ]
+        else:
+            brand_colors = list(reversed(list(colors.values())))
+
         fig = create_distplot(
             hist_data,
             group_labels,
             bin_size=0.1,
             show_rug=False,
+            show_hist=False,
+            colors=brand_colors,
         )
         fig.update_layout(
             legend={
