@@ -50,7 +50,7 @@ def _get_text_ratings(dataset_name: str, model: SentenceTransformer):
 
         dataset_df = dataset.to_pandas()
         rows: List[str, float, float] = []
-        for _, instances in tqdm(dataset.groupby("post_id")):
+        for _, instances in tqdm(dataset_df.groupby("post_id")):
             matchups = [
                 (instance["human_ref_A"], instance["human_ref_B"], instance["labels"])
                 for _, instance in instances.iterrows()
@@ -73,8 +73,8 @@ def embed():
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
     datasets = [
         # "openai/summarize_from_feedback",
-        "stanfordnlp/SHP",
-        # "berkeley-nest/Nectar",
+        # "stanfordnlp/SHP",
+        "berkeley-nest/Nectar",
     ]
     for dataset in datasets:
         df = _get_text_ratings(dataset, model=model)
