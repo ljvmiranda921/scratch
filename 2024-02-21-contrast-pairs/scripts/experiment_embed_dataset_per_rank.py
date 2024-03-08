@@ -5,6 +5,7 @@ import torch
 import typer
 from plotly.figure_factory import create_distplot
 from scipy.spatial.distance import cosine
+from scipy.stats import pearsonr
 from sentence_transformers import SentenceTransformer
 from wasabi import msg
 
@@ -13,8 +14,8 @@ from scripts.preprocessors import DATASET_PREPROCESSORS
 app = typer.Typer()
 
 ranked_datasets = [
-    "openai/summarize_from_feedback",
-    "stanford/SHP",
+    # "openai/summarize_from_feedback",
+    # "stanford/SHP",
     "berkeley-nest/Nectar",
 ]
 
@@ -150,6 +151,45 @@ def visualize():
 
         outfile = "distance_rank_plot_" + dataset_name.replace("/", "___") + ".html"
         fig.write_html(output_dir / outfile, include_plotlyjs="cdn")
+
+
+@app.command("compute-correlation")
+def compute_correlation(include_chosen: bool = typer.Option(False)):
+    """Compute Pearson correlation between pairs and distances"""
+    data_dir = Path("embeddings/get-dist-ranking")
+    for dataset_name in ranked_datasets:
+        msg.text(f"Computing correlation for {dataset_name}...")
+        dataset_dir = data_dir / dataset_name.replace("/", "___")
+
+        embeddings = {}
+        # ranks_numeric = {"last": 4, "mid": 3, "next": 2}
+        ranks_numeric = {str(i): i for i in range(2, 7 + 1)}
+
+        embeddings["chosen"] = np.load(list(dataset_dir.glob("chosen.npy"))[0])
+        for rank in ranks_numeric:
+            embeddings[f"rejected_{rank}"] = np.load(
+                list(dataset_dir.glob(f"rejected_{rank}.npy"))[0]
+            )
+
+        distances = []
+        ords = []
+        for rank, ord in ranks_numeric.items():
+            for chosen, rejected in zip(
+                embeddings["chosen"], embeddings[f"rejected_{rank}"]
+            ):
+                cosine_distance = cosine(chosen, rejected)
+                distances.append(cosine_distance)
+                ords.append(ord)
+
+                # Include chosen-chosen distance
+                if include_chosen:
+                    distances.append(cosine(chosen, chosen))
+                    ords.append(1)
+
+        corr = pearsonr(distances, ords)
+        msg.good(f"Correlation results for {dataset_name}: {corr}")
+
+    pass
 
 
 if __name__ == "__main__":

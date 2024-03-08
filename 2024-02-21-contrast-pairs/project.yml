@@ -30,7 +30,7 @@ directories:
 
 commands:
   - name: "get-dist-histogram"
-    help: "Get cosine distances between preference pairs using an embedding model."
+    help: "Visualize cosine distances between preference pairs from an embedding model."
     script:
       - python3 -m scripts.embed_dataset openai/summarize_from_feedback embeddings/get-dist-histogram/
       - python3 -m scripts.embed_dataset stanford/SHP embeddings/get-dist-histogram/
@@ -50,3 +50,9 @@ commands:
     outputs:
       - embeddings/get-dist-ranking/
       - outputs/distance_hist_ranking_plot.html
+
+  - name: "get-pearson-correlation"
+    help: "Run experiment to get pearson correlation between distances"
+    script:
+      - python3 -m scripts.experiment_embed_dataset_per_rank embed
+      - python3 -m scripts.experiment_embed_dataset_per_rank compute-correlation

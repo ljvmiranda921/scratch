@@ -40,7 +40,8 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `get-dist-histogram` | Get cosine distances between preference pairs using an embedding model. |
-| `get-dist-ranking` | Get cosine distances for each rank |
+| `get-dist-histogram` | Visualize cosine distances between preference pairs from an embedding model. |
+| `get-dist-ranking` | Run experiment to get cosine distances for each rank |
+| `get-pearson-correlation` | Run experiment to get pearson correlation between distances |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
