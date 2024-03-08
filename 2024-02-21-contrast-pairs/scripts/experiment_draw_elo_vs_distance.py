@@ -5,6 +5,7 @@ from datasets import load_dataset
 import pandas as pd
 from typing import List
 from scipy.spatial.distance import cosine
+from tqdm import tqdm
 
 
 def get_text_ratings(dataset_name: str, model: SentenceTransformer):
@@ -18,7 +19,7 @@ def get_text_ratings(dataset_name: str, model: SentenceTransformer):
         dataset_df["id"] = dataset_df["info"].apply(lambda x: x.get("id"))
 
         rows: List[str, float, float] = []
-        for _, instances in dataset_df.groupby("id"):
+        for _, instances in tqdm(dataset_df.groupby("id")):
             matchups = [
                 (
                     instance["summaries"][0].get("text"),
@@ -41,8 +42,15 @@ def get_text_ratings(dataset_name: str, model: SentenceTransformer):
 def main():
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
-    df = get_text_ratings("openai/summarize_from_feedback", model=model)
-    breakpoint()
+    datasets = [
+        "openai/summarize_from_feedback",
+        "stanford/SHP",
+        "berkeley-nest/Nectar",
+    ]
+    for dataset in datasets:
+        df = get_text_ratings(dataset, model=model)
+        file_name = dataset.replace("/", "___")
+        df.to_csv(f"outputs/{file_name}.csv", index=False)
 
 
 if __name__ == "__main__":
