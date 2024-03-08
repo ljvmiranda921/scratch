@@ -14,8 +14,8 @@ from scripts.preprocessors import DATASET_PREPROCESSORS
 app = typer.Typer()
 
 ranked_datasets = [
-    # "openai/summarize_from_feedback",
-    # "stanford/SHP",
+    "openai/summarize_from_feedback",
+    "stanford/SHP",
     "berkeley-nest/Nectar",
 ]
 
@@ -162,8 +162,8 @@ def compute_correlation(include_chosen: bool = typer.Option(False)):
         dataset_dir = data_dir / dataset_name.replace("/", "___")
 
         embeddings = {}
-        # ranks_numeric = {"last": 4, "mid": 3, "next": 2}
-        ranks_numeric = {str(i): i for i in range(2, 7 + 1)}
+        ranks_numeric = {"last": 4, "mid": 3, "next": 2}
+        # ranks_numeric = {str(i): i for i in range(2, 7 + 1)}
 
         embeddings["chosen"] = np.load(list(dataset_dir.glob("chosen.npy"))[0])
         for rank in ranks_numeric:
