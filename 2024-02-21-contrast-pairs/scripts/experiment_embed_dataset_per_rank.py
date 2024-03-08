@@ -189,8 +189,6 @@ def compute_correlation(include_chosen: bool = typer.Option(False)):
         corr = pearsonr(distances, ords)
         msg.good(f"Correlation results for {dataset_name}: {corr}")
 
-    pass
-
 
 if __name__ == "__main__":
     app()

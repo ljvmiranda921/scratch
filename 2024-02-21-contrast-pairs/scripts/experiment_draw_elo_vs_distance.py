@@ -2,12 +2,15 @@ from typing import List
 
 import pandas as pd
 import torch
+import typer
 from datasets import load_dataset
 from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
 from scripts.preprocessors import compute_elo_rankings
+
+app = typer.Typer()
 
 
 def _get_text_ratings(dataset_name: str, model: SentenceTransformer):
@@ -41,7 +44,8 @@ def _get_text_ratings(dataset_name: str, model: SentenceTransformer):
         return pd.DataFrame(rows, columns=["text", "elo_ratings", "dist_from_chosen"])
 
 
-def main():
+@app.command("embed")
+def embed():
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
     datasets = [
@@ -56,4 +60,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app()
