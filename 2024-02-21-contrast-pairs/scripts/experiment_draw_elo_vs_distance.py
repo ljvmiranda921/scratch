@@ -1,14 +1,16 @@
-import torch
-from sentence_transformers import SentenceTransformer
-from scripts.preprocessors import compute_elo_rankings
-from datasets import load_dataset
-import pandas as pd
 from typing import List
+
+import pandas as pd
+import torch
+from datasets import load_dataset
 from scipy.spatial.distance import cosine
+from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
+from scripts.preprocessors import compute_elo_rankings
 
-def get_text_ratings(dataset_name: str, model: SentenceTransformer):
+
+def _get_text_ratings(dataset_name: str, model: SentenceTransformer):
     if dataset_name == "openai/summarize_from_feedback":
         dataset = load_dataset(
             "openai/summarize_from_feedback",
@@ -48,7 +50,7 @@ def main():
         "berkeley-nest/Nectar",
     ]
     for dataset in datasets:
-        df = get_text_ratings(dataset, model=model)
+        df = _get_text_ratings(dataset, model=model)
         file_name = dataset.replace("/", "___")
         df.to_csv(f"outputs/{file_name}.csv", index=False)
 
