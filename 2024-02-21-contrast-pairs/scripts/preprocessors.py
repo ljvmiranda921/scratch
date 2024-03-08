@@ -76,6 +76,7 @@ def preprocess_openai_summarize(
     chosen_texts = []
     rejected_texts = []
     mid_idx = []
+    num_ranks = []
     for _, instances in tqdm(df.groupby("id")):
         matchups = [
             (
@@ -86,6 +87,7 @@ def preprocess_openai_summarize(
             for _, instance in instances.iterrows()
         ]
         ranked = compute_elo_rankings(matchups)
+        num_ranks.append(len(ranked))
 
         idx = (
             handle_rejected_idx(idx=rejected_idx, n_answers=len(ranked))
@@ -99,6 +101,7 @@ def preprocess_openai_summarize(
 
     if rejected_idx == "mid":
         msg.text(f"Average mid rank: {np.mean(mid_idx)}")
+    msg.text(f"Average number of ranks: {np.mean(num_ranks)}")
 
     return chosen_texts, rejected_texts
 
@@ -117,6 +120,7 @@ def preprocess_stanford_shp(
 
     num_real_matchups = 0
     mid_idx = []
+    num_ranks = []
     for _, instances in tqdm(df.groupby("post_id")):
         matchups = [
             (instance["human_ref_A"], instance["human_ref_B"], instance["labels"])
@@ -128,6 +132,8 @@ def preprocess_stanford_shp(
             if len(ranked) > 1
             else -1
         )
+        num_ranks.append(len(ranked))
+
         if rejected_idx == "mid":
             mid_idx.append(idx)
 
@@ -140,6 +146,7 @@ def preprocess_stanford_shp(
             rejected_texts.append(ranked[idx][0])
 
     msg.text(f"Number of instances with multiple annotations: {num_real_matchups}")
+    msg.text(f"Average number of ranks: {np.mean(num_ranks)}")
     if rejected_idx == "mid":
         msg.text(f"Average mid rank: {np.mean(mid_idx)}")
 

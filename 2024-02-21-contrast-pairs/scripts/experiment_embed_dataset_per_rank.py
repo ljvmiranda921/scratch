@@ -16,7 +16,7 @@ app = typer.Typer()
 ranked_datasets = [
     "openai/summarize_from_feedback",
     "stanford/SHP",
-    "berkeley-nest/Nectar",
+    # "berkeley-nest/Nectar",
 ]
 
 colors = {
