@@ -1,3 +1,5 @@
+"""Script for running experiments on drawing Elo rating and distance"""
+
 from typing import List
 
 import pandas as pd

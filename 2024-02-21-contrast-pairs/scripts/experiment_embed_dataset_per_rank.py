@@ -1,3 +1,5 @@
+"""Script for running experiments for embedding each preference pair per rank"""
+
 from pathlib import Path
 
 import numpy as np
