@@ -16,7 +16,7 @@ app = typer.Typer()
 ranked_datasets = [
     "openai/summarize_from_feedback",
     "stanford/SHP",
-    # "berkeley-nest/Nectar",
+    "berkeley-nest/Nectar",
 ]
 
 colors = {
@@ -109,11 +109,11 @@ def visualize():
 
         layout_properties = {
             "autosize": False,
-            "width": 720,
-            "height": 480,
+            "width": 360,
+            "height": 600,
             "font_family": "CMU Sans Serif",
             "title_font_family": "CMU Sans Serif",
-            "title_font_size": 24,
+            "title_font_size": 21,
             "title_text": dataset_name,
             "paper_bgcolor": "rgba(0,0,0,0)",
             "plot_bgcolor": "rgba(0,0,0,0)",
@@ -149,8 +149,9 @@ def visualize():
             **layout_properties,
         )
 
-        outfile = "distance_rank_plot_" + dataset_name.replace("/", "___") + ".html"
-        fig.write_html(output_dir / outfile, include_plotlyjs="cdn")
+        outfile = "distance_rank_plot_" + dataset_name.replace("/", "___")
+        fig.write_image(output_dir / f"{outfile}.png", scale=4)
+        fig.write_html(output_dir / f"{outfile}.html", include_plotlyjs="cdn")
 
 
 @app.command("compute-correlation")
