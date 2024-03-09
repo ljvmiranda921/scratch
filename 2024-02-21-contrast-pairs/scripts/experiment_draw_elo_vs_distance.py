@@ -3,9 +3,9 @@
 from typing import List
 
 import pandas as pd
+import plotly.express as px
 import torch
 import typer
-import plotly.express as px
 from datasets import load_dataset
 from scipy.spatial.distance import cosine
 from scipy.stats import pearsonr

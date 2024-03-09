@@ -1,21 +1,39 @@
-from pathlib import Path
-from typing import Dict, List, Tuple, Literal
 from operator import attrgetter
+from pathlib import Path
+from typing import Dict, List, Literal, Tuple
 
+import numpy as np
 import torch
 import typer
 from datasets import load_dataset
-from sentence_transformers import SentenceTransformer
 from scipy.spatial.distance import cosine
+from sentence_transformers import SentenceTransformer
 from wasabi import msg
 
 from scripts.preprocessors import compute_elo_rankings
 
 
 def main():
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
+    output_dir = Path("embeddings/get-help-steer")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
     aspects = ["helpfulness", "correctness", "coherence", "complexity", "verbosity"]
     for aspect in aspects:
         chosen_texts, sorted_rejected = _preprocess_helpsteer(aspect)
+        chosen_embs = model.encode([text.response for text in chosen_texts])
+        np.save(output_dir / f"chosen_{aspect}.npy", chosen_embs)
+        for rejection_type in ("next", "mid", "last"):
+            if rejection_type == "next":
+                rejected_texts = [rej[0] for rej in sorted_rejected]
+            if rejection_type == "last":
+                rejected_texts = [rej[-1] for rej in sorted_rejected]
+            if rejection_type == "mid":
+                mid_idx = round(np.mean(np.arange(len(sorted_rejected))))
+                rejected_texts = [rej[mid_idx] for rej in sorted_rejected]
+            rejected_embs = model.encode([text.response for text in rejected_texts])
+            np.save(output_dir / f"chosen_{aspect}_{rejection_type}.npy", rejected_embs)
 
 
 def _preprocess_helpsteer(aspect: str) -> Tuple[List[Tuple], List[List[Tuple]]]:
