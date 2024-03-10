@@ -17,10 +17,11 @@ def main():
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
     output_dir = Path("embeddings/get-help-steer")
-    output_dir.mkdir(parents=True, exist_ok=True)
 
     aspects = ["helpfulness", "correctness", "coherence", "complexity", "verbosity"]
     for aspect in aspects:
+        output_dir = output_dir / aspect
+        output_dir.mkdir(parents=True, exist_ok=True)
         msg.text(f"Processing for '{aspect}' aspect")
         chosen_texts, sorted_rejected = _preprocess_helpsteer(aspect)
         chosen_embs = model.encode([text.response for text in chosen_texts])
