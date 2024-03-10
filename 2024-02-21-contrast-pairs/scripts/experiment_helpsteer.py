@@ -24,6 +24,7 @@ def main():
         output_dir.mkdir(parents=True, exist_ok=True)
         msg.text(f"Processing for '{aspect}' aspect")
         chosen_texts, sorted_rejected = _preprocess_helpsteer(aspect)
+
         chosen_embs = model.encode([text.response for text in chosen_texts])
         np.save(output_dir / f"chosen_{aspect}.npy", chosen_embs)
         for rejection_type in ("next", "mid", "last"):
@@ -52,8 +53,9 @@ def _preprocess_helpsteer(aspect: str) -> Tuple[List[Tuple], List[List[Tuple]]]:
             reverse=True,
         )
 
-        chosen_texts.append(responses[0])
-        rejected_texts.append(responses[1:])
+        if len(responses[0]) > 1 and len(responses[1:]) >= 1:
+            chosen_texts.append(responses[0])
+            rejected_texts.append(responses[1:])
 
     return chosen_texts, rejected_texts
 
