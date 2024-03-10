@@ -2,6 +2,7 @@ from operator import attrgetter
 from pathlib import Path
 from typing import Dict, List, Literal, Tuple
 
+import math
 import numpy as np
 import torch
 import typer
@@ -33,7 +34,7 @@ def main():
             if rejection_type == "last":
                 rejected_texts = [rej[-1] for rej in sorted_rejected]
             if rejection_type == "mid":
-                mid_idx = round(np.mean(np.arange(len(sorted_rejected))))
+                mid_idx = math.ceil(np.mean(np.arange(len(sorted_rejected))))
                 rejected_texts = [rej[mid_idx] for rej in sorted_rejected]
             rejected_embs = model.encode([text.response for text in rejected_texts])
             np.save(output_dir / f"chosen_{aspect}_{rejection_type}.npy", rejected_embs)
