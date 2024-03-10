@@ -21,6 +21,7 @@ def main():
 
     aspects = ["helpfulness", "correctness", "coherence", "complexity", "verbosity"]
     for aspect in aspects:
+        msg.text(f"Processing for '{aspect}' aspect")
         chosen_texts, sorted_rejected = _preprocess_helpsteer(aspect)
         chosen_embs = model.encode([text.response for text in chosen_texts])
         np.save(output_dir / f"chosen_{aspect}.npy", chosen_embs)
