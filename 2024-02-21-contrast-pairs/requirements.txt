@@ -1,0 +1,11 @@
+weasel
+typer
+datasets
+transformers
+torch
+sentence-transformers
+scikit-learn
+# Plotting and visuals
+plotly==5.19.0
+kaleido==0.2.1
+statsmodels
