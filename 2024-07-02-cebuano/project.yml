@@ -1,0 +1,14 @@
+title: "IFT exploration"
+description: |
+  The goal here is to try and practice finetuning an existing base model.
+  I'll use Aya-23B and a Cebuano dataset (from the Aya collection) as an example.
+  Another thing I can do is to create a custom interface using Prodigy for preference annotations.
+
+directories:
+  - "scripts"
+
+commands:
+  - name: "classify-bot"
+    help: "Classify bot-like vs natural texts using the SEACrowd model."
+    script:
+      - ls
