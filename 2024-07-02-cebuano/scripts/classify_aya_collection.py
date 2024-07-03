@@ -1,9 +1,10 @@
 from collections import Counter
+from pathlib import Path
 from typing import Optional
 
 import typer
+from datasets import Dataset, load_dataset
 from transformers import pipeline
-from datasets import load_dataset, Dataset
 from wasabi import msg
 
 id2label = {
@@ -15,6 +16,7 @@ id2label = {
 
 def main(
     # fmt: off
+    output_path: Path = typer.Argument(..., help="Path to save the statistics as JSON file."),
     split: str = typer.Option("train", help="Split to get the instances from."),
     sample: Optional[int] = typer.Option(None, help="If set, will select random instances."),
     seed: int = typer.Option(42, help="Random seed for shuffling."),
