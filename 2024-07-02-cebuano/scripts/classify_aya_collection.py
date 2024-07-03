@@ -1,8 +1,9 @@
+from collections import Counter
 from typing import Optional
 
 import typer
 from transformers import pipeline
-from datasets import load_dataset
+from datasets import load_dataset, Dataset
 from wasabi import msg
 
 id2label = {
@@ -24,8 +25,10 @@ def main(
     dataset_name = "CohereForAI/aya_collection_language_split"
     dataset = load_dataset(dataset_name, name="cebuano", split=split)
     if sample:
+        msg.text(f"Getting {sample} samples (seed={seed})")
         dataset = dataset.shuffle(seed=seed).select(range(sample))
-    breakpoint()
+    df = dataset.to_pandas()
+    print(df["dataset_name"].value_counts().to_markdown(tablefmt="github"))
 
     msg.info("Loading classification model")
     model_name = "SEACrowd/mdeberta-v3_sea_translationese"
@@ -33,7 +36,15 @@ def main(
         "text-classification",
         model=model_name,
         device="cuda:0",
+        batch_size=8,
     )
+
+    preds_dataset = {}
+    for name, group_df in df.groupby("dataset_name"):
+        texts = group_df["inputs"].to_list()
+        inputs = Dataset.from_list([{"text": text} for text in texts])
+        preds = [id2label[pred.get("label")] for pred in pipe(inputs)]
+        preds_dataset[name] = Counter(preds)
     breakpoint()
 
 
