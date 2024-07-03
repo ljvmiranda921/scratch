@@ -6,9 +6,12 @@ description: |
 
 directories:
   - "scripts"
+  - "outputs"
 
 commands:
   - name: "classify-aya"
     help: "Classify bot-like vs natural texts using the SEACrowd model."
     script:
-      - python -m scripts.classify_aya_collection aya_ceb_stats.json --split train  --sample 10000 --seed 42
+      - python -m scripts.classify_aya_collection outputs/aya_ceb_stats.json --split train  --sample 10000 --seed 42
+    outputs:
+      - outputs/aya_ceb_stats.json

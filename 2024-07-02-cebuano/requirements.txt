@@ -4,3 +4,4 @@ pandas
 typer
 weasel
 tabulate
+matplotlib
