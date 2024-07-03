@@ -42,6 +42,7 @@ def main(
     preds_dataset = {}
     for name, group_df in df.groupby("dataset_name"):
         texts = group_df["inputs"].to_list()
+        msg.text(f"Classifying {name} dataset (len={len(texts)})")
         preds = [id2label[pred.get("label")] for pred in pipe(texts)]
         preds_dataset[name] = Counter(preds)
     breakpoint()
