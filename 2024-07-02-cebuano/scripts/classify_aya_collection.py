@@ -14,22 +14,24 @@ id2label = {
 
 def main(
     # fmt: off
-    dataset_name: str = typer.Argument(..., help="Dataset to test on."),
     split: str = typer.Option("train", help="Split to get the instances from."),
-    subset: Optional[str] = typer.Option(None, help="Subset to get the data."),
-    column_name: str = typer.Option("text", help="Column name to source the texts."),
-    model: str = typer.Option("SEACrowd/mdeberta-v3_sea_translationese", help="Classifier to use."),
+    sample: Optional[int] = typer.Option(None, help="If set, will select random instances."),
+    seed: int = typer.Option(42, help="Random seed for shuffling."),
     # fmt: on
 ):
-    """Get distribution of bot-like texts in a dataset"""
+    """Get distribution of bot-like texts in the Aya Collection dataset"""
     msg.info("Loading the dataset")
-    dataset = load_dataset(dataset_name, name=subset, split=split)
+    dataset_name = "CohereForAI/aya_collection_language_split"
+    dataset = load_dataset(dataset_name, name="cebuano", split=split)
+    if sample:
+        dataset = dataset.shuffle(seed=seed).select(range(sample))
     breakpoint()
 
     msg.info("Loading classification model")
+    model_name = "SEACrowd/mdeberta-v3_sea_translationese"
     pipe = pipeline(
         "text-classification",
-        model=model,
+        model=model_name,
         device="cuda:0",
     )
     breakpoint()

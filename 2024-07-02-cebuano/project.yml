@@ -8,8 +8,7 @@ directories:
   - "scripts"
 
 commands:
-  - name: "classify-bot"
+  - name: "classify-aya"
     help: "Classify bot-like vs natural texts using the SEACrowd model."
     script:
-      - python -m scripts.classify_dataset CohereForAI/aya_collection_language_split --split train --subset ceb --column-name inputs
-      - python -m scripts.classify_dataset CohereForAI/aya_collection_language_split --split train --subset ceb --column-name targets
+      - python -m scripts.classify_aya_collection --split train  --sample 10000 --seed 42

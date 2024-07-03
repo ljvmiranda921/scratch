@@ -21,6 +21,6 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `classify-bot` | Classify bot-like vs natural texts using the SEACrowd model. |
+| `classify-aya` | Classify bot-like vs natural texts using the SEACrowd model. |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
