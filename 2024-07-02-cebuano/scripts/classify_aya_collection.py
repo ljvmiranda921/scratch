@@ -1,9 +1,10 @@
+import json
 from collections import Counter
 from pathlib import Path
 from typing import Optional
 
 import typer
-from datasets import Dataset, load_dataset
+from datasets import load_dataset
 from transformers import pipeline
 from wasabi import msg
 
@@ -47,7 +48,10 @@ def main(
         msg.text(f"Classifying {name} dataset (len={len(texts)})")
         preds = [id2label[pred.get("label")] for pred in pipe(texts)]
         preds_dataset[name] = Counter(preds)
-    print(preds_dataset)
+
+    preds_json = {k: dict(v) for k, v in preds_dataset.items()}
+    with open(output_path, "w") as f:
+        json.dump(preds_json, f, indent=4)
 
 
 if __name__ == "__main__":
