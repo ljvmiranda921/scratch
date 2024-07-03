@@ -11,4 +11,5 @@ commands:
   - name: "classify-bot"
     help: "Classify bot-like vs natural texts using the SEACrowd model."
     script:
-      - ls
+      - python -m scripts.classify_dataset CohereForAI/aya_collection_language_split --split train --subset ceb --column-name inputs
+      - python -m scripts.classify_dataset CohereForAI/aya_collection_language_split --split train --subset ceb --column-name targets

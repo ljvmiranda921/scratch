@@ -1,7 +1,8 @@
+from typing import Optional
+
 import typer
-import torch
 from transformers import pipeline
-from dataset import load_dataset
+from datasets import load_dataset
 from wasabi import msg
 
 id2label = {
@@ -13,20 +14,23 @@ id2label = {
 
 def main(
     # fmt: off
-    dataset: str = typer.Argument(..., help="Dataset to test on."),
+    dataset_name: str = typer.Argument(..., help="Dataset to test on."),
     split: str = typer.Option("train", help="Split to get the instances from."),
+    subset: Optional[str] = typer.Option(None, help="Subset to get the data."),
     column_name: str = typer.Option("text", help="Column name to source the texts."),
     model: str = typer.Option("SEACrowd/mdeberta-v3_sea_translationese", help="Classifier to use."),
     # fmt: on
 ):
     """Get distribution of bot-like texts in a dataset"""
     msg.info("Loading the dataset")
+    dataset = load_dataset(dataset_name, name=subset, split=split)
+    breakpoint()
 
     msg.info("Loading classification model")
     pipe = pipeline(
         "text-classification",
         model=model,
-        device="cuda:0" if torch.cuda.is_available() else "cpu",
+        device="cuda:0",
     )
     breakpoint()
 
