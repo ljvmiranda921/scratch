@@ -45,7 +45,7 @@ def main(
         msg.text(f"Classifying {name} dataset (len={len(texts)})")
         preds = [id2label[pred.get("label")] for pred in pipe(texts)]
         preds_dataset[name] = Counter(preds)
-    breakpoint()
+    print(preds_dataset)
 
 
 if __name__ == "__main__":
