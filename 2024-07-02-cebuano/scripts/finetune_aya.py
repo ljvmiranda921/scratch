@@ -1,20 +1,13 @@
-import os
-import re
 from pathlib import Path
 
-import bitsandbytes as bnb
-import pandas as pd
-import pyarrow as pa
-import pyarrow.dataset as ds
 import torch
 import typer
-import wandb
-from datasets import Dataset, load_dataset
-from peft import LoraConfig, PeftModel, get_peft_model
-from peft import prepare_model_for_kbit_training
+from datasets import load_dataset
+from peft import LoraConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers import BitsAndBytesConfig, TrainingArguments, logging
+from transformers import BitsAndBytesConfig, TrainingArguments
 from trl import SFTTrainer
+from wasabi import msg
 
 
 def main(
@@ -41,6 +34,7 @@ def main(
         else None
     )
 
+    msg.info(f"Loading model configuration for {model_name}...")
     attn_implementation = "flash_attention_2" if use_flash_attn else None
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -49,6 +43,62 @@ def main(
         torch_dtype=torch.bfloat16,
         device_map="auto",
     )
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    msg.info(f"Loading dataset '{dataset_name}'...")
+    dataset = load_dataset(dataset_name, "cebuano", split="train")
+
+    training_arguments = TrainingArguments(
+        output_dir=output_dir,
+        num_train_epochs=20,
+        per_device_train_batch_size=train_batch_size,
+        gradient_accumulation=grad_acc_steps,
+        gradient_checkpointing=use_grad_checkpointing,
+        optim="paged_adamw_32bit",
+        save_steps=50,
+        logging_steps=10,
+        learning_rate=1e-3,
+        weight_decay=0.001,
+        fp16=False,
+        bf16=True,
+        warmup_ratio=0.05,
+        group_by_length=True,
+        lr_scheduler_type="constant",
+        report_to="none",
+    )
+
+    peft_config = LoraConfig(
+        lora_alpha=32,
+        r=32,
+        bias="none",
+        task_type="CAUSAL_LM",
+        target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
+    )
+
+    trainer = SFTTrainer(
+        model=model,
+        train_dataset=dataset,
+        peft_config=peft_config,
+        max_seq_length=train_max_seq_len,
+        tokenizer=tokenizer,
+        args=training_arguments,
+        formatting_func=formatting_prompts_func,
+    )
+
+    trainer.train()
+
+    msg.info("Saving adapter model to disk...")
+    trainer.model.save_pretrained(save_directory="aya-qlora-ceb")
+    model.config.use_cache = True
+    model.eval()
+
+
+def formatting_prompts_func(example):
+    output_texts = []
+    for i in range(len(example["inputs"])):
+        text = f"<|START_OF_TURN_TOKEN|><|USER_TOKEN|>{example['inputs'][i]}<|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>{example['targets'][i]}"
+        output_texts.append(text)
+    return output_texts
 
 
 if __name__ == "__main__":
