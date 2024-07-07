@@ -5,3 +5,10 @@ typer
 weasel
 tabulate
 matplotlib
+bitsandbytes
+peft
+accelerate
+trl
+sentencepiece
+wheel
+flash-attn
