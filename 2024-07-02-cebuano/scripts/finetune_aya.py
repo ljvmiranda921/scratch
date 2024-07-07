@@ -23,6 +23,7 @@ def main(
     grad_acc_steps: int = typer.Option(16, "--grad-acc-steps", "-g", help="Set gradient accumulation steps."),
     # fmt: on
 ):
+    """Reference: https://huggingface.co/CohereForAI/aya-23-8B/blob/main/Aya_23_notebook.ipynb"""
     quantization_config = (
         BitsAndBytesConfig(
             load_in_4bit=True,
