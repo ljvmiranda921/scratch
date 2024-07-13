@@ -5,7 +5,7 @@ description: |
   Another thing I can do is to create a custom interface using Prodigy for preference annotations.
 
 vars:
-  model_output_dir: "finetuned-ceb"
+  model_output_dir: "model"
 
 directories:
   - "scripts"

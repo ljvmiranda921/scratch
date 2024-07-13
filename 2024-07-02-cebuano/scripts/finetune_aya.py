@@ -89,7 +89,8 @@ def main(
     trainer.train()
 
     msg.info("Saving adapter model to disk...")
-    trainer.model.save_pretrained(save_directory="aya-qlora-ceb")
+    save_directory = output_dir / "aya-glora-ceb"
+    trainer.model.save_pretrained(save_directory=str(save_directory))
     model.config.use_cache = True
     model.eval()
 
