@@ -11,4 +11,4 @@ accelerate
 trl
 sentencepiece
 wheel
-flash-attn
+# flash-attn, --no-build-isolation
