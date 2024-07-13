@@ -53,7 +53,7 @@ def main(
         output_dir=output_dir,
         num_train_epochs=20,
         per_device_train_batch_size=train_batch_size,
-        gradient_accumulation=grad_acc_steps,
+        gradient_accumulation_steps=grad_acc_steps,
         gradient_checkpointing=use_grad_checkpointing,
         optim="paged_adamw_32bit",
         save_steps=50,
