@@ -3,7 +3,7 @@
 # 🪐 Weasel Project: IFT exploration
 
 The goal here is to try and practice finetuning an existing base model.
-I'll use Aya-23B and a Cebuano dataset (from the Aya collection) as an example.
+I'll use Aya-23 8B and a Cebuano dataset (from the Aya collection) as an example.
 Another thing I can do is to create a custom interface using Prodigy for preference annotations.
 
 
@@ -22,5 +22,7 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `classify-aya` | Classify bot-like vs natural texts using the SEACrowd model. |
+| `finetune-t4` | Finetune Aya-23 8B on a T4 instance |
+| `finetune-a100` | Finetune Aya-23 8B on an A100 instance |
 
 <!-- WEASEL: AUTO-GENERATED DOCS END (do not remove) -->
