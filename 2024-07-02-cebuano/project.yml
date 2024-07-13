@@ -1,8 +1,11 @@
 title: "IFT exploration"
 description: |
   The goal here is to try and practice finetuning an existing base model.
-  I'll use Aya-23B and a Cebuano dataset (from the Aya collection) as an example.
+  I'll use Aya-23 8B and a Cebuano dataset (from the Aya collection) as an example.
   Another thing I can do is to create a custom interface using Prodigy for preference annotations.
+
+vars:
+  model_output_dir: "finetuned-ceb"
 
 directories:
   - "scripts"
@@ -15,3 +18,36 @@ commands:
       - python -m scripts.classify_aya_collection outputs/aya_ceb_stats.json --split train  --sample 10000 --seed 42
     outputs:
       - outputs/aya_ceb_stats.json
+
+  - name: "finetune-t4"
+    help: "Finetune Aya-23 8B on a T4 instance"
+    script:
+      - mkdir ${vars.model_output_dir}
+      - >-
+        python -m scripts.finetune_aya ${vars.model_output_dir}
+        --dataset-name "CohereForAI/aya_collection_language_split"
+        --model-name "CohereForAI/aya-23-8b"
+        --train-batch-size 2
+        --max-seq-len 512
+        --grad-acc-steps 16
+        --quantize-4bit
+        --use-grad-checkpointing
+    outputs:
+      - ${vars.model_output_dir}
+
+  - name: "finetune-a100"
+    help: "Finetune Aya-23 8B on an A100 instance"
+    script:
+      - mkdir ${vars.model_output_dir}
+      - >-
+        python -m scripts.finetune_aya ${vars.model_output_dir}
+        --dataset-name "CohereForAI/aya_collection_language_split"
+        --model-name "CohereForAI/aya-23-8b"
+        --train-batch-size 16
+        --max-seq-len 512
+        --grad-acc-steps 2
+        --quantize-4bit
+        --use-flash-attn
+        --use-grad-checkpointing
+    outputs:
+      - ${vars.model_output_dir}
