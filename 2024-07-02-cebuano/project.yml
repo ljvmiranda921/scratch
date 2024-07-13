@@ -22,7 +22,7 @@ commands:
   - name: "finetune-t4"
     help: "Finetune Aya-23 8B on a T4 instance"
     script:
-      - mkdir ${vars.model_output_dir}
+      - mkdir -p ${vars.model_output_dir}
       - >-
         python -m scripts.finetune_aya ${vars.model_output_dir}
         --dataset-name "CohereForAI/aya_collection_language_split"
@@ -38,7 +38,7 @@ commands:
   - name: "finetune-a100"
     help: "Finetune Aya-23 8B on an A100 instance"
     script:
-      - mkdir ${vars.model_output_dir}
+      - mkdir -p ${vars.model_output_dir}
       - >-
         python -m scripts.finetune_aya ${vars.model_output_dir}
         --dataset-name "CohereForAI/aya_collection_language_split"
