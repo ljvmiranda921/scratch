@@ -6,6 +6,7 @@ description: |
 
 vars:
   model_output_dir: "model"
+  checkpoint_dir: "checkpoint"
 
 directories:
   - "scripts"
@@ -23,6 +24,7 @@ commands:
     help: "Finetune Aya-23 8B on a T4 instance"
     script:
       - mkdir -p ${vars.model_output_dir}
+      - mkdir -p ${vars.checkpoint_dir}
       - >-
         python -m scripts.finetune_aya ${vars.model_output_dir}
         --dataset-name "CohereForAI/aya_collection_language_split"
@@ -32,6 +34,7 @@ commands:
         --grad-acc-steps 16
         --quantize-4bit
         --use-grad-checkpointing
+        --checkpoint-dir ${vars.checkpoint_dir}
     outputs:
       - ${vars.model_output_dir}
 
@@ -39,6 +42,7 @@ commands:
     help: "Finetune Aya-23 8B on an A100 instance"
     script:
       - mkdir -p ${vars.model_output_dir}
+      - mkdir -p ${vars.checkpoint_dir}
       - >-
         python -m scripts.finetune_aya ${vars.model_output_dir}
         --dataset-name "CohereForAI/aya_collection_language_split"
@@ -49,5 +53,6 @@ commands:
         --quantize-4bit
         --use-flash-attn
         --use-grad-checkpointing
+        --checkpoint-dir ${vars.checkpoint_dir}
     outputs:
       - ${vars.model_output_dir}

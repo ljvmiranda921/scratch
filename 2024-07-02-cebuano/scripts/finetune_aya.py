@@ -21,6 +21,7 @@ def main(
     train_max_seq_len: int = typer.Option(512, "--max-seq-len", "-l", help="Set max sequence length when training."),
     use_flash_attn: bool = typer.Option(False, "--use-flash-attn", "-f", help="Use flash attention. Useful for training on a larger machine."),
     grad_acc_steps: int = typer.Option(16, "--grad-acc-steps", "-g", help="Set gradient accumulation steps."),
+    checkpoint_dir: str = typer.Option("checkpoint", "--checkpoint-dir", help="Directory to save the checkpoint files."),
     verbose: bool = typer.Option(False, help="Show additional information.")
     # fmt: on
 ):
@@ -50,8 +51,9 @@ def main(
     msg.info(f"Loading dataset '{dataset_name}'...", show=verbose)
     dataset = load_dataset(dataset_name, "cebuano", split="train")
 
+    msg.text(f"Saving checkpoint to {checkpoint_dir}")
     training_arguments = TrainingArguments(
-        output_dir=output_dir,
+        output_dir=checkpoint_dir,
         num_train_epochs=20,
         per_device_train_batch_size=train_batch_size,
         gradient_accumulation_steps=grad_acc_steps,
@@ -90,8 +92,7 @@ def main(
     trainer.train()
 
     msg.info("Saving adapter model to disk...", show=verbose)
-    save_directory = output_dir / "aya-qlora-ceb"
-    trainer.model.save_pretrained(save_directory=str(save_directory))
+    trainer.model.save_pretrained(save_directory=str(output_dir))
     model.config.use_cache = True
     model.eval()
 
