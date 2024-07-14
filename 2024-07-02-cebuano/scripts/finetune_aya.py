@@ -21,6 +21,7 @@ def main(
     train_max_seq_len: int = typer.Option(512, "--max-seq-len", "-l", help="Set max sequence length when training."),
     use_flash_attn: bool = typer.Option(False, "--use-flash-attn", "-f", help="Use flash attention. Useful for training on a larger machine."),
     grad_acc_steps: int = typer.Option(16, "--grad-acc-steps", "-g", help="Set gradient accumulation steps."),
+    verbose: bool = typer.Option(False, help="Show additional information.")
     # fmt: on
 ):
     """Reference: https://huggingface.co/CohereForAI/aya-23-8B/blob/main/Aya_23_notebook.ipynb"""
@@ -35,7 +36,7 @@ def main(
         else None
     )
 
-    msg.info(f"Loading model configuration for {model_name}...")
+    msg.info(f"Loading model configuration for {model_name}...", show=verbose)
     attn_implementation = "flash_attention_2" if use_flash_attn else None
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -46,7 +47,7 @@ def main(
     )
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-    msg.info(f"Loading dataset '{dataset_name}'...")
+    msg.info(f"Loading dataset '{dataset_name}'...", show=verbose)
     dataset = load_dataset(dataset_name, "cebuano", split="train")
 
     training_arguments = TrainingArguments(
@@ -88,7 +89,7 @@ def main(
 
     trainer.train()
 
-    msg.info("Saving adapter model to disk...")
+    msg.info("Saving adapter model to disk...", show=verbose)
     save_directory = output_dir / "aya-qlora-ceb"
     trainer.model.save_pretrained(save_directory=str(save_directory))
     model.config.use_cache = True
