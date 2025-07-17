@@ -3,10 +3,14 @@ name = "aseprite-mcp"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "mcp[cli]>=1.10.1",
+    "openai-agents[litellm]>=0.2.0",
     "python-dotenv>=1.1.1",
+    "typer>=0.16.0",
+    "vllm>=0.8.5",
+    "wheel>=0.45.1",
 ]
 
 [dependency-groups]
