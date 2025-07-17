@@ -41,12 +41,18 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # fmt: on
 
+    if os.getenv("ASEPRITE_PATH") is None:
+        raise ValueError(
+            "ASEPRITE_PATH environment variable is not set. Please set it " \
+            "to the path of your Aseprite executable."
+        )
+
     aseprite_mcp = MCPServerStdio(
         cache_tools_list=False,
         params={
             "command": "uv",
             "args": ["run", "-m", "aseprite_mcp.server"],
-            "env": dict(os.environ),
+            "env": {"ASEPRITE_PATH": os.getenv("ASEPRITE_PATH", None)},
         },
     )
 
