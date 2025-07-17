@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import logging
+import os
 
 from agents import Agent, Runner, trace
 from agents.extensions.models.litellm_model import LitellmModel
@@ -41,7 +42,12 @@ if __name__ == "__main__":
     # fmt: on
 
     aseprite_mcp = MCPServerStdio(
-        cache_tools_list=False, params={"command": "uv", "args": "", "env": ""}
+        cache_tools_list=False,
+        params={
+            "command": "uv",
+            "args": ["run", "-m", "aseprite_mcp.server"],
+            "env": dict(os.environ),
+        },
     )
 
     asyncio.run(
