@@ -119,7 +119,6 @@ dependencies = [
     { name = "mcp", extra = ["cli"] },
     { name = "openai-agents", extra = ["litellm"] },
     { name = "python-dotenv" },
-    { name = "typer" },
     { name = "vllm" },
     { name = "wheel" },
 ]
@@ -138,7 +137,6 @@ requires-dist = [
     { name = "mcp", extras = ["cli"], specifier = ">=1.10.1" },
     { name = "openai-agents", extras = ["litellm"], specifier = ">=0.2.0" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
-    { name = "typer", specifier = ">=0.16.0" },
     { name = "vllm", specifier = ">=0.8.5" },
     { name = "wheel", specifier = ">=0.45.1" },
 ]
