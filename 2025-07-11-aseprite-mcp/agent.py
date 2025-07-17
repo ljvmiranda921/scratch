@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import logging
 import os
+from typing import Optional
 
 from agents import Agent, Runner, trace
 from agents.extensions.models.litellm_model import LitellmModel
@@ -13,7 +14,7 @@ async def agent_env_interaction(
     mcp_server: MCPServerStdio,
     request: str,
     *,
-    agent_port: int = 8000,
+    agent_port: Optional[int] = None,
     workflow_name: str = "aseprite_agent",
     system_prompt: str = "You are a function-calling agent that can use tools to perform a given task.",
 ):
@@ -22,7 +23,7 @@ async def agent_env_interaction(
     model_name (str): The name of the model to use for the agent.
     mcp_server (MCPServerStdio): The MCP server to connect to.
     request (str): The input request for the agent.
-    agent_port (int): The port on which the agent will run.
+    agent_port (int): The vLLM port on which the agent is running.
     workflow_name (str): The name of the workflow for tracing.
     system_prompt (str): The system prompt to initialize the agent.
     """
