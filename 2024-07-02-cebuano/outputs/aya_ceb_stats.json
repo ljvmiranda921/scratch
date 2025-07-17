@@ -1,0 +1,73 @@
+{
+    "Adversarial QA (T)": {
+        "Natural": 12,
+        "Machine-translated": 24
+    },
+    "CNN-Daily-Mail (T)": {
+        "Machine-translated": 291,
+        "Natural": 1
+    },
+    "Dolly-v2 (T)": {
+        "Machine-translated": 35,
+        "Natural": 1
+    },
+    "Flan-CoT-submix (T)": {
+        "Natural": 160,
+        "Machine-translated": 132
+    },
+    "Flan-Coqa (T)": {
+        "Machine-translated": 23
+    },
+    "Flan-GEM-wiki-lingua (T)": {
+        "Machine-translated": 54,
+        "Natural": 9
+    },
+    "Flan-lambada (T)": {
+        "Machine-translated": 13,
+        "Human-translated": 1,
+        "Natural": 3
+    },
+    "Flan-unified-QA (T)": {
+        "Machine-translated": 1
+    },
+    "HotpotQA (T)": {
+        "Natural": 604,
+        "Machine-translated": 406
+    },
+    "Joke-explaination-inst (T)": {
+        "Machine-translated": 1,
+        "Natural": 1
+    },
+    "Mintaka-inst (T)": {
+        "Machine-translated": 41
+    },
+    "NQ-Open (T)": {
+        "Natural": 380,
+        "Machine-translated": 98,
+        "Human-translated": 4
+    },
+    "PAWS-Wiki (T)": {
+        "Natural": 110,
+        "Machine-translated": 4
+    },
+    "PIQA (T)": {
+        "Machine-translated": 42,
+        "Natural": 9
+    },
+    "SODA-inst (T)": {
+        "Machine-translated": 3245,
+        "Natural": 4
+    },
+    "WIKI QA (T)": {
+        "Natural": 3
+    },
+    "Wiki-split-inst (T)": {
+        "Machine-translated": 2341,
+        "Natural": 416,
+        "Human-translated": 58
+    },
+    "Xlel_wd-inst (T)": {
+        "Natural": 356,
+        "Machine-translated": 1117
+    }
+}
