@@ -17,6 +17,15 @@ async def agent_env_interaction(
     workflow_name: str = "aseprite_agent",
     system_prompt: str = "You are a function-calling agent that can use tools to perform a given task.",
 ):
+    """Simulates an interaction between an agent and an MCP server.
+    
+    model_name (str): The name of the model to use for the agent.
+    mcp_server (MCPServerStdio): The MCP server to connect to.
+    request (str): The input request for the agent.
+    agent_port (int): The port on which the agent will run.
+    workflow_name (str): The name of the workflow for tracing.
+    system_prompt (str): The system prompt to initialize the agent.
+    """
     async with mcp_server as server:
         with trace(workflow_name=workflow_name):
             # TODO: Configure the model properly
