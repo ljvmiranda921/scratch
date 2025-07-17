@@ -38,9 +38,18 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Simulate interaction between agent and MCP server.")
     parser.add_argument("--model_name", "-n", type=str, default="gpt-4o-mini", help="Name of the model to use.")
     parser.add_argument("--port", "-p", type=int, default=8000, help="vLLM server port of the agent.")
+    parser.add_argument("--task_name", "-t", type=str, choices=["simple_art", "spritesheet"], default="simple_art", help="Task name to run the agent on.")
     args = parser.parse_args()
     # fmt: on
 
+    # Set-up the tasks
+    task_db = {
+        "simple_art": "Create a simple art piece using Aseprite.",
+        "spritesheet": "Create a spritesheet for a character using Aseprite.",
+    }
+    task = task_db.get(args.task_name)
+
+    # Configure the server
     if os.getenv("ASEPRITE_PATH") is None:
         raise ValueError(
             "ASEPRITE_PATH environment variable is not set. Please set it " \
@@ -56,10 +65,12 @@ if __name__ == "__main__":
         },
     )
 
+    # Start the agent interaction with the MCP server
     asyncio.run(
         agent_env_interaction(
             args.model_name,
             aseprite_mcp,
+            request=task,
             agent_port=args.port,
         )
     )
