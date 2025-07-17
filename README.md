@@ -3,7 +3,7 @@
 This repository contains Jupyter notebooks and random assortment of projects.
 Think of this as a scratch paper for my ideas. Some of these may have found
 their way into my [blog](https://ljvmiranda921.github.io). To generate the table
-below, run `python update_table.py`.
+below, run `uv run update_table.py`.
 
 | Name                                                                                                                                                       | Description                                                                                                                                                                     |
 |:-----------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
