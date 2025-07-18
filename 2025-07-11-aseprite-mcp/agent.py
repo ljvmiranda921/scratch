@@ -14,23 +14,30 @@ async def agent_env_interaction(
     mcp_server: MCPServerStdio,
     request: str,
     *,
-    agent_port: Optional[int] = None,
+    agent_url: Optional[str] = None,
     workflow_name: str = "aseprite_agent",
     system_prompt: str = "You are a function-calling agent that can use tools to perform a given task.",
 ):
     """Simulates an interaction between an agent and an MCP server.
-    
+
     model_name (str): The name of the model to use for the agent.
     mcp_server (MCPServerStdio): The MCP server to connect to.
     request (str): The input request for the agent.
-    agent_port (int): The vLLM port on which the agent is running.
+    agent_url (str): The vLLM URL and port on which the agent is running.
     workflow_name (str): The name of the workflow for tracing.
     system_prompt (str): The system prompt to initialize the agent.
     """
     async with mcp_server as server:
         with trace(workflow_name=workflow_name):
-            # TODO: Configure the model properly
-            model = None
+            model = (
+                model_name
+                if "openai" in model_name
+                else LitellmModel(
+                    model="hosted_vllm/" + model_name,
+                    base_url=agent_url,
+                    api_key=None,
+                )
+            )
             agent = Agent(
                 name="Assistant",
                 instructions=system_prompt,
@@ -62,7 +69,7 @@ if __name__ == "__main__":
     # Configure the server
     if os.getenv("ASEPRITE_PATH") is None:
         raise ValueError(
-            "ASEPRITE_PATH environment variable is not set. Please set it " \
+            "ASEPRITE_PATH environment variable is not set. Please set it "
             "to the path of your Aseprite executable."
         )
 
@@ -81,7 +88,7 @@ if __name__ == "__main__":
             args.model_name,
             aseprite_mcp,
             request=task,
-            agent_port=args.port,
+            agent_url=args.port,
         )
     )
 
