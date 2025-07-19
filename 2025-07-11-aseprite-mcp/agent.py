@@ -27,6 +27,7 @@ async def agent_env_interaction(
     *,
     agent_url: Optional[str] = None,
     workflow_name: str = "aseprite_agent",
+    max_turns: int = 10,
     system_prompt: str = SYSTEM_PROMPT,
 ):
     """Simulates an interaction between an agent and an MCP server.
@@ -56,7 +57,7 @@ async def agent_env_interaction(
                 mcp_servers=[server],
             )
 
-            result = await Runner.run(starting_agent=agent, input=request)
+            result = await Runner.run(starting_agent=agent, input=request, max_turns=max_turns)
             # TODO: Use rich for chat-like formatting
             print(result.final_output)
 
@@ -67,13 +68,14 @@ if __name__ == "__main__":
     parser.add_argument("--model_name", "-n", type=str, default="openai/gpt-4o", help="Name of the model to use. If an OpenAI model, prepend it with openai/ (e.g., openai/gpt-4o)")
     parser.add_argument("--agent_url", "-l", type=str, default="", help="vLLM URL and port for the agent.")
     parser.add_argument("--task_name", "-t", type=str, choices=["simple_art", "spritesheet"], default="simple_art", help="Task name to run the agent on.")
+    parser.add_argument("--max_turns", "-m", type=int, default=10, help="Maximum number of turns for the agent to run.")
     args = parser.parse_args()
     # fmt: on
 
     # Set-up the tasks
     task_db = {
-        "simple_art": "Draw me a pixel art of swordsman posing with a sword.",
-        "spritesheet": "Draw a 4-frame spritesheet showing a swordsman performing a sword slash attack sequence, with each frame capturing a different stage of the slashing motion from windup to follow-through.",
+        "simple_art": "Draw me a pixel art of swordsman posing with a sword. Save the final output as an image file in PNG format with filename 'simple_task.png'",
+        "spritesheet": "Draw a 4-frame spritesheet showing a swordsman performing a sword slash attack sequence, with each frame capturing a different stage of the slashing motion from windup to follow-through. Save the final output as an image file in PNG format with filename 'spritesheet.png'",
     }
     task = task_db.get(args.task_name)
     msg.text(f"Running task: {args.task_name} - '{task}'")
@@ -101,5 +103,6 @@ if __name__ == "__main__":
             aseprite_mcp,
             request=task,
             agent_url=args.agent_url,
+            max_turns=args.max_turns,
         )
     )
