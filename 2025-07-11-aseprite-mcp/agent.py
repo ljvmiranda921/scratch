@@ -57,7 +57,9 @@ async def agent_env_interaction(
                 mcp_servers=[server],
             )
 
-            result = await Runner.run(starting_agent=agent, input=request, max_turns=max_turns)
+            result = await Runner.run(
+                starting_agent=agent, input=request, max_turns=max_turns
+            )
             # TODO: Use rich for chat-like formatting
             print(result.final_output)
 
