@@ -12,6 +12,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+SYSTEM_PROMPT = (
+    "You are a creative and artistic function-calling agent that can use pixel "
+    "art tools to perform a drawing task. You have a good knowledge of color, form, and movement. "
+    "Your output must always be saved as an image file in the PNG format. "
+    "If you encounter an error, find a way to resolve it using other available tools."
+)
+
 
 async def agent_env_interaction(
     model_name: str,
@@ -20,7 +27,7 @@ async def agent_env_interaction(
     *,
     agent_url: Optional[str] = None,
     workflow_name: str = "aseprite_agent",
-    system_prompt: str = "You are a function-calling agent that can use tools to perform a given task and saves the final output as a PNG file.",
+    system_prompt: str = SYSTEM_PROMPT,
 ):
     """Simulates an interaction between an agent and an MCP server.
 
@@ -65,7 +72,7 @@ if __name__ == "__main__":
 
     # Set-up the tasks
     task_db = {
-        "simple_art": "Draw me a pixel art of swordsman.",
+        "simple_art": "Draw me a pixel art of swordsman posing with a sword.",
         "spritesheet": "Draw a 4-frame spritesheet showing a swordsman performing a sword slash attack sequence, with each frame capturing a different stage of the slashing motion from windup to follow-through.",
     }
     task = task_db.get(args.task_name)
