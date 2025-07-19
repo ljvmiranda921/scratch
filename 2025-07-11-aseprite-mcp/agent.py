@@ -8,6 +8,10 @@ from agents.extensions.models.litellm_model import LitellmModel
 from agents.mcp import MCPServerStdio
 from wasabi import msg
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 async def agent_env_interaction(
     model_name: str,
@@ -16,7 +20,7 @@ async def agent_env_interaction(
     *,
     agent_url: Optional[str] = None,
     workflow_name: str = "aseprite_agent",
-    system_prompt: str = "You are a function-calling agent that can use tools to perform a given task.",
+    system_prompt: str = "You are a function-calling agent that can use tools to perform a given task and saves the final output as a PNG file.",
 ):
     """Simulates an interaction between an agent and an MCP server.
 
@@ -30,7 +34,7 @@ async def agent_env_interaction(
     async with mcp_server as server:
         with trace(workflow_name=workflow_name):
             model = (
-                model_name
+                model_name.split("/")[1]
                 if "openai" in model_name
                 else LitellmModel(
                     model="hosted_vllm/" + model_name,
@@ -53,7 +57,7 @@ async def agent_env_interaction(
 if __name__ == "__main__":
     # fmt: off
     parser = argparse.ArgumentParser(description="Simulate interaction between agent and MCP server.")
-    parser.add_argument("--model_name", "-n", type=str, default="gpt-4o-mini", help="Name of the model to use.")
+    parser.add_argument("--model_name", "-n", type=str, default="openai/gpt-4o", help="Name of the model to use. If an OpenAI model, prepend it with openai/ (e.g., openai/gpt-4o)")
     parser.add_argument("--agent_url", "-l", type=str, default="", help="vLLM URL and port for the agent.")
     parser.add_argument("--task_name", "-t", type=str, choices=["simple_art", "spritesheet"], default="simple_art", help="Task name to run the agent on.")
     args = parser.parse_args()
@@ -61,8 +65,8 @@ if __name__ == "__main__":
 
     # Set-up the tasks
     task_db = {
-        "simple_art": "Create a simple art piece using Aseprite.",
-        "spritesheet": "Create a spritesheet for a character using Aseprite.",
+        "simple_art": "Draw me a pixel art of swordsman.",
+        "spritesheet": "Draw a 4-frame spritesheet showing a swordsman performing a sword slash attack sequence, with each frame capturing a different stage of the slashing motion from windup to follow-through.",
     }
     task = task_db.get(args.task_name)
     msg.text(f"Running task: {args.task_name} - '{task}'")
@@ -89,6 +93,6 @@ if __name__ == "__main__":
             args.model_name,
             aseprite_mcp,
             request=task,
-            agent_url=args.port,
+            agent_url=args.agent_url,
         )
     )
