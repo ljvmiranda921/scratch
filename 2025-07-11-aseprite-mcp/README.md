@@ -43,3 +43,13 @@ vllm serve Qwen/Qwen3-32B \
     --enable-auto-tool-choice \
     --tool-call-parser hermes
 ```
+
+This command should provide you with a URL and port you can access to (e.g., `http://my.vllm.url:8000`).
+To start the agent-env interaction, run:
+
+```sh
+python agent.py \
+    --model_name Qwen/Qwen3-32B \
+    --task_name simple_art \
+    --agent_url http://my.vllm.url:8000/v1
+```
