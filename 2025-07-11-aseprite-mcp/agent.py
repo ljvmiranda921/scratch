@@ -1,12 +1,12 @@
 import argparse
 import asyncio
-import logging
 import os
 from typing import Optional
 
 from agents import Agent, Runner, trace
 from agents.extensions.models.litellm_model import LitellmModel
 from agents.mcp import MCPServerStdio
+from wasabi import msg
 
 
 async def agent_env_interaction(
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     # fmt: off
     parser = argparse.ArgumentParser(description="Simulate interaction between agent and MCP server.")
     parser.add_argument("--model_name", "-n", type=str, default="gpt-4o-mini", help="Name of the model to use.")
-    parser.add_argument("--port", "-p", type=int, default=8000, help="vLLM server port of the agent.")
+    parser.add_argument("--agent_url", "-l", type=str, default="", help="vLLM URL and port for the agent.")
     parser.add_argument("--task_name", "-t", type=str, choices=["simple_art", "spritesheet"], default="simple_art", help="Task name to run the agent on.")
     args = parser.parse_args()
     # fmt: on
@@ -65,6 +65,7 @@ if __name__ == "__main__":
         "spritesheet": "Create a spritesheet for a character using Aseprite.",
     }
     task = task_db.get(args.task_name)
+    msg.text(f"Running task: {args.task_name} - '{task}'")
 
     # Configure the server
     if os.getenv("ASEPRITE_PATH") is None:
@@ -91,5 +92,3 @@ if __name__ == "__main__":
             agent_url=args.port,
         )
     )
-
-    pass
