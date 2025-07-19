@@ -14,4 +14,5 @@ wheels/
 
 # Output files
 *.aseprite
-*.png
+# *.png
+!model_outputs
