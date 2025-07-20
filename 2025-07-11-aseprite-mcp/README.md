@@ -1,6 +1,6 @@
 # Aseprite MCP
 
-This repository is an aseprite-mcp implementation based on [divii/aseprite-mcp](https://github.com/diivi/aseprite-mcp) and as basis for my blog post, ["Draw me a swordsman."](https://ljvmiranda921.github.io/notebook/2025/07/30/draw-me-a-swordsman/)
+This repository is an aseprite-mcp implementation based on [divii/aseprite-mcp](https://github.com/diivi/aseprite-mcp) and as basis for my blog post, ["Draw me a swordsman."](https://ljvmiranda921.github.io/notebook/2025/07/20/draw-me-a-swordsman/)
 
 ## Setup and Installation
 
