@@ -1,0 +1,14 @@
+transformers
+datasets
+pandas
+typer
+weasel
+tabulate
+matplotlib
+bitsandbytes
+peft
+accelerate
+trl
+sentencepiece
+wheel
+# flash-attn, --no-build-isolation
