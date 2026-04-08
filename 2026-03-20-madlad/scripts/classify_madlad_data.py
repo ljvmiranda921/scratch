@@ -36,7 +36,7 @@ def main():
     df = load_madlad(args.language, split="clean_docs")
     src_lang = args.translategemma_lang_code or args.language
     df["translation"] = asyncio.run(
-        translate_all(
+        batch_translate(
             df["text"].tolist(),
             src_lang=src_lang,
             batch_size=args.batch_size,
@@ -44,7 +44,7 @@ def main():
     )
 
 
-async def translate_all(
+async def batch_translate(
     texts: list[str],
     src_lang: str,
     tgt_lang: str = "en",
