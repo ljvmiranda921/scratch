@@ -10,6 +10,8 @@ from huggingface_hub import HfApi, hf_hub_download
 from transformers import AutoProcessor
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
+logging.getLogger("transformers").setLevel(logging.WARNING)
 log = logging.getLogger(__name__)
 
 TRANSLATE_TOKENIZER = AutoProcessor.from_pretrained("google/translategemma-4b-it")
@@ -20,6 +22,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="Classify MADLAD Data")
     parser.add_argument("-l", "--language", type=str, help="Language code for the specific MADLAD subsplit.")
     parser.add_argument("-T", "--translategemma_lang_code", type=str, default=None, help="TranslateGemma language code (defaults to --language).")
+    parser.add_argument("-b", "--batch_size", type=int, default=8, help="Batch size for long-running tasks like translation and classification.")
     # fmt: on
     return parser.parse_args()
 
@@ -29,7 +32,16 @@ def main():
 
     df = load_madlad(args.language, split="clean_docs")
     src_lang = args.translategemma_lang_code or args.language
-    df["translation"] = df["text"].apply(lambda text: translate(text, src_lang=src_lang))  # fmt: skip
+
+    translations = []
+    for i in range(0, len(df), args.batch_size):
+        batch = df["text"].iloc[i : i + args.batch_size].tolist()
+        batch_translations = [translate(text, src_lang=src_lang) for text in batch]
+        translations.extend(batch_translations)
+        log.info(f"Translated {min(i + args.batch_size, len(df))}/{len(df)} examples")
+        breakpoint()
+    df["translation"] = translations
+
     breakpoint()
 
 

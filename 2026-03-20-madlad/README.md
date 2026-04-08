@@ -13,22 +13,22 @@ llama-server -m models/translategemma-4b-it.Q8_0.gguf --port 8080
 
 | Language | MADLAD | translategemma |
 |---|---|---|
-| Lao | `lao` | `lo` |
-| Faroese | `fao` | `fo` |
-| Bashkir | `bak` | `ba` |
-| Turkmen | `tuk` | `tk` |
-| Shona | `sna` | `sn` |
-| Sundanese | `sun` | `su` |
+| Lao | `lo` | `lo` |
+| Faroese | `fo` | `fo` |
+| Bashkir | `ba` | `ba` |
+| Turkmen | — | `tk` |
+| Shona | `sn` | `sn` |
+| Sundanese | `su` | `su` |
 | Papiamento | `pap` | — |
-| Igbo | `ibo` | `ig` |
-| Zulu | `zul` | `zu` |
-| Xhosa | `xho` | `xh` |
-| Nyanja | `nya` | `ny` |
-| Yoruba | `yor` | `yo` |
-| Southern Sotho | `sot` | `st` |
+| Igbo | — | `ig` |
+| Zulu | `zu` | `zu` |
+| Xhosa | `xh` | `xh` |
+| Nyanja | — | `ny` |
+| Yoruba | `yo` | `yo` |
+| Southern Sotho | — | `st` |
 | Mizo | `lus` | — |
-| Occitan | `oci` | `oc` |
-| Assamese | `asm` | `as` |
+| Occitan | `oc` | `oc` |
+| Assamese | `as` | `as` |
 
 ## Usage
 
