@@ -37,6 +37,7 @@ def main():
     df = load_madlad(args.language, split="clean_docs")
     if args.limit:
         df = df.head(args.limit)
+    logging.info(f"Number of documents: {len(df)}")
     src_lang = args.translategemma_lang_code or args.language
     df["translation"] = asyncio.run(
         batch_translate(
