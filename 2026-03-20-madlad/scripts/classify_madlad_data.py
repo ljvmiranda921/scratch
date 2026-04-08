@@ -7,11 +7,13 @@ from pathlib import Path
 import pandas as pd
 import requests
 from huggingface_hub import HfApi, hf_hub_download
+from tqdm import tqdm
 from transformers import AutoProcessor
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
 logging.getLogger("transformers").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 log = logging.getLogger(__name__)
 
 TRANSLATE_TOKENIZER = AutoProcessor.from_pretrained("google/translategemma-4b-it")
@@ -34,11 +36,8 @@ def main():
     src_lang = args.translategemma_lang_code or args.language
 
     translations = []
-    for i in range(0, len(df), args.batch_size):
-        batch = df["text"].iloc[i : i + args.batch_size].tolist()
-        batch_translations = [translate(text, src_lang=src_lang) for text in batch]
-        translations.extend(batch_translations)
-        log.info(f"Translated {min(i + args.batch_size, len(df))}/{len(df)} examples")
+    for text in tqdm(df["text"], desc="Translating"):
+        translations.append(translate(text, src_lang=src_lang))
         breakpoint()
     df["translation"] = translations
 
@@ -79,21 +78,25 @@ def translate(
 def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
     """Load MADLAD-400 data for a given language code."""
     api = HfApi()
-    files = api.list_repo_tree(
-        "allenai/MADLAD-400",
-        path_in_repo=f"data-v1p5/{lang}",
-        repo_type="dataset",
+    files = list(
+        api.list_repo_tree(
+            "allenai/MADLAD-400",
+            path_in_repo=f"data-v1p5/{lang}",
+            repo_type="dataset",
+        )
     )
+    files = [
+        f
+        for f in files
+        if f.rfilename.endswith(".jsonl.gz")
+        and (split == "all" or split in f.rfilename)
+    ]
 
     local_dir = Path("data") / lang
     local_dir.mkdir(parents=True, exist_ok=True)
 
     paths = []
-    for f in files:
-        if not f.rfilename.endswith(".jsonl.gz"):
-            continue
-        if split != "all" and split not in f.rfilename:
-            continue
+    for f in tqdm(files, desc=f"Downloading {lang}"):
         path = hf_hub_download(
             "allenai/MADLAD-400",
             filename=f.rfilename,
