@@ -5,8 +5,8 @@
 Download the GGUF and start llama-server:
 
 ```bash
-huggingface-cli download mradermacher/translategemma-4b-it-GGUF --include "translategemma-4b-it.Q8_0.gguf" --local-dir models/
-llama-server -m models/translategemma-4b-it.Q8_0.gguf --port 8080 --parallel 4 --ctx-size 16384 --n-gpu-layers 99
+huggingface-cli download mradermacher/translategemma-4b-it-GGUF --include "translategemma-4b-it.Q4_K_M.gguf" --local-dir models/
+llama-server -m models/translategemma-4b-it.Q4_K_M.gguf --port 8080 --parallel 4 --ctx-size 16384 --n-gpu-layers 99
 ```
 
 ## Language codes
