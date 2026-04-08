@@ -39,7 +39,7 @@ def main():
     if args.limit:
         df = df.head(args.limit)
     if args.shuffle:
-        df = df.sample(frac=1.0).reset_index(drop=True)
+        df = df.sample(frac=1).reset_index(drop=True)
     logging.info(f"Number of documents: {len(df)}")
     src_lang = args.translategemma_lang_code or args.language
     df["translation"] = asyncio.run(
