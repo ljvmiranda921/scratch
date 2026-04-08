@@ -1,11 +1,12 @@
 """Download MADLAD dataset and classify it using a model."""
 
 import argparse
+import asyncio
 import logging
 from pathlib import Path
 
+import aiohttp
 import pandas as pd
-import requests
 from huggingface_hub import HfApi, hf_hub_download
 from tqdm import tqdm
 from transformers import AutoProcessor
@@ -34,17 +35,37 @@ def main():
 
     df = load_madlad(args.language, split="clean_docs")
     src_lang = args.translategemma_lang_code or args.language
+    df["translation"] = asyncio.run(
+        translate_all(
+            df["text"].tolist(),
+            src_lang=src_lang,
+            batch_size=args.batch_size,
+        )
+    )
 
+
+async def translate_all(
+    texts: list[str],
+    src_lang: str,
+    tgt_lang: str = "en",
+    batch_size: int = 8,
+    base_url: str = "http://localhost:8080",
+) -> list[str]:
+    """Translate texts in async batches using translategemma via llama-server."""
     translations = []
-    for text in tqdm(df["text"], desc="Translating"):
-        translations.append(translate(text, src_lang=src_lang))
-        breakpoint()
-    df["translation"] = translations
+    async with aiohttp.ClientSession() as session:
+        for i in tqdm(range(0, len(texts), batch_size), desc="Translating"):
+            batch = texts[i : i + batch_size]
+            tasks = [
+                translate(session, text, src_lang, tgt_lang, base_url) for text in batch
+            ]
+            results = await asyncio.gather(*tasks)
+            translations.extend(results)
+    return translations
 
-    breakpoint()
 
-
-def translate(
+async def translate(
+    session: aiohttp.ClientSession,
     text: str,
     src_lang: str,
     tgt_lang: str = "en",
@@ -67,12 +88,13 @@ def translate(
     prompt = TRANSLATE_TOKENIZER.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True
     )
-    response = requests.post(
+    async with session.post(
         f"{base_url}/completion",
         json={"prompt": prompt, "n_predict": 512, "temperature": 0.0},
-    )
-    response.raise_for_status()
-    return response.json()["content"].strip()
+    ) as response:
+        response.raise_for_status()
+        data = await response.json()
+        return data["content"].strip()
 
 
 def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
