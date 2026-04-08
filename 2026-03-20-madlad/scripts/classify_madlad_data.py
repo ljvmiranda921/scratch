@@ -26,6 +26,7 @@ def get_args():
     parser.add_argument("-l", "--language", type=str, help="Language code for the specific MADLAD subsplit.")
     parser.add_argument("-T", "--translategemma_lang_code", type=str, default=None, help="TranslateGemma language code (defaults to --language).")
     parser.add_argument("-b", "--batch_size", type=int, default=8, help="Batch size for long-running tasks like translation and classification.")
+    parser.add_argument("-n", "--limit", type=int, default=None, help="Limit number of instances to process.")
     # fmt: on
     return parser.parse_args()
 
@@ -34,6 +35,8 @@ def main():
     args = get_args()
 
     df = load_madlad(args.language, split="clean_docs")
+    if args.limit:
+        df = df.head(args.limit)
     src_lang = args.translategemma_lang_code or args.language
     df["translation"] = asyncio.run(
         batch_translate(
@@ -105,7 +108,9 @@ def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
         existing = [p for p in existing if split in p.name]
 
     if existing:
-        log.info(f"Found {len(existing)} cached files in {local_dir}, skipping download")
+        log.info(
+            f"Found {len(existing)} cached files in {local_dir}, skipping download"
+        )
         paths = existing
     else:
         api = HfApi()
