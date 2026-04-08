@@ -23,7 +23,6 @@ TRANSLATE_TOKENIZER = AutoProcessor.from_pretrained("google/translategemma-4b-it
 def get_args():
     # fmt: off
     parser = argparse.ArgumentParser(description="Classify MADLAD Data")
-    parser.add_agument("-o", "--output_dir", type=Path, required=True, help="Directory to store the results. It will be dir / lang_code / madlad_topic.jsonl")
     parser.add_argument("-l", "--language", type=str, help="Language code for the specific MADLAD subsplit.")
     parser.add_argument("-T", "--translategemma_lang_code", type=str, default=None, help="TranslateGemma language code (defaults to --language).")
     parser.add_argument("--batch_size", type=int, default=8, help="Batch size for long-running tasks like translation and classification.")
