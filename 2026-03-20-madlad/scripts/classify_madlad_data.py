@@ -56,16 +56,22 @@ async def batch_translate(
     base_url: str = "http://localhost:8080",
 ) -> list[str]:
     """Translate texts in async batches using translategemma via llama-server."""
-    translations = []
+    semaphore = asyncio.Semaphore(batch_size)
+    pbar = tqdm(total=len(texts), desc="Translating")
+
+    async def _translate_with_limit(idx, text):
+        async with semaphore:
+            result = await translate(session, text, src_lang, tgt_lang, base_url)
+            pbar.update(1)
+            return idx, result
+
     async with aiohttp.ClientSession() as session:
-        for i in tqdm(range(0, len(texts), batch_size), desc="Translating"):
-            batch = texts[i : i + batch_size]
-            tasks = [
-                translate(session, text, src_lang, tgt_lang, base_url) for text in batch
-            ]
-            results = await asyncio.gather(*tasks)
-            translations.extend(results)
-    return translations
+        tasks = [_translate_with_limit(i, text) for i, text in enumerate(texts)]
+        results = await asyncio.gather(*tasks)
+
+    pbar.close()
+    results.sort(key=lambda x: x[0])
+    return [r for _, r in results]
 
 
 async def translate(
