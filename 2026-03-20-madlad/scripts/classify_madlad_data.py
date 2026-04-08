@@ -13,11 +13,18 @@ log = logging.getLogger(__name__)
 
 
 def get_args():
-    pass
+    # fmt: off
+    parser = argparse.ArgumentParser(description="Classify MADLAD Data")
+    parser.add_argument("-l", "--language", type=str, help="Language code for the specific MADLAD subsplit")
+    # fmt: on
+    return parser.parse_args()
 
 
 def main():
-    pass
+    args = get_args()
+
+    df = load_madlad(args.language, split="clean_docs")
+    breakpoint()
 
 
 def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
@@ -29,7 +36,7 @@ def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
         repo_type="dataset",
     )
 
-    local_dir = Path("data") / "lang"
+    local_dir = Path("data") / lang
     local_dir.mkdir(parents=True, exist_ok=True)
 
     paths = []
