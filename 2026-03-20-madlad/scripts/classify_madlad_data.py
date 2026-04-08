@@ -99,33 +99,41 @@ async def translate(
 
 def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
     """Load MADLAD-400 data for a given language code."""
-    api = HfApi()
-    files = list(
-        api.list_repo_tree(
-            "allenai/MADLAD-400",
-            path_in_repo=f"data-v1p5/{lang}",
-            repo_type="dataset",
-        )
-    )
-    files = [
-        f
-        for f in files
-        if f.rfilename.endswith(".jsonl.gz")
-        and (split == "all" or split in f.rfilename)
-    ]
-
     local_dir = Path("data") / lang
-    local_dir.mkdir(parents=True, exist_ok=True)
+    existing = sorted(local_dir.glob("**/*.jsonl.gz")) if local_dir.exists() else []
+    if split != "all":
+        existing = [p for p in existing if split in p.name]
 
-    paths = []
-    for f in tqdm(files, desc=f"Downloading {lang}"):
-        path = hf_hub_download(
-            "allenai/MADLAD-400",
-            filename=f.rfilename,
-            repo_type="dataset",
-            local_dir=local_dir,
+    if existing:
+        log.info(f"Found {len(existing)} cached files in {local_dir}, skipping download")
+        paths = existing
+    else:
+        api = HfApi()
+        files = list(
+            api.list_repo_tree(
+                "allenai/MADLAD-400",
+                path_in_repo=f"data-v1p5/{lang}",
+                repo_type="dataset",
+            )
         )
-        paths.append(path)
+        files = [
+            f
+            for f in files
+            if f.rfilename.endswith(".jsonl.gz")
+            and (split == "all" or split in f.rfilename)
+        ]
+
+        local_dir.mkdir(parents=True, exist_ok=True)
+
+        paths = []
+        for f in tqdm(files, desc=f"Downloading {lang}"):
+            path = hf_hub_download(
+                "allenai/MADLAD-400",
+                filename=f.rfilename,
+                repo_type="dataset",
+                local_dir=local_dir,
+            )
+            paths.append(path)
 
     df = pd.concat([pd.read_json(p, lines=True) for p in paths], ignore_index=True)
     return df
