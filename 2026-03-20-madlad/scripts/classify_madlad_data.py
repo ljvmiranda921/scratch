@@ -25,8 +25,9 @@ def get_args():
     parser = argparse.ArgumentParser(description="Classify MADLAD Data")
     parser.add_argument("-l", "--language", type=str, help="Language code for the specific MADLAD subsplit.")
     parser.add_argument("-T", "--translategemma_lang_code", type=str, default=None, help="TranslateGemma language code (defaults to --language).")
-    parser.add_argument("-b", "--batch_size", type=int, default=8, help="Batch size for long-running tasks like translation and classification.")
-    parser.add_argument("-n", "--limit", type=int, default=None, help="Limit number of instances to process.")
+    parser.add_argument("--batch_size", type=int, default=8, help="Batch size for long-running tasks like translation and classification.")
+    parser.add_argument("--limit", type=int, default=None, help="Limit number of instances to process.")
+    parser.add_argument("--shuffle", action="store_true", default=False, help="If set, will shuffle the instances before running the classification pipeline.")
     # fmt: on
     return parser.parse_args()
 
@@ -37,6 +38,8 @@ def main():
     df = load_madlad(args.language, split="clean_docs")
     if args.limit:
         df = df.head(args.limit)
+    if args.shuffle:
+        df = df.sample(frac=1.0).reset_index(drop=True)
     logging.info(f"Number of documents: {len(df)}")
     src_lang = args.translategemma_lang_code or args.language
     df["translation"] = asyncio.run(
