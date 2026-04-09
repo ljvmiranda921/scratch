@@ -53,6 +53,7 @@ def main():
     src_lang = args.translategemma_lang_code or args.language
     texts = df["text"].tolist()
     if args.truncate:
+        logging.info(f"Truncating texts to {args.truncate} characters")
         texts = [t[: args.truncate] for t in texts]
     df["translation"] = asyncio.run(
         batch_translate(
@@ -214,7 +215,7 @@ def _load_classifier(name: str, include_url: bool) -> tuple:
         device = torch.device("mps")
     else:
         device = torch.device("cpu")
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     model = (
         AutoModelForSequenceClassification.from_pretrained(
             model_name,
