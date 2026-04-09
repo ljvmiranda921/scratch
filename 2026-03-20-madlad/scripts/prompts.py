@@ -1,5 +1,7 @@
 """Prompt templates for LM-based classification of MADLAD data."""
 
+from pydantic import BaseModel, Field
+
 # fmt: off
 TOPIC_LABELS = {
     "Adult": "Adult/explicit content",
@@ -72,6 +74,26 @@ def _format_label_list(labels: dict[str, str]) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Pydantic response models
+# ---------------------------------------------------------------------------
+
+
+class TopicAnnotation(BaseModel):
+    reasoning: str = Field(description="Step-by-step reasoning for the topic classification")
+    label: str = Field(description="The topic label")
+
+
+class FormatAnnotation(BaseModel):
+    reasoning: str = Field(description="Step-by-step reasoning for the format classification")
+    label: str = Field(description="The format label")
+
+
+class SIB200Annotation(BaseModel):
+    reasoning: str = Field(description="Step-by-step reasoning for the SIB-200 classification")
+    label: str = Field(description="The SIB-200 label")
+
+
+# ---------------------------------------------------------------------------
 # Topic classification
 # ---------------------------------------------------------------------------
 
@@ -87,10 +109,7 @@ Classify the following document into exactly one topic category.
 {text}
 
 First, reason step-by-step about which topic best fits this document.
-Then, provide your final answer.
-
-Respond in the following JSON format:
-{{"reasoning": "...", "label": "..."}}"""
+Then, provide your final answer."""
 
 
 def build_topic_prompt(text: str) -> str:
@@ -116,10 +135,7 @@ Classify the following document into exactly one format category.
 {text}
 
 First, reason step-by-step about which format best fits this document.
-Then, provide your final answer.
-
-Respond in the following JSON format:
-{{"reasoning": "...", "label": "..."}}"""
+Then, provide your final answer."""
 
 
 def build_format_prompt(text: str) -> str:
@@ -145,10 +161,7 @@ Classify the following document into exactly one SIB-200 category.
 {text}
 
 First, reason step-by-step about which category best fits this document.
-Then, provide your final answer.
-
-Respond in the following JSON format:
-{{"reasoning": "...", "label": "..."}}"""
+Then, provide your final answer."""
 
 
 def build_sib200_prompt(text: str) -> str:

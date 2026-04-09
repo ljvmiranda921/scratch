@@ -2,29 +2,45 @@
 
 import argparse
 import asyncio
-import json
 import logging
+import os
+import sys
+from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 import aiohttp
 import pandas as pd
-from openai import AsyncAzureOpenAI
+from dotenv import load_dotenv
+from openai import APIError, AsyncAzureOpenAI, AsyncOpenAI, RateLimitError
+from pydantic import BaseModel
 from tqdm import tqdm
+from tqdm.asyncio import tqdm_asyncio
 from transformers import AutoProcessor
 
 from prompts import (
     FORMAT_SYSTEM_PROMPT,
     SIB200_SYSTEM_PROMPT,
     TOPIC_SYSTEM_PROMPT,
+    FormatAnnotation,
+    SIB200Annotation,
+    TopicAnnotation,
     build_format_prompt,
     build_sib200_prompt,
     build_topic_prompt,
 )
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[logging.StreamHandler(sys.stdout)],
+    level=logging.INFO,
+)
 for lib in ("huggingface_hub", "transformers", "httpx", "openai"):
     logging.getLogger(lib).setLevel(logging.WARNING)
 log = logging.getLogger(__name__)
+
+load_dotenv()
 
 TRANSLATE_TOKENIZER = AutoProcessor.from_pretrained("google/translategemma-4b-it")
 
@@ -34,15 +50,39 @@ def get_args():
     parser = argparse.ArgumentParser(description="Classify MADLAD Data (LM-based)")
     parser.add_argument("-l", "--language", type=str, help="Language code for the specific MADLAD subsplit.")
     parser.add_argument("-T", "--translategemma_lang_code", type=str, default=None, help="TranslateGemma language code (defaults to --language).")
+    parser.add_argument("--model", type=str, default="gpt-4.1-mini", help="Language model to use for classification.")
     parser.add_argument("--batch_size", type=int, default=8, help="Batch size for long-running tasks like translation and classification.")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of instances to process.")
     parser.add_argument("--shuffle", action="store_true", default=False, help="If set, will shuffle the instances before running the classification pipeline.")
     parser.add_argument("--truncate", type=int, default=None, help="Truncate input text to this many characters before translation.")
-    parser.add_argument("--azure_endpoint", type=str, default=None, help="Azure OpenAI endpoint URL. Falls back to AZURE_OPENAI_ENDPOINT env var.")
-    parser.add_argument("--azure_deployment", type=str, default=None, help="Azure OpenAI deployment name. Falls back to AZURE_OPENAI_DEPLOYMENT env var.")
-    parser.add_argument("--api_version", type=str, default="2024-12-01-preview", help="Azure OpenAI API version.")
+    parser.add_argument("--use_azure", action="store_true", help="Use Azure OpenAI instead of OpenAI. Requires AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY in .env.")
+    parser.add_argument("--azure_api_version", type=str, default="2024-12-01-preview", help="Azure OpenAI API version.")
+    parser.add_argument("--delay", type=float, default=1.0, help="Delay in seconds between batches (for rate limiting).")
+    parser.add_argument("--max_retries", type=int, default=5, help="Max retries per request on rate limit errors.")
+    parser.add_argument("--resume", type=str, default=None, help="Path to an existing output CSV to resume from (skips already-annotated rows).")
+    parser.add_argument("--output_dir", type=str, default="data/classified", help="Directory to save classified CSV.")
     # fmt: on
     return parser.parse_args()
+
+
+def _build_client(args) -> AsyncOpenAI:
+    if args.use_azure:
+        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+        azure_key = os.getenv("AZURE_OPENAI_API_KEY")
+        if not azure_endpoint or not azure_key:
+            log.error("AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY must be set in .env")
+            sys.exit(1)
+        return AsyncAzureOpenAI(
+            azure_endpoint=azure_endpoint,
+            api_key=azure_key,
+            api_version=args.azure_api_version,
+        )
+    else:
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            log.error("OPENAI_API_KEY is not set!")
+            sys.exit(1)
+        return AsyncOpenAI(api_key=api_key)
 
 
 def main():
@@ -52,15 +92,15 @@ def main():
     if args.limit:
         df = df.head(args.limit)
     if args.shuffle:
-        logging.info("Shuffling the dataset")
+        log.info("Shuffling the dataset")
         df = df.sample(frac=1).reset_index(drop=True)
-    logging.info(f"Number of documents: {len(df)}")
+    log.info(f"Number of documents: {len(df)}")
 
     # Translation first
     src_lang = args.translategemma_lang_code or args.language
     texts = df["text"].tolist()
     if args.truncate:
-        logging.info(f"Truncating texts to {args.truncate} characters")
+        log.info(f"Truncating texts to {args.truncate} characters")
         texts = [t[: args.truncate] for t in texts]
     df["translation"] = asyncio.run(
         batch_translate(
@@ -70,115 +110,130 @@ def main():
         )
     )
 
-    translated = df["translation"].tolist()
-    client_kwargs = dict(
-        azure_endpoint=args.azure_endpoint,
-        azure_deployment=args.azure_deployment,
-        api_version=args.api_version,
-        batch_size=args.batch_size,
-    )
+    # Set up output
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Topic classification
-    topic_results = asyncio.run(batch_classify_topic(translated, **client_kwargs))
-    df["topic"] = [r.get("label", "") for r in topic_results]
-    df["topic_reasoning"] = [r.get("reasoning", "") for r in topic_results]
+    if args.resume:
+        output_path = Path(args.resume)
+        if not output_path.exists():
+            log.error(f"Resume file not found: {output_path}")
+            sys.exit(1)
+        existing_df = pd.read_csv(output_path)
+        done_indices = set(existing_df.index.tolist())
+        log.info(f"Resuming from {output_path} ({len(done_indices)} rows already done)")
+    else:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = output_dir / f"{args.language}_{timestamp}_classified.csv"
+        done_indices = set()
 
-    # Format classification
-    format_results = asyncio.run(batch_classify_format(translated, **client_kwargs))
-    df["format"] = [r.get("label", "") for r in format_results]
-    df["format_reasoning"] = [r.get("reasoning", "") for r in format_results]
+    client = _build_client(args)
 
-    # SIB-200 classification
-    sib200_results = asyncio.run(batch_classify_sib200(translated, **client_kwargs))
-    df["sib200"] = [r.get("label", "") for r in sib200_results]
-    df["sib200_reasoning"] = [r.get("reasoning", "") for r in sib200_results]
+    # Run three classification passes
+    for task_name, system_prompt, build_fn, response_model, label_col, reasoning_col in [
+        ("topic", TOPIC_SYSTEM_PROMPT, build_topic_prompt, TopicAnnotation, "topic", "topic_reasoning"),
+        ("format", FORMAT_SYSTEM_PROMPT, build_format_prompt, FormatAnnotation, "format", "format_reasoning"),
+        ("sib200", SIB200_SYSTEM_PROMPT, build_sib200_prompt, SIB200Annotation, "sib200", "sib200_reasoning"),
+    ]:
+        log.info(f"Classifying: {task_name}")
+        requests = []
+        for idx, row in df.iterrows():
+            if idx in done_indices:
+                continue
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": build_fn(row["translation"])},
+            ]
+            requests.append((idx, messages))
 
-    breakpoint()
+        if not requests:
+            log.info(f"  {task_name}: nothing to do, all rows already annotated")
+            continue
 
-
-# ---------------------------------------------------------------------------
-# Classification helpers
-# ---------------------------------------------------------------------------
-
-
-async def _batch_classify(
-    texts: list[str],
-    system_prompt: str,
-    build_prompt_fn,
-    desc: str,
-    azure_endpoint: str | None = None,
-    azure_deployment: str | None = None,
-    api_version: str = "2024-12-01-preview",
-    batch_size: int = 8,
-) -> list[dict]:
-    """Generic async batch classification."""
-    client = AsyncAzureOpenAI(
-        azure_endpoint=azure_endpoint,
-        azure_deployment=azure_deployment,
-        api_version=api_version,
-    )
-    semaphore = asyncio.Semaphore(batch_size)
-    pbar = tqdm(total=len(texts), desc=desc)
-
-    async def _with_limit(idx: int, text: str):
-        async with semaphore:
-            result = await _classify_single(
-                client, text, system_prompt, build_prompt_fn, azure_deployment
+        results = asyncio.run(
+            submit_async_requests(
+                requests,
+                client=client,
+                model=args.model,
+                response_model=response_model,
+                batch_size=args.batch_size,
+                delay_between_batches=args.delay,
+                max_retries=args.max_retries,
+                desc=f"Classifying {task_name}",
             )
-            pbar.update(1)
-            return idx, result
+        )
+        results_map = {r["_idx"]: r for r in results}
+        df[label_col] = df.index.map(lambda i: results_map.get(i, {}).get("label", ""))
+        df[reasoning_col] = df.index.map(lambda i: results_map.get(i, {}).get("reasoning", ""))
 
-    tasks = [_with_limit(i, text) for i, text in enumerate(texts)]
-    results = await asyncio.gather(*tasks)
-
-    pbar.close()
-    await client.close()
-    results.sort(key=lambda x: x[0])
-    return [r for _, r in results]
+    # Save final output
+    df.to_csv(output_path, index=False)
+    log.info(f"Done! Results saved to {output_path}")
 
 
-async def _classify_single(
-    client: AsyncAzureOpenAI,
-    text: str,
-    system_prompt: str,
-    build_prompt_fn,
-    deployment: str | None = None,
-) -> dict:
-    """Classify a single document. Returns {"reasoning": ..., "label": ...}."""
-    user_prompt = build_prompt_fn(text)
-    response = await client.chat.completions.create(
-        model=deployment or "gpt-4o",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        temperature=0.0,
-        response_format={"type": "json_object"},
-    )
-    content = response.choices[0].message.content
-    try:
-        return json.loads(content)
-    except (json.JSONDecodeError, TypeError):
-        log.warning(f"Failed to parse LM response: {content}")
-        return {"reasoning": "", "label": ""}
+# ---------------------------------------------------------------------------
+# LM classification
+# ---------------------------------------------------------------------------
 
 
-async def batch_classify_topic(texts, **kwargs) -> list[dict]:
-    return await _batch_classify(
-        texts, TOPIC_SYSTEM_PROMPT, build_topic_prompt, "Classifying topics", **kwargs
-    )
+async def submit_async_requests(
+    messages: list[tuple[int, list[dict]]],
+    *,
+    client: AsyncOpenAI,
+    model: str,
+    response_model: type[BaseModel],
+    batch_size: int = 8,
+    delay_between_batches: float = 1.0,
+    max_retries: int = 5,
+    desc: str = "Processing",
+) -> list[dict[str, Any]]:
+    """Submit async requests in batches, with delay between batches."""
+    batches = [messages[i : i + batch_size] for i in range(0, len(messages), batch_size)]
+    all_results = []
+
+    for batch_num, batch in enumerate(tqdm_asyncio(batches, desc=desc, unit="batch"), start=1):
+        tasks = [
+            _process_single(client, idx, msgs, model=model, response_model=response_model, max_retries=max_retries)
+            for idx, msgs in batch
+        ]
+        results = await asyncio.gather(*tasks)
+        all_results.extend(results)
+
+        if batch_num < len(batches):
+            await asyncio.sleep(delay_between_batches)
+
+    return all_results
 
 
-async def batch_classify_format(texts, **kwargs) -> list[dict]:
-    return await _batch_classify(
-        texts, FORMAT_SYSTEM_PROMPT, build_format_prompt, "Classifying formats", **kwargs
-    )
-
-
-async def batch_classify_sib200(texts, **kwargs) -> list[dict]:
-    return await _batch_classify(
-        texts, SIB200_SYSTEM_PROMPT, build_sib200_prompt, "Classifying SIB-200", **kwargs
-    )
+async def _process_single(
+    client: AsyncOpenAI,
+    idx: int,
+    messages: list[dict],
+    *,
+    model: str,
+    response_model: type[BaseModel],
+    max_retries: int = 5,
+) -> dict[str, Any]:
+    """Process a single request with structured output and retry on rate limits."""
+    for attempt in range(max_retries):
+        try:
+            response = await client.beta.chat.completions.parse(
+                messages=messages,
+                model=model,
+                response_format=response_model,
+            )
+            parsed = response.choices[0].message.parsed.model_dump()
+            return {"_idx": idx, **parsed}
+        except RateLimitError as e:
+            wait = 2**attempt
+            log.warning(f"Rate limited on idx={idx}, retrying in {wait}s (attempt {attempt + 1}/{max_retries}): {e}")
+            await asyncio.sleep(wait)
+        except APIError as e:
+            wait = 2**attempt
+            log.warning(f"API error on idx={idx}, retrying in {wait}s (attempt {attempt + 1}/{max_retries}): {e}")
+            await asyncio.sleep(wait)
+    log.error(f"Failed after {max_retries} retries for idx={idx}")
+    return {"_idx": idx, "reasoning": "", "label": ""}
 
 
 # ---------------------------------------------------------------------------
@@ -236,7 +291,6 @@ async def translate(
     prompt = TRANSLATE_TOKENIZER.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True
     )
-    # Strip leading BOS token to avoid double-BOS (llama-server adds its own)
     bos = TRANSLATE_TOKENIZER.tokenizer.bos_token
     if bos and prompt.startswith(bos):
         prompt = prompt[len(bos):]
