@@ -60,13 +60,13 @@ python scripts/classify_madlad_data_lm.py --language tl --truncate 8000 --limit 
 Run with Azure OpenAI:
 
 ```bash
-python scripts/classify_madlad_data_lm.py --language tl --truncate 8000 --limit 100 --use_azure --model gpt-4.1-mini
+python scripts/classify_madlad_data_lm.py --language lo --truncate 8192 --limit 100 --use_azure --model gpt-4.1-mini
 ```
 
 Resume a previous run:
 
 ```bash
-python scripts/classify_madlad_data_lm.py --language tl --resume data/classified/tl_20260409_classified.csv
+python scripts/classify_madlad_data_lm.py --language lo --resume data/classified/tl_20260409_classified.csv
 ```
 
 Outputs are saved to `data/classified/` with columns: `topic`, `topic_reasoning`, `format`, `format_reasoning`, `sib200`, `sib200_reasoning`.
