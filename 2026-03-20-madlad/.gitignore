@@ -219,3 +219,4 @@ __marimo__/
 .streamlit/secrets.toml
 models/*
 .claude/*
+drafts/*
