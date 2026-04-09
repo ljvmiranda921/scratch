@@ -96,16 +96,10 @@ def plot_heatmap(
     for i in range(n_rows):
         for j in range(n_cols):
             val = matrix[i, j]
+            val = 100 * val
             if val > 0:
-                text_color = "white" if val > 0.30 else "black"
                 ax.text(
-                    j,
-                    i,
-                    f"{val:.2f}",
-                    ha="center",
-                    va="center",
-                    fontsize=7,
-                    color=text_color,
+                    j, i, f"{val:.1f}%", ha="center", va="center", fontsize=7, color="k"
                 )
 
     # Colorbar
