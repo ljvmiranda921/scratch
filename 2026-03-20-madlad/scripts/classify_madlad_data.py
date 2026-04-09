@@ -239,6 +239,8 @@ def classify_topic(
     for i, text in enumerate(tqdm(texts, desc="Classifying topics")):
         input_text = f"{urls[i]}\n\n{text}" if urls else text
         inputs = tokenizer([input_text], return_tensors="pt", truncation=True).to(device)
+        seq_len = inputs["input_ids"].shape[1]
+        inputs["position_ids"] = torch.arange(seq_len, dtype=torch.long, device=device).unsqueeze(0)
         outputs = model(**inputs)
         pred = outputs.logits.softmax(dim=-1).argmax(dim=-1).item()
         results.append(id2label[pred])
@@ -259,6 +261,8 @@ def classify_format(
     for i, text in enumerate(tqdm(texts, desc="Classifying formats")):
         input_text = f"{urls[i]}\n\n{text}" if urls else text
         inputs = tokenizer([input_text], return_tensors="pt", truncation=True).to(device)
+        seq_len = inputs["input_ids"].shape[1]
+        inputs["position_ids"] = torch.arange(seq_len, dtype=torch.long, device=device).unsqueeze(0)
         outputs = model(**inputs)
         pred = outputs.logits.softmax(dim=-1).argmax(dim=-1).item()
         results.append(id2label[pred])
