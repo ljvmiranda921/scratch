@@ -187,7 +187,7 @@ async def translate(
     # Strip leading BOS token to avoid double-BOS (llama-server adds its own)
     bos = TRANSLATE_TOKENIZER.tokenizer.bos_token
     if bos and prompt.startswith(bos):
-        prompt = prompt[len(bos):]
+        prompt = prompt[len(bos) :]
     async with session.post(
         f"{base_url}/completion",
         json={"prompt": prompt, "n_predict": 512, "temperature": 0.0},
