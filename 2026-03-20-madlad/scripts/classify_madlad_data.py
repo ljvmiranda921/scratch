@@ -12,9 +12,8 @@ from tqdm import tqdm
 from transformers import AutoProcessor
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
-logging.getLogger("transformers").setLevel(logging.WARNING)
-logging.getLogger("httpx").setLevel(logging.WARNING)
+for lib in ("huggingface_hub", "transformers", "httpx"):
+    logging.getLogger(lib).setLevel(logging.WARNING)
 log = logging.getLogger(__name__)
 
 TRANSLATE_TOKENIZER = AutoProcessor.from_pretrained("google/translategemma-4b-it")
