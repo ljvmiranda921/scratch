@@ -73,29 +73,26 @@ def _format_label_list(labels: dict[str, str]) -> str:
     return "\n".join(f'- "{name}": {desc}' for name, desc in labels.items())
 
 
-# ---------------------------------------------------------------------------
-# Pydantic response models
-# ---------------------------------------------------------------------------
-
-
 class TopicAnnotation(BaseModel):
-    reasoning: str = Field(description="Step-by-step reasoning for the topic classification")
+    reasoning: str = Field(
+        description="Step-by-step reasoning for the topic classification"
+    )
     label: str = Field(description="The topic label")
 
 
 class FormatAnnotation(BaseModel):
-    reasoning: str = Field(description="Step-by-step reasoning for the format classification")
+    reasoning: str = Field(
+        description="Step-by-step reasoning for the format classification"
+    )
     label: str = Field(description="The format label")
 
 
 class SIB200Annotation(BaseModel):
-    reasoning: str = Field(description="Step-by-step reasoning for the SIB-200 classification")
+    reasoning: str = Field(
+        description="Step-by-step reasoning for the SIB-200 classification"
+    )
     label: str = Field(description="The SIB-200 label")
 
-
-# ---------------------------------------------------------------------------
-# Topic classification
-# ---------------------------------------------------------------------------
 
 TOPIC_SYSTEM_PROMPT = "You are a web document classifier that categorizes documents by their subject matter."
 
@@ -119,10 +116,6 @@ def build_topic_prompt(text: str) -> str:
     )
 
 
-# ---------------------------------------------------------------------------
-# Format classification
-# ---------------------------------------------------------------------------
-
 FORMAT_SYSTEM_PROMPT = "You are a web document classifier that categorizes documents by their style, intent, and venue."
 
 FORMAT_USER_PROMPT = """\
@@ -144,10 +137,6 @@ def build_format_prompt(text: str) -> str:
         text=text,
     )
 
-
-# ---------------------------------------------------------------------------
-# SIB-200 classification
-# ---------------------------------------------------------------------------
 
 SIB200_SYSTEM_PROMPT = "You are a web document classifier that categorizes documents into broad thematic categories."
 
