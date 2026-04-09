@@ -12,7 +12,14 @@ from openai import AsyncAzureOpenAI
 from tqdm import tqdm
 from transformers import AutoProcessor
 
-from prompts import CLASSIFY_SYSTEM_PROMPT, build_classify_prompt
+from prompts import (
+    FORMAT_SYSTEM_PROMPT,
+    SIB200_SYSTEM_PROMPT,
+    TOPIC_SYSTEM_PROMPT,
+    build_format_prompt,
+    build_sib200_prompt,
+    build_topic_prompt,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 for lib in ("huggingface_hub", "transformers", "httpx", "openai"):
@@ -63,46 +70,65 @@ def main():
         )
     )
 
-    # Classify translated text using Azure OpenAI
-    results = asyncio.run(
-        batch_classify(
-            df["translation"].tolist(),
-            azure_endpoint=args.azure_endpoint,
-            azure_deployment=args.azure_deployment,
-            api_version=args.api_version,
-            batch_size=args.batch_size,
-        )
+    translated = df["translation"].tolist()
+    client_kwargs = dict(
+        azure_endpoint=args.azure_endpoint,
+        azure_deployment=args.azure_deployment,
+        api_version=args.api_version,
+        batch_size=args.batch_size,
     )
-    df["topic"] = [r.get("topic", "") for r in results]
-    df["format"] = [r.get("format", "") for r in results]
-    df["sib200"] = [r.get("sib200", "") for r in results]
+
+    # Topic classification
+    topic_results = asyncio.run(batch_classify_topic(translated, **client_kwargs))
+    df["topic"] = [r.get("label", "") for r in topic_results]
+    df["topic_reasoning"] = [r.get("reasoning", "") for r in topic_results]
+
+    # Format classification
+    format_results = asyncio.run(batch_classify_format(translated, **client_kwargs))
+    df["format"] = [r.get("label", "") for r in format_results]
+    df["format_reasoning"] = [r.get("reasoning", "") for r in format_results]
+
+    # SIB-200 classification
+    sib200_results = asyncio.run(batch_classify_sib200(translated, **client_kwargs))
+    df["sib200"] = [r.get("label", "") for r in sib200_results]
+    df["sib200_reasoning"] = [r.get("reasoning", "") for r in sib200_results]
 
     breakpoint()
 
 
-async def batch_classify(
+# ---------------------------------------------------------------------------
+# Classification helpers
+# ---------------------------------------------------------------------------
+
+
+async def _batch_classify(
     texts: list[str],
+    system_prompt: str,
+    build_prompt_fn,
+    desc: str,
     azure_endpoint: str | None = None,
     azure_deployment: str | None = None,
     api_version: str = "2024-12-01-preview",
     batch_size: int = 8,
 ) -> list[dict]:
-    """Classify texts using Azure OpenAI in async batches."""
+    """Generic async batch classification."""
     client = AsyncAzureOpenAI(
         azure_endpoint=azure_endpoint,
         azure_deployment=azure_deployment,
         api_version=api_version,
     )
     semaphore = asyncio.Semaphore(batch_size)
-    pbar = tqdm(total=len(texts), desc="Classifying")
+    pbar = tqdm(total=len(texts), desc=desc)
 
-    async def _classify_with_limit(idx: int, text: str):
+    async def _with_limit(idx: int, text: str):
         async with semaphore:
-            result = await classify(client, text, azure_deployment)
+            result = await _classify_single(
+                client, text, system_prompt, build_prompt_fn, azure_deployment
+            )
             pbar.update(1)
             return idx, result
 
-    tasks = [_classify_with_limit(i, text) for i, text in enumerate(texts)]
+    tasks = [_with_limit(i, text) for i, text in enumerate(texts)]
     results = await asyncio.gather(*tasks)
 
     pbar.close()
@@ -111,17 +137,19 @@ async def batch_classify(
     return [r for _, r in results]
 
 
-async def classify(
+async def _classify_single(
     client: AsyncAzureOpenAI,
     text: str,
+    system_prompt: str,
+    build_prompt_fn,
     deployment: str | None = None,
 ) -> dict:
-    """Classify a single document into topic, format, and SIB-200 category."""
-    user_prompt = build_classify_prompt(text)
+    """Classify a single document. Returns {"reasoning": ..., "label": ...}."""
+    user_prompt = build_prompt_fn(text)
     response = await client.chat.completions.create(
         model=deployment or "gpt-4o",
         messages=[
-            {"role": "system", "content": CLASSIFY_SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
         temperature=0.0,
@@ -132,7 +160,25 @@ async def classify(
         return json.loads(content)
     except (json.JSONDecodeError, TypeError):
         log.warning(f"Failed to parse LM response: {content}")
-        return {"topic": "", "format": "", "sib200": ""}
+        return {"reasoning": "", "label": ""}
+
+
+async def batch_classify_topic(texts, **kwargs) -> list[dict]:
+    return await _batch_classify(
+        texts, TOPIC_SYSTEM_PROMPT, build_topic_prompt, "Classifying topics", **kwargs
+    )
+
+
+async def batch_classify_format(texts, **kwargs) -> list[dict]:
+    return await _batch_classify(
+        texts, FORMAT_SYSTEM_PROMPT, build_format_prompt, "Classifying formats", **kwargs
+    )
+
+
+async def batch_classify_sib200(texts, **kwargs) -> list[dict]:
+    return await _batch_classify(
+        texts, SIB200_SYSTEM_PROMPT, build_sib200_prompt, "Classifying SIB-200", **kwargs
+    )
 
 
 # ---------------------------------------------------------------------------

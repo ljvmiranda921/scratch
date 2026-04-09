@@ -71,31 +71,88 @@ def _format_label_list(labels: dict[str, str]) -> str:
     return "\n".join(f'- "{name}": {desc}' for name, desc in labels.items())
 
 
-CLASSIFY_SYSTEM_PROMPT = "You are a web document classifier. You will be given a document and must classify it along three dimensions: topic, format, and SIB-200 category. Respond with JSON only, no explanation."
+# ---------------------------------------------------------------------------
+# Topic classification
+# ---------------------------------------------------------------------------
 
-CLASSIFY_USER_PROMPT = """\
-Classify the following document into exactly one label per dimension.
+TOPIC_SYSTEM_PROMPT = "You are a web document classifier that categorizes documents by their subject matter."
 
-## Topic categories (pick one)
-{topic_labels}
+TOPIC_USER_PROMPT = """\
+Classify the following document into exactly one topic category.
 
-## Format categories (pick one)
-{format_labels}
-
-## SIB-200 categories (pick one)
-{sib200_labels}
+## Topic categories
+{labels}
 
 ## Document
 {text}
 
-Respond with JSON only:
-{{"topic": "...", "format": "...", "sib200": "..."}}"""
+First, reason step-by-step about which topic best fits this document.
+Then, provide your final answer.
+
+Respond in the following JSON format:
+{{"reasoning": "...", "label": "..."}}"""
 
 
-def build_classify_prompt(text: str) -> str:
-    return CLASSIFY_USER_PROMPT.format(
-        topic_labels=_format_label_list(TOPIC_LABELS),
-        format_labels=_format_label_list(FORMAT_LABELS),
-        sib200_labels=_format_label_list(SIB200_LABELS),
+def build_topic_prompt(text: str) -> str:
+    return TOPIC_USER_PROMPT.format(
+        labels=_format_label_list(TOPIC_LABELS),
+        text=text,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Format classification
+# ---------------------------------------------------------------------------
+
+FORMAT_SYSTEM_PROMPT = "You are a web document classifier that categorizes documents by their style, intent, and venue."
+
+FORMAT_USER_PROMPT = """\
+Classify the following document into exactly one format category.
+
+## Format categories
+{labels}
+
+## Document
+{text}
+
+First, reason step-by-step about which format best fits this document.
+Then, provide your final answer.
+
+Respond in the following JSON format:
+{{"reasoning": "...", "label": "..."}}"""
+
+
+def build_format_prompt(text: str) -> str:
+    return FORMAT_USER_PROMPT.format(
+        labels=_format_label_list(FORMAT_LABELS),
+        text=text,
+    )
+
+
+# ---------------------------------------------------------------------------
+# SIB-200 classification
+# ---------------------------------------------------------------------------
+
+SIB200_SYSTEM_PROMPT = "You are a web document classifier that categorizes documents into broad thematic categories."
+
+SIB200_USER_PROMPT = """\
+Classify the following document into exactly one SIB-200 category.
+
+## SIB-200 categories
+{labels}
+
+## Document
+{text}
+
+First, reason step-by-step about which category best fits this document.
+Then, provide your final answer.
+
+Respond in the following JSON format:
+{{"reasoning": "...", "label": "..."}}"""
+
+
+def build_sib200_prompt(text: str) -> str:
+    return SIB200_USER_PROMPT.format(
+        labels=_format_label_list(SIB200_LABELS),
         text=text,
     )
