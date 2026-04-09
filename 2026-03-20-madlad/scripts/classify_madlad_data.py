@@ -10,11 +10,8 @@ import pandas as pd
 import torch
 from huggingface_hub import HfApi, hf_hub_download
 from tqdm import tqdm
-from transformers import (
-    AutoModelForSequenceClassification,
-    AutoProcessor,
-    AutoTokenizer,
-)
+from transformers import AutoModelForSequenceClassification, AutoProcessor
+from transformers import AutoTokenizer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 for lib in ("huggingface_hub", "transformers", "httpx"):

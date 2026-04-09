@@ -18,17 +18,11 @@ from tqdm import tqdm
 from tqdm.asyncio import tqdm_asyncio
 from transformers import AutoProcessor
 
-from scripts.prompts import (
-    FORMAT_SYSTEM_PROMPT,
-    SIB200_SYSTEM_PROMPT,
-    TOPIC_SYSTEM_PROMPT,
-    FormatAnnotation,
-    SIB200Annotation,
-    TopicAnnotation,
-    build_format_prompt,
-    build_sib200_prompt,
-    build_topic_prompt,
-)
+from scripts.prompts import FORMAT_SYSTEM_PROMPT, SIB200_SYSTEM_PROMPT
+from scripts.prompts import TOPIC_SYSTEM_PROMPT, FormatAnnotation
+from scripts.prompts import SIB200Annotation, TopicAnnotation
+from scripts.prompts import build_format_prompt, build_sib200_prompt
+from scripts.prompts import build_topic_prompt
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
