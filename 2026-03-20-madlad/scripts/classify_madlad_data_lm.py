@@ -18,7 +18,7 @@ from tqdm import tqdm
 from tqdm.asyncio import tqdm_asyncio
 from transformers import AutoProcessor
 
-from prompts import (
+from scripts.prompts import (
     FORMAT_SYSTEM_PROMPT,
     SIB200_SYSTEM_PROMPT,
     TOPIC_SYSTEM_PROMPT,
@@ -70,7 +70,9 @@ def _build_client(args) -> AsyncOpenAI:
         azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
         azure_key = os.getenv("AZURE_OPENAI_API_KEY")
         if not azure_endpoint or not azure_key:
-            log.error("AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY must be set in .env")
+            log.error(
+                "AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY must be set in .env"
+            )
             sys.exit(1)
         return AsyncAzureOpenAI(
             azure_endpoint=azure_endpoint,
@@ -130,10 +132,38 @@ def main():
     client = _build_client(args)
 
     # Run three classification passes
-    for task_name, system_prompt, build_fn, response_model, label_col, reasoning_col in [
-        ("topic", TOPIC_SYSTEM_PROMPT, build_topic_prompt, TopicAnnotation, "topic", "topic_reasoning"),
-        ("format", FORMAT_SYSTEM_PROMPT, build_format_prompt, FormatAnnotation, "format", "format_reasoning"),
-        ("sib200", SIB200_SYSTEM_PROMPT, build_sib200_prompt, SIB200Annotation, "sib200", "sib200_reasoning"),
+    for (
+        task_name,
+        system_prompt,
+        build_fn,
+        response_model,
+        label_col,
+        reasoning_col,
+    ) in [
+        (
+            "topic",
+            TOPIC_SYSTEM_PROMPT,
+            build_topic_prompt,
+            TopicAnnotation,
+            "topic",
+            "topic_reasoning",
+        ),
+        (
+            "format",
+            FORMAT_SYSTEM_PROMPT,
+            build_format_prompt,
+            FormatAnnotation,
+            "format",
+            "format_reasoning",
+        ),
+        (
+            "sib200",
+            SIB200_SYSTEM_PROMPT,
+            build_sib200_prompt,
+            SIB200Annotation,
+            "sib200",
+            "sib200_reasoning",
+        ),
     ]:
         log.info(f"Classifying: {task_name}")
         requests = []
@@ -164,7 +194,9 @@ def main():
         )
         results_map = {r["_idx"]: r for r in results}
         df[label_col] = df.index.map(lambda i: results_map.get(i, {}).get("label", ""))
-        df[reasoning_col] = df.index.map(lambda i: results_map.get(i, {}).get("reasoning", ""))
+        df[reasoning_col] = df.index.map(
+            lambda i: results_map.get(i, {}).get("reasoning", "")
+        )
 
     # Save final output
     df.to_csv(output_path, index=False)
@@ -188,12 +220,23 @@ async def submit_async_requests(
     desc: str = "Processing",
 ) -> list[dict[str, Any]]:
     """Submit async requests in batches, with delay between batches."""
-    batches = [messages[i : i + batch_size] for i in range(0, len(messages), batch_size)]
+    batches = [
+        messages[i : i + batch_size] for i in range(0, len(messages), batch_size)
+    ]
     all_results = []
 
-    for batch_num, batch in enumerate(tqdm_asyncio(batches, desc=desc, unit="batch"), start=1):
+    for batch_num, batch in enumerate(
+        tqdm_asyncio(batches, desc=desc, unit="batch"), start=1
+    ):
         tasks = [
-            _process_single(client, idx, msgs, model=model, response_model=response_model, max_retries=max_retries)
+            _process_single(
+                client,
+                idx,
+                msgs,
+                model=model,
+                response_model=response_model,
+                max_retries=max_retries,
+            )
             for idx, msgs in batch
         ]
         results = await asyncio.gather(*tasks)
@@ -226,11 +269,15 @@ async def _process_single(
             return {"_idx": idx, **parsed}
         except RateLimitError as e:
             wait = 2**attempt
-            log.warning(f"Rate limited on idx={idx}, retrying in {wait}s (attempt {attempt + 1}/{max_retries}): {e}")
+            log.warning(
+                f"Rate limited on idx={idx}, retrying in {wait}s (attempt {attempt + 1}/{max_retries}): {e}"
+            )
             await asyncio.sleep(wait)
         except APIError as e:
             wait = 2**attempt
-            log.warning(f"API error on idx={idx}, retrying in {wait}s (attempt {attempt + 1}/{max_retries}): {e}")
+            log.warning(
+                f"API error on idx={idx}, retrying in {wait}s (attempt {attempt + 1}/{max_retries}): {e}"
+            )
             await asyncio.sleep(wait)
     log.error(f"Failed after {max_retries} retries for idx={idx}")
     return {"_idx": idx, "reasoning": "", "label": ""}
@@ -293,7 +340,7 @@ async def translate(
     )
     bos = TRANSLATE_TOKENIZER.tokenizer.bos_token
     if bos and prompt.startswith(bos):
-        prompt = prompt[len(bos):]
+        prompt = prompt[len(bos) :]
     async with session.post(
         f"{base_url}/completion",
         json={"prompt": prompt, "n_predict": 512, "temperature": 0.0},
