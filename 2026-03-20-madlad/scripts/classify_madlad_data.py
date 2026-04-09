@@ -33,6 +33,7 @@ def get_args():
     parser.add_argument("--limit", type=int, default=None, help="Limit number of instances to process.")
     parser.add_argument("--shuffle", action="store_true", default=False, help="If set, will shuffle the instances before running the classification pipeline.")
     parser.add_argument("--include_url", action="store_true", default=False, help="If set, prepend URL to text for classification. If not set, use the NoURL model variants.")
+    parser.add_argument("--truncate", type=int, default=None, help="Truncate input text to this many characters before translation.")
     # fmt: on
     return parser.parse_args()
 
@@ -50,9 +51,12 @@ def main():
 
     # Translation first
     src_lang = args.translategemma_lang_code or args.language
+    texts = df["text"].tolist()
+    if args.truncate:
+        texts = [t[: args.truncate] for t in texts]
     df["translation"] = asyncio.run(
         batch_translate(
-            df["text"].tolist(),
+            texts,
             src_lang=src_lang,
             batch_size=args.batch_size,
         )
