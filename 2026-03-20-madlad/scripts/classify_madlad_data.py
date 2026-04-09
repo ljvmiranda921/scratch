@@ -76,7 +76,6 @@ def main():
         topic_id2label,
         device,
         urls=urls,
-        batch_size=args.batch_size,
     )
 
     format_tokenizer, format_model, format_id2label, device = _load_classifier(
@@ -89,7 +88,6 @@ def main():
         format_id2label,
         device,
         urls=urls,
-        batch_size=args.batch_size,
     )
 
     breakpoint()
@@ -235,24 +233,15 @@ def classify_topic(
     id2label: dict,
     device: torch.device,
     urls: list[str] | None = None,
-    batch_size: int = 8,
 ) -> list[str]:
     """Classify documents into topic categories."""
     results = []
-    for i in tqdm(range(0, len(texts), batch_size), desc="Classifying topics"):
-        batch_texts = texts[i : i + batch_size]
-        if urls:
-            batch_urls = urls[i : i + batch_size]
-            batch_inputs = [f"{u}\n\n{t}" for u, t in zip(batch_urls, batch_texts)]
-        else:
-            batch_inputs = batch_texts
-        inputs = tokenizer(
-            batch_inputs, return_tensors="pt", truncation=True, padding=True,
-            max_length=model.config.max_position_embeddings,
-        ).to(device)
+    for i, text in enumerate(tqdm(texts, desc="Classifying topics")):
+        input_text = f"{urls[i]}\n\n{text}" if urls else text
+        inputs = tokenizer([input_text], return_tensors="pt", truncation=True).to(device)
         outputs = model(**inputs)
-        preds = outputs.logits.softmax(dim=-1).argmax(dim=-1).tolist()
-        results.extend(id2label[p] for p in preds)
+        pred = outputs.logits.softmax(dim=-1).argmax(dim=-1).item()
+        results.append(id2label[pred])
     return results
 
 
@@ -264,24 +253,15 @@ def classify_format(
     id2label: dict,
     device: torch.device,
     urls: list[str] | None = None,
-    batch_size: int = 8,
 ) -> list[str]:
     """Classify documents into format categories."""
     results = []
-    for i in tqdm(range(0, len(texts), batch_size), desc="Classifying formats"):
-        batch_texts = texts[i : i + batch_size]
-        if urls:
-            batch_urls = urls[i : i + batch_size]
-            batch_inputs = [f"{u}\n\n{t}" for u, t in zip(batch_urls, batch_texts)]
-        else:
-            batch_inputs = batch_texts
-        inputs = tokenizer(
-            batch_inputs, return_tensors="pt", truncation=True, padding=True,
-            max_length=model.config.max_position_embeddings,
-        ).to(device)
+    for i, text in enumerate(tqdm(texts, desc="Classifying formats")):
+        input_text = f"{urls[i]}\n\n{text}" if urls else text
+        inputs = tokenizer([input_text], return_tensors="pt", truncation=True).to(device)
         outputs = model(**inputs)
-        preds = outputs.logits.softmax(dim=-1).argmax(dim=-1).tolist()
-        results.extend(id2label[p] for p in preds)
+        pred = outputs.logits.softmax(dim=-1).argmax(dim=-1).item()
+        results.append(id2label[pred])
     return results
 
 
