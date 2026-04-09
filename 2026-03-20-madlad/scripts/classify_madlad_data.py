@@ -209,18 +209,15 @@ def _load_classifier(name: str, include_url: bool) -> tuple:
     """
     model_name = f"WebOrganizer/{name}" if include_url else f"WebOrganizer/{name}-NoURL"
     log.info(f"Loading classifier: {model_name}")
-    if torch.cuda.is_available():
-        device = torch.device("cuda")
-    elif torch.backends.mps.is_available():
-        device = torch.device("mps")
-    else:
-        device = torch.device("cpu")
+    # MPS has issues with these custom models, so only use CUDA or CPU
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     model = (
         AutoModelForSequenceClassification.from_pretrained(
             model_name,
             trust_remote_code=True,
             use_memory_efficient_attention=False,
+            unpad_inputs=False,
             torch_dtype=torch.float32,
         )
         .to(device)
@@ -250,7 +247,8 @@ def classify_topic(
         else:
             batch_inputs = batch_texts
         inputs = tokenizer(
-            batch_inputs, return_tensors="pt", truncation=True, padding=True
+            batch_inputs, return_tensors="pt", truncation=True, padding=True,
+            max_length=model.config.max_position_embeddings,
         ).to(device)
         outputs = model(**inputs)
         preds = outputs.logits.softmax(dim=-1).argmax(dim=-1).tolist()
@@ -278,7 +276,8 @@ def classify_format(
         else:
             batch_inputs = batch_texts
         inputs = tokenizer(
-            batch_inputs, return_tensors="pt", truncation=True, padding=True
+            batch_inputs, return_tensors="pt", truncation=True, padding=True,
+            max_length=model.config.max_position_embeddings,
         ).to(device)
         outputs = model(**inputs)
         preds = outputs.logits.softmax(dim=-1).argmax(dim=-1).tolist()
