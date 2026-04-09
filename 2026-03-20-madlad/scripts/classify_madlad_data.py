@@ -215,7 +215,6 @@ def _load_classifier(name: str, include_url: bool) -> tuple:
             model_name,
             trust_remote_code=True,
             use_memory_efficient_attention=False,
-            unpad_inputs=False,
             torch_dtype=torch.float32,
         )
         .to(device)
