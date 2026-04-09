@@ -1,6 +1,7 @@
 """Visualize classification results as heatmaps (one per category group)."""
 
 import glob
+import os
 import re
 from collections import defaultdict
 
@@ -14,6 +15,16 @@ from prompts import FORMAT_LABELS, SIB200_LABELS, TOPIC_LABELS
 # Crest color scheme
 CREST_COLORS = ["#FFE2C8", "#FFC392", "#FD8153", "#DD3025"]
 CREST_CMAP = mcolors.LinearSegmentedColormap.from_list("crest", CREST_COLORS)
+
+# fmt: off
+LANG_NAMES = {
+    "lo": "Lao", "fo": "Faroese", "ba": "Bashkir", "tk": "Turkmen",
+    "sn": "Shona", "su": "Sundanese", "pap": "Papiamento", "ig": "Igbo",
+    "zu": "Zulu", "xh": "Xhosa", "ny": "Nyanja", "yo": "Yoruba",
+    "st": "Southern Sotho", "lus": "Mizo", "oc": "Occitan", "as": "Assamese",
+    "tl": "Tagalog", "ceb": "Cebuano",
+}
+# fmt: on
 
 
 def load_all_classified(
@@ -45,16 +56,17 @@ def build_heatmap_data(
 
     Returns (matrix, row_labels, col_labels).
     """
-    languages = sorted(lang_dfs.keys())
-    matrix = np.zeros((len(languages), len(categories)))
+    lang_codes = sorted(lang_dfs.keys())
+    languages = [LANG_NAMES.get(c, c) for c in lang_codes]
+    matrix = np.zeros((len(lang_codes), len(categories)))
 
-    for i, lang in enumerate(languages):
+    for i, lang in enumerate(lang_codes):
         df = lang_dfs[lang]
         n = len(df)
         if n == 0:
             continue
         for j, cat in enumerate(categories):
-            matrix[i, j] = (df[column] == cat).sum() / n * 100
+            matrix[i, j] = (df[column] == cat).sum() / n
 
     return matrix, languages, categories
 
@@ -66,9 +78,9 @@ def plot_heatmap(
     title: str,
 ):
     n_rows, n_cols = matrix.shape
-    fig, ax = plt.subplots(figsize=(max(8, n_cols * 0.5), max(3, n_rows * 0.8)))
+    fig, ax = plt.subplots(figsize=(max(8, n_cols * 0.5), max(4, n_rows * 1.0)))
 
-    im = ax.imshow(matrix, cmap=CREST_CMAP, aspect="auto", vmin=0)
+    im = ax.imshow(matrix, cmap=CREST_CMAP, aspect="auto", vmin=0, vmax=1.0)
 
     # X-axis on top, slanted
     ax.set_xticks(range(n_cols))
@@ -85,11 +97,11 @@ def plot_heatmap(
         for j in range(n_cols):
             val = matrix[i, j]
             if val > 0:
-                text_color = "white" if val > 30 else "black"
+                text_color = "white" if val > 0.30 else "black"
                 ax.text(
                     j,
                     i,
-                    f"{val:.0f}",
+                    f"{val:.2f}",
                     ha="center",
                     va="center",
                     fontsize=7,
@@ -122,7 +134,9 @@ def main():
             lang_dfs, categories, column
         )
         fig, ax = plot_heatmap(matrix, row_labels, col_labels, title)
-        output_path = f"data/classified/heatmap_{column}.png"
+        output_dir = "outputs"
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = f"{output_dir}/heatmap_{column}.png"
         fig.savefig(output_path, dpi=120, bbox_inches="tight")
         print(f"Saved {output_path}")
         plt.close(fig)

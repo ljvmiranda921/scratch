@@ -70,3 +70,11 @@ python scripts/classify_madlad_data_lm.py --language lo --resume data/classified
 ```
 
 Outputs are saved to `data/classified/` with columns: `topic`, `topic_reasoning`, `format`, `format_reasoning`, `sib200`, `sib200_reasoning`.
+
+### Visualize results
+
+```bash
+python scripts/visualize_results.py
+```
+
+Generates three heatmaps in `outputs/`: `heatmap_topic.png`, `heatmap_format.png`, `heatmap_sib200.png`.
