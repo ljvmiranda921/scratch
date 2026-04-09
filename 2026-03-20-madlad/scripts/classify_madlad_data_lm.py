@@ -130,41 +130,33 @@ def main():
         done_indices = set()
 
     client = _build_client(args)
-
-    # Run three classification passes
-    for (
-        task_name,
-        system_prompt,
-        build_fn,
-        response_model,
-        label_col,
-        reasoning_col,
-    ) in [
-        (
-            "topic",
-            TOPIC_SYSTEM_PROMPT,
-            build_topic_prompt,
-            TopicAnnotation,
-            "topic",
-            "topic_reasoning",
-        ),
-        (
-            "format",
-            FORMAT_SYSTEM_PROMPT,
-            build_format_prompt,
-            FormatAnnotation,
-            "format",
-            "format_reasoning",
-        ),
-        (
-            "sib200",
-            SIB200_SYSTEM_PROMPT,
-            build_sib200_prompt,
-            SIB200Annotation,
-            "sib200",
-            "sib200_reasoning",
-        ),
-    ]:
+    classification_tasks = [
+        {
+            "name": "topic",
+            "system_prompt": TOPIC_SYSTEM_PROMPT,
+            "build_fn": build_topic_prompt,
+            "response_model": TopicAnnotation,
+        },
+        {
+            "name": "format",
+            "system_prompt": FORMAT_SYSTEM_PROMPT,
+            "build_fn": build_format_prompt,
+            "response_model": FormatAnnotation,
+        },
+        {
+            "name": "sib200",
+            "system_prompt": SIB200_SYSTEM_PROMPT,
+            "build_fn": build_sib200_prompt,
+            "response_model": SIB200Annotation,
+        },
+    ]
+    for task in classification_tasks:
+        task_name = task["name"]
+        system_prompt = task["system_prompt"]
+        build_fn = task["build_fn"]
+        response_model = task["response_model"]
+        label_col = task_name
+        reasoning_col = f"{task_name}_reasoning"
         log.info(f"Classifying: {task_name}")
         requests = []
         for idx, row in df.iterrows():
@@ -201,11 +193,6 @@ def main():
     # Save final output
     df.to_csv(output_path, index=False)
     log.info(f"Done! Results saved to {output_path}")
-
-
-# ---------------------------------------------------------------------------
-# LM classification
-# ---------------------------------------------------------------------------
 
 
 async def submit_async_requests(
@@ -283,11 +270,6 @@ async def _process_single(
     return {"_idx": idx, "reasoning": "", "label": ""}
 
 
-# ---------------------------------------------------------------------------
-# Translation (reused from classify_madlad_data.py)
-# ---------------------------------------------------------------------------
-
-
 async def batch_translate(
     texts: list[str],
     src_lang: str,
@@ -352,11 +334,6 @@ async def translate(
             )
         data = await response.json()
         return data["content"].strip()
-
-
-# ---------------------------------------------------------------------------
-# Data loading (reused from classify_madlad_data.py)
-# ---------------------------------------------------------------------------
 
 
 def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
