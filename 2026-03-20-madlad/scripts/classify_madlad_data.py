@@ -221,7 +221,7 @@ def _load_classifier(name: str, include_url: bool) -> tuple:
         .to(device)
         .eval()
     )
-    id2label = model.config.id2label
+    id2label = {int(k): v for k, v in model.config.id2label.items()}
     return tokenizer, model, id2label, device
 
 
