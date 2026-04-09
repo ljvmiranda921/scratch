@@ -241,7 +241,11 @@ def classify_topic(
         seq_len = inputs["input_ids"].shape[1]
         inputs["position_ids"] = torch.arange(seq_len, dtype=torch.long, device=device).unsqueeze(0)
         outputs = model(**inputs)
-        pred = outputs.logits.softmax(dim=-1).argmax(dim=-1).item()
+        probs = outputs.logits.softmax(dim=-1)
+        pred = probs.argmax(dim=-1).item()
+        if i < 3:
+            top5 = probs.topk(5, dim=-1)
+            log.info(f"Topic sample {i}: pred={id2label[pred]}, top5={[(id2label[idx.item()], f'{val.item():.3f}') for val, idx in zip(top5.values[0], top5.indices[0])]}")
         results.append(id2label[pred])
     return results
 
