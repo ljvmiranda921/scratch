@@ -48,37 +48,7 @@ def main():
         df = df.sample(frac=1).reset_index(drop=True)
     logging.info(f"Number of documents: {len(df)}")
 
-    urls = df["url"].tolist() if args.include_url else None
-
-    # Topic classification
-    topic_tokenizer, topic_model, topic_id2label, device = _load_classifier(
-        "TopicClassifier", args.include_url
-    )
-    df["topic"] = classify_topic(
-        df["text"].tolist(),
-        topic_tokenizer,
-        topic_model,
-        topic_id2label,
-        device,
-        urls=urls,
-        batch_size=args.batch_size,
-    )
-
-    # Format classification
-    format_tokenizer, format_model, format_id2label, device = _load_classifier(
-        "FormatClassifier", args.include_url
-    )
-    df["format"] = classify_format(
-        df["text"].tolist(),
-        format_tokenizer,
-        format_model,
-        format_id2label,
-        device,
-        urls=urls,
-        batch_size=args.batch_size,
-    )
-
-    # Translation
+    # Translation first
     src_lang = args.translategemma_lang_code or args.language
     df["translation"] = asyncio.run(
         batch_translate(
@@ -87,6 +57,37 @@ def main():
             batch_size=args.batch_size,
         )
     )
+
+    # Classify on translated text
+    urls = df["url"].tolist() if args.include_url else None
+
+    topic_tokenizer, topic_model, topic_id2label, device = _load_classifier(
+        "TopicClassifier", args.include_url
+    )
+    df["topic"] = classify_topic(
+        df["translation"].tolist(),
+        topic_tokenizer,
+        topic_model,
+        topic_id2label,
+        device,
+        urls=urls,
+        batch_size=args.batch_size,
+    )
+
+    format_tokenizer, format_model, format_id2label, device = _load_classifier(
+        "FormatClassifier", args.include_url
+    )
+    df["format"] = classify_format(
+        df["translation"].tolist(),
+        format_tokenizer,
+        format_model,
+        format_id2label,
+        device,
+        urls=urls,
+        batch_size=args.batch_size,
+    )
+
+    breakpoint()
 
 
 def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
