@@ -7,9 +7,14 @@ from pathlib import Path
 
 import aiohttp
 import pandas as pd
+import torch
 from huggingface_hub import HfApi, hf_hub_download
 from tqdm import tqdm
-from transformers import AutoProcessor
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoProcessor,
+    AutoTokenizer,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 for lib in ("huggingface_hub", "transformers", "httpx"):
@@ -27,6 +32,7 @@ def get_args():
     parser.add_argument("--batch_size", type=int, default=8, help="Batch size for long-running tasks like translation and classification.")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of instances to process.")
     parser.add_argument("--shuffle", action="store_true", default=False, help="If set, will shuffle the instances before running the classification pipeline.")
+    parser.add_argument("--include_url", action="store_true", default=False, help="If set, prepend URL to text for classification. If not set, use the NoURL model variants.")
     # fmt: on
     return parser.parse_args()
 
@@ -38,8 +44,41 @@ def main():
     if args.limit:
         df = df.head(args.limit)
     if args.shuffle:
+        logging.info("Shuffling the dataset")
         df = df.sample(frac=1).reset_index(drop=True)
     logging.info(f"Number of documents: {len(df)}")
+
+    urls = df["url"].tolist() if args.include_url else None
+
+    # Topic classification
+    topic_tokenizer, topic_model, topic_id2label, device = _load_classifier(
+        "TopicClassifier", args.include_url
+    )
+    df["topic"] = classify_topic(
+        df["text"].tolist(),
+        topic_tokenizer,
+        topic_model,
+        topic_id2label,
+        device,
+        urls=urls,
+        batch_size=args.batch_size,
+    )
+
+    # Format classification
+    format_tokenizer, format_model, format_id2label, device = _load_classifier(
+        "FormatClassifier", args.include_url
+    )
+    df["format"] = classify_format(
+        df["text"].tolist(),
+        format_tokenizer,
+        format_model,
+        format_id2label,
+        device,
+        urls=urls,
+        batch_size=args.batch_size,
+    )
+
+    # Translation
     src_lang = args.translategemma_lang_code or args.language
     df["translation"] = asyncio.run(
         batch_translate(
@@ -48,6 +87,50 @@ def main():
             batch_size=args.batch_size,
         )
     )
+
+
+def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
+    """Load MADLAD-400 data for a given language code."""
+    local_dir = Path("data") / lang
+    existing = sorted(local_dir.glob("**/*.jsonl.gz")) if local_dir.exists() else []
+    if split != "all":
+        existing = [p for p in existing if split in p.name]
+
+    if existing:
+        log.info(
+            f"Found {len(existing)} cached files in {local_dir}, skipping download"
+        )
+        paths = existing
+    else:
+        api = HfApi()
+        files = list(
+            api.list_repo_tree(
+                "allenai/MADLAD-400",
+                path_in_repo=f"data-v1p5/{lang}",
+                repo_type="dataset",
+            )
+        )
+        files = [
+            f
+            for f in files
+            if f.rfilename.endswith(".jsonl.gz")
+            and (split == "all" or split in f.rfilename)
+        ]
+
+        local_dir.mkdir(parents=True, exist_ok=True)
+
+        paths = []
+        for f in tqdm(files, desc=f"Downloading {lang}"):
+            path = hf_hub_download(
+                "allenai/MADLAD-400",
+                filename=f.rfilename,
+                repo_type="dataset",
+                local_dir=local_dir,
+            )
+            paths.append(path)
+
+    df = pd.concat([pd.read_json(p, lines=True) for p in paths], ignore_index=True)
+    return df
 
 
 async def batch_translate(
@@ -109,48 +192,88 @@ async def translate(
         return data["content"].strip()
 
 
-def load_madlad(lang: str, split: str = "clean_docs") -> pd.DataFrame:
-    """Load MADLAD-400 data for a given language code."""
-    local_dir = Path("data") / lang
-    existing = sorted(local_dir.glob("**/*.jsonl.gz")) if local_dir.exists() else []
-    if split != "all":
-        existing = [p for p in existing if split in p.name]
+def _load_classifier(name: str, include_url: bool) -> tuple:
+    """Load a WebOrganizer classifier and its tokenizer.
 
-    if existing:
-        log.info(
-            f"Found {len(existing)} cached files in {local_dir}, skipping download"
-        )
-        paths = existing
+    Returns (tokenizer, model, id2label, device).
+    """
+    model_name = f"WebOrganizer/{name}" if include_url else f"WebOrganizer/{name}-NoURL"
+    log.info(f"Loading classifier: {model_name}")
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
     else:
-        api = HfApi()
-        files = list(
-            api.list_repo_tree(
-                "allenai/MADLAD-400",
-                path_in_repo=f"data-v1p5/{lang}",
-                repo_type="dataset",
-            )
+        device = torch.device("cpu")
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = (
+        AutoModelForSequenceClassification.from_pretrained(
+            model_name,
+            trust_remote_code=True,
+            use_memory_efficient_attention=False,
+            torch_dtype=torch.float32,
         )
-        files = [
-            f
-            for f in files
-            if f.rfilename.endswith(".jsonl.gz")
-            and (split == "all" or split in f.rfilename)
-        ]
+        .to(device)
+        .eval()
+    )
+    id2label = model.config.id2label
+    return tokenizer, model, id2label, device
 
-        local_dir.mkdir(parents=True, exist_ok=True)
 
-        paths = []
-        for f in tqdm(files, desc=f"Downloading {lang}"):
-            path = hf_hub_download(
-                "allenai/MADLAD-400",
-                filename=f.rfilename,
-                repo_type="dataset",
-                local_dir=local_dir,
-            )
-            paths.append(path)
+@torch.no_grad()
+def classify_topic(
+    texts: list[str],
+    tokenizer,
+    model,
+    id2label: dict,
+    device: torch.device,
+    urls: list[str] | None = None,
+    batch_size: int = 8,
+) -> list[str]:
+    """Classify documents into topic categories."""
+    results = []
+    for i in tqdm(range(0, len(texts), batch_size), desc="Classifying topics"):
+        batch_texts = texts[i : i + batch_size]
+        if urls:
+            batch_urls = urls[i : i + batch_size]
+            batch_inputs = [f"{u}\n\n{t}" for u, t in zip(batch_urls, batch_texts)]
+        else:
+            batch_inputs = batch_texts
+        inputs = tokenizer(
+            batch_inputs, return_tensors="pt", truncation=True, padding=True
+        ).to(device)
+        outputs = model(**inputs)
+        preds = outputs.logits.softmax(dim=-1).argmax(dim=-1).tolist()
+        results.extend(id2label[p] for p in preds)
+    return results
 
-    df = pd.concat([pd.read_json(p, lines=True) for p in paths], ignore_index=True)
-    return df
+
+@torch.no_grad()
+def classify_format(
+    texts: list[str],
+    tokenizer,
+    model,
+    id2label: dict,
+    device: torch.device,
+    urls: list[str] | None = None,
+    batch_size: int = 8,
+) -> list[str]:
+    """Classify documents into format categories."""
+    results = []
+    for i in tqdm(range(0, len(texts), batch_size), desc="Classifying formats"):
+        batch_texts = texts[i : i + batch_size]
+        if urls:
+            batch_urls = urls[i : i + batch_size]
+            batch_inputs = [f"{u}\n\n{t}" for u, t in zip(batch_urls, batch_texts)]
+        else:
+            batch_inputs = batch_texts
+        inputs = tokenizer(
+            batch_inputs, return_tensors="pt", truncation=True, padding=True
+        ).to(device)
+        outputs = model(**inputs)
+        preds = outputs.logits.softmax(dim=-1).argmax(dim=-1).tolist()
+        results.extend(id2label[p] for p in preds)
+    return results
 
 
 if __name__ == "__main__":
