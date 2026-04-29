@@ -3,310 +3,94 @@ import re
 import unicodedata
 from collections import OrderedDict
 
+import langcodes
 import pandas as pd
 
 
-CANONICAL_TO_ISO3 = {
-    "Agikuyu": "kik",
-    "Amharic": "amh",
-    "Arabic": "ara",
-    "Armenian": "hye",
-    "Assamese": "asm",
-    "Azerbaijani": "aze",
-    "Balochi": "bal",
-    "Bambara": "bam",
-    "Basque": "eus",
-    "Batak": "btk",
-    "Belarusian": "bel",
-    "Bengali": "ben",
-    "Bikol": "bik",
-    "Bini": "bin",
-    "Bosnian": "bos",
-    "Braj": "bra",
-    "Brahui": "brh",
-    "Bulgarian": "bul",
-    "Burushaski": "bsk",
-    "Buryat": "bua",
-    "Cantonese": "yue",
-    "Catalan": "cat",
-    "Cebuano": "ceb",
-    "Chinese": "zho",
-    "Chuvash": "chv",
-    "Croatian": "hrv",
-    "Czech": "ces",
-    "Danish": "dan",
-    "Dutch": "nld",
-    "Efik": "efi",
-    "Ekpeye": "ekp",
-    "English": "eng",
-    "Estonian": "est",
-    "Ewe": "ewe",
-    "Faroese": "fao",
-    "Filipino": "fil",
-    "Finnish": "fin",
-    "Fon": "fon",
-    "French": "fra",
-    "Fulfulde": "ful",
-    "Galician": "glg",
-    "Georgian": "kat",
-    "German": "deu",
-    "Greek": "ell",
-    "Gujarati": "guj",
-    "Hausa": "hau",
-    "Hawaiian": "haw",
-    "Hebrew": "heb",
-    "Hindi": "hin",
-    "Hokkien": "nan",
-    "Hungarian": "hun",
-    "Icelandic": "isl",
-    "Igbo": "ibo",
-    "Indonesian": "ind",
-    "Isoko": "iso",
-    "Italian": "ita",
-    "Javanese": "jav",
-    "Japanese": "jpn",
-    "Kannada": "kan",
-    "Kashmiri": "kas",
-    "Kazakh": "kaz",
-    "Khakas": "kjh",
-    "Kikongo": "kon",
-    "Kinyarwanda": "kin",
-    "Korean": "kor",
-    "Kurdish": "kur",
-    "Lambani": "lmn",
-    "Lingala": "lin",
-    "Lithuanian": "lit",
-    "Luganda": "lug",
-    "Luo": "luo",
-    "Macedonian": "mkd",
-    "Magahi": "mag",
-    "Maithili": "mai",
-    "Malagasy": "mlg",
-    "Malay": "msa",
-    "Malayalam": "mal",
-    "Mandarin": "cmn",
-    "Marathi": "mar",
-    "Marwari": "mwr",
-    "Nepali": "nep",
-    "Nigerian Pidgin": "pcm",
-    "Norwegian Bokmal": "nob",
-    "Norwegian Nynorsk": "nno",
-    "Obolo": "ann",
-    "Odia": "ori",
-    "Pashto": "pus",
-    "Persian": "fas",
-    "Polish": "pol",
-    "Portuguese": "por",
-    "Punjabi": "pan",
-    "Romanian": "ron",
-    "Russian": "rus",
-    "Sanskrit": "san",
-    "Saraiki": "skr",
-    "Serbian": "srp",
-    "Sepedi": "nso",
-    "Shekhawati": "",
-    "Sinhala": "sin",
-    "Sindhi": "snd",
-    "Slovak": "slk",
-    "Slovenian": "slv",
-    "Spanish": "spa",
-    "Sundanese": "sun",
-    "Swahili": "swa",
-    "Swedish": "swe",
-    "Sylheti": "syl",
-    "Tagalog": "tgl",
-    "Tajik": "tgk",
-    "Tamil": "tam",
-    "Telugu": "tel",
-    "Thai": "tha",
-    "Tshivenda": "ven",
-    "Tunisian Arabic": "aeb",
-    "Turkish": "tur",
-    "Ukrainian": "ukr",
-    "Urdu": "urd",
-    "Uzbek": "uzb",
-    "Uyghur": "uig",
-    "Vietnamese": "vie",
-    "Xhosa": "xho",
-    "Yoruba": "yor",
-    "Zarma": "dje",
-    "Zulu": "zul",
-}
-
-
-ALIAS_TO_CANONICAL = {
-    "agikuyu": "Agikuyu",
-    "agikuyu language family": "Agikuyu",
-    "akikuyu": "Agikuyu",
-    "amharic": "Amharic",
-    "arabic": "Arabic",
-    "arabic algerian dialect": "Arabic",
-    "arabic najdi saudi": "Arabic",
-    "arabic msa": "Arabic",
-    "armenian": "Armenian",
-    "assamese": "Assamese",
-    "azerbaijani": "Azerbaijani",
-    "balochi": "Balochi",
-    "bangla": "Bengali",
-    "bangla india": "Bengali",
-    "bambara": "Bambara",
-    "batak": "Batak",
-    "bataknese": "Batak",
-    "basque": "Basque",
-    "belarusian": "Belarusian",
+ALIAS_TO_QUERY = {
+    "agikuyu": "Kikuyu",
+    "algerian dialect": "Arabic",
     "belorusian": "Belarusian",
-    "bengali": "Bengali",
-    "bengali all dialects": "Bengali",
-    "bikol": "Bikol",
-    "bini": "Bini",
-    "bosnian": "Bosnian",
-    "braj": "Braj",
-    "brahui": "Brahui",
-    "bulgarian": "Bulgarian",
-    "burushaski": "Burushaski",
-    "buryat language": "Buryat",
-    "cantonese": "Cantonese",
-    "catalan": "Catalan",
-    "cebuano": "Cebuano",
-    "chinese": "Chinese",
-    "chuvash": "Chuvash",
-    "croatian": "Croatian",
-    "czech": "Czech",
-    "danish": "Danish",
-    "dholuo": "Luo",
-    "dutch": "Dutch",
-    "efik": "Efik",
-    "ekpeye": "Ekpeye",
-    "english": "English",
-    "estonian": "Estonian",
-    "ewe": "Ewe",
-    "faroese": "Faroese",
-    "farsi": "Persian",
-    "farsi persian": "Persian",
-    "filipino": "Filipino",
-    "finnish": "Finnish",
-    "fon": "Fon",
+    "brazilian": "Portuguese",
+    "do persian": "Persian",
     "fongbe": "Fon",
-    "french": "French",
-    "french from cameroon": "French",
-    "fulfulde": "Fulfulde",
-    "galician": "Galician",
-    "georgian": "Georgian",
-    "german": "German",
-    "greek": "Greek",
-    "gujarati": "Gujarati",
-    "hausa": "Hausa",
-    "hawaiian": "Hawaiian",
-    "hawaiian olelo hawaii": "Hawaiian",
-    "hebrew": "Hebrew",
-    "hindi": "Hindi",
     "hindia": "Hindi",
-    "hokkien": "Hokkien",
-    "hungarian": "Hungarian",
-    "icelandic": "Icelandic",
-    "igbo": "Igbo",
+    "hokkien": "nan",
+    "ijesa dialect": "Yoruba",
     "indonesia": "Indonesian",
-    "indonesian": "Indonesian",
-    "iranian persian": "Persian",
-    "isixhosa": "Xhosa",
-    "isoko": "Isoko",
-    "italian": "Italian",
-    "japanese": "Japanese",
-    "java": "Javanese",
-    "javanese": "Javanese",
-    "kannada": "Kannada",
     "kashmiri": "Kashmiri",
-    "kazakh": "Kazakh",
-    "khakas": "Khakas",
-    "kikongo": "Kikongo",
-    "kikongo language": "Kikongo",
-    "kikuyu": "Agikuyu",
-    "kinyarwanda": "Kinyarwanda",
-    "korean": "Korean",
-    "kurdish": "Kurdish",
-    "lambani": "Lambani",
-    "lingala": "Lingala",
     "lithuania": "Lithuanian",
-    "lithuanian": "Lithuanian",
-    "luganda": "Luganda",
-    "luo": "Luo",
-    "macedonian": "Macedonian",
-    "magahi": "Magahi",
-    "maithili": "Maithili",
-    "malagasy": "Malagasy",
-    "malagasy language spoken in madagascar": "Malagasy",
-    "malay": "Malay",
-    "malayalam": "Malayalam",
-    "mandarin": "Mandarin",
-    "mandarin chinese": "Mandarin",
-    "marathi": "Marathi",
     "marwadi": "Marwari",
-    "marwari": "Marwari",
-    "middleeast": "",
-    "nepali": "Nepali",
-    "nigerian pidgin": "Nigerian Pidgin",
-    "norwegian bokmal": "Norwegian Bokmal",
-    "norwegian nynorsk": "Norwegian Nynorsk",
-    "obolo": "Obolo",
-    "odia": "Odia",
-    "odia indo aryan language from eastern india": "Odia",
-    "odia indo aryan language not in current list": "Odia",
-    "odia indo aryan language not in global piqa": "Odia",
+    "najdi-saudi": "Arabic",
+    "najdi saudi": "Arabic",
+    "nigerian pidigin english": "Nigerian Pidgin",
     "odiya": "Odia",
+    "olelo hawaii": "Hawaiian",
     "oriya": "Odia",
-    "pashto": "Pashto",
-    "persian": "Persian",
-    "pidgin": "Nigerian Pidgin",
-    "polish": "Polish",
-    "portuguese": "Portuguese",
-    "portuguese brazilian": "Portuguese",
-    "punjabi": "Punjabi",
     "pushto": "Pashto",
-    "romanian": "Romanian",
-    "russian": "Russian",
-    "sanskrit": "Sanskrit",
     "saraiki": "Saraiki",
-    "serbian": "Serbian",
-    "sepedi": "Sepedi",
-    "shekhawati": "Shekhawati",
-    "sinhala": "Sinhala",
-    "sindhi": "Sindhi",
-    "slovak": "Slovak",
-    "slovenian": "Slovenian",
-    "spanish": "Spanish",
-    "sundanese": "Sundanese",
-    "swahili": "Swahili",
+    "also work on swedish": "Swedish",
+    "work on german in a group": "German",
     "swahilli": "Swahili",
-    "swedish": "Swedish",
-    "sylheti": "Sylheti",
-    "tagalog": "Tagalog",
-    "tajik": "Tajik",
-    "tamil": "Tamil",
-    "telugu": "Telugu",
-    "thai": "Thai",
     "thailand": "Thai",
-    "tshivenda": "Tshivenda",
-    "tunisian dialect": "Tunisian Arabic",
-    "turkish": "Turkish",
-    "uhami": "",
-    "ukrainian": "Ukrainian",
-    "urdu": "Urdu",
-    "uzbek": "Uzbek",
-    "uyghur": "Uyghur",
-    "vietnamese": "Vietnamese",
-    "will discuss": "",
-    "xhosa": "Xhosa",
-    "yoruba": "Yoruba",
-    "yoruba nigerian pidigin english": "Nigerian Pidgin",
-    "yoruba nigerian pidigin": "Nigerian Pidgin",
-    "zarma": "Zarma",
-    "zulu": "Zulu",
+    "tshivenda": "Venda",
 }
 
+CODE_TO_QUERY = {
+    "bal": "Balochi",
+    "brh": "Brahui",
+    "chv": "Chuvash",
+    "kas": "Kashmiri",
+    "pus": "Pashto",
+    "skr": "Saraiki",
+}
 
-NOISE_KEYS = {
+NOISE_PATTERNS = [
+    r"\bas i am not native in it\b",
+    r"\bi can\b",
+    r"\bi can also\b",
+    r"\bi would like to\b",
+    r"\bpreferable\b",
+    r"\bnative\b",
+    r"\bnative speaker\b",
+    r"\bpossibly\b",
+    r"\bif needed\b",
+    r"\bi am working with several collaborators on this\b",
+    r"\bi have already registered for farsi\b",
+    r"\bbut i know the language\b",
+    r"\bwhich is another name for persian\b",
+    r"\blow-resourced middle eastern languages\b",
+    r"\blow-resource pakistani languages\b",
+    r"\blow-resource pakistani\b",
+    r"\blow-resource\b",
+    r"\blow-resourced\b",
+    r"\bincluding varieties of\b",
+    r"\bthere romanized versions\b",
+    r"\bthese are not currently represented there\b",
+    r"\bwould extend coverage in south asia\b",
+    r"\blanguage spoken in madagascar\b",
+    r"\bspoken in the faroe islands\b",
+    r"\bafrican country\b",
+    r"\bdravidian language family\b",
+    r"\bindo-aryan language related to bengali\b",
+    r"\biso 639-3\b",
+    r"\biso 15924\b",
+    r"\bglottocode\b",
+]
+
+NOISE_TOKENS = {
+    "",
+    "all dialects",
+    "as i am not in it",
+    "contribute culturally specific global piqa datasets for low-resource pakistani languages such as saraiki",
+    "cyrl",
+    "dardic language of northern pakistan",
+    "khak1248",
     "will discuss",
     "python",
+    "speaker",
+    "middleeast",
+    "msa",
 }
 
 
@@ -319,63 +103,85 @@ def get_args():
     return parser.parse_args()
 
 
-def _ascii_key(value: str) -> str:
-    normalized = unicodedata.normalize("NFKD", value)
-    ascii_only = normalized.encode("ascii", "ignore").decode("ascii")
-    ascii_only = ascii_only.lower()
-    ascii_only = re.sub(r"[^a-z0-9]+", " ", ascii_only).strip()
-    return re.sub(r"\s+", " ", ascii_only)
+def _normalize(text: str) -> str:
+    text = unicodedata.normalize("NFKD", str(text))
+    text = text.encode("ascii", "ignore").decode("ascii")
+    text = text.lower()
+    text = re.sub(r"[^a-z0-9_;/,&() -]+", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
 
 def _split_candidates(value: str) -> list[str]:
-    if not isinstance(value, str) or not value.strip():
+    text = _normalize(value)
+    if not text:
         return []
 
-    text = value.strip()
-    text = re.sub(r"\b(and|or)\s*/\s*\b(and|or)\b", ",", text, flags=re.IGNORECASE)
-    text = re.sub(r"\b(and|or)\b", ",", text, flags=re.IGNORECASE)
+    for pattern in NOISE_PATTERNS:
+        text = re.sub(pattern, " ", text)
+
+    text = re.sub(r"\b(and/or|and|or)\b", ",", text)
     text = text.replace("&", ",")
     text = text.replace("/", ",")
     text = text.replace(";", ",")
     text = re.sub(r"[()]", ",", text)
     text = re.sub(r"\s*,\s*", ",", text)
     text = re.sub(r"\s+", " ", text)
+
     return [chunk.strip(" .,-") for chunk in text.split(",") if chunk.strip(" .,-")]
 
 
-def _canonicalize(candidate: str) -> str | None:
-    key = _ascii_key(candidate)
-    if not key:
+def _resolve_with_langcodes(query: str) -> tuple[str, str] | None:
+    try:
+        language = langcodes.find(query)
+    except Exception:
         return None
-    if key in NOISE_KEYS:
+
+    try:
+        iso3 = language.to_alpha3()
+    except Exception:
+        iso3 = ""
+
+    display_name = language.display_name()
+    display_name = re.sub(r"\s*\([^)]*\)", "", display_name).strip()
+    return display_name, iso3
+
+
+def _resolve_candidate(candidate: str) -> tuple[str, str] | None:
+    if candidate in NOISE_TOKENS:
         return None
 
-    if key in ALIAS_TO_CANONICAL:
-        canonical = ALIAS_TO_CANONICAL[key]
-        return canonical or None
+    code_match = re.fullmatch(r"([a-z]{3})(?:_[a-z0-9]+)?", candidate)
+    if code_match:
+        code = code_match.group(1)
+        if code in CODE_TO_QUERY:
+            return _resolve_with_langcodes(CODE_TO_QUERY[code])
 
-    for alias, canonical in sorted(ALIAS_TO_CANONICAL.items(), key=lambda item: len(item[0]), reverse=True):
-        if alias and re.search(rf"\b{re.escape(alias)}\b", key):
-            return canonical or None
+    if candidate in ALIAS_TO_QUERY:
+        return _resolve_with_langcodes(ALIAS_TO_QUERY[candidate])
 
-    clean = re.sub(r"\b(i can|i would like to|preferable|native|possibly|if needed|if needed)\b", " ", key)
-    clean = re.sub(r"\s+", " ", clean).strip()
-    if clean in ALIAS_TO_CANONICAL:
-        canonical = ALIAS_TO_CANONICAL[clean]
-        return canonical or None
+    resolved = _resolve_with_langcodes(candidate)
+    if resolved:
+        return resolved
 
-    if 1 <= len(clean.split()) <= 3 and re.fullmatch(r"[a-z0-9 ]+", clean):
-        return " ".join(part.capitalize() for part in clean.split())
-    return None
+    for alias, query in ALIAS_TO_QUERY.items():
+        if re.search(rf"\b{re.escape(alias)}\b", candidate):
+            return _resolve_with_langcodes(query)
+
+    fallback = " ".join(part.capitalize() for part in candidate.split())
+    return fallback, ""
 
 
-def _extract_languages(raw_value: str) -> list[str]:
-    extracted = []
-    for chunk in _split_candidates(raw_value):
-        canonical = _canonicalize(chunk)
-        if canonical:
-            extracted.append(canonical)
-    return list(OrderedDict.fromkeys(extracted))
+def _extract_languages(value: str) -> list[tuple[str, str]]:
+    deduped = OrderedDict()
+    for candidate in _split_candidates(value):
+        resolved = _resolve_candidate(candidate)
+        if not resolved:
+            continue
+        name, iso3 = resolved
+        if name:
+            deduped[name] = iso3
+    return list(deduped.items())
 
 
 def main():
@@ -384,22 +190,25 @@ def main():
 
     output_rows: list[dict] = []
     for row in df.to_dict(orient="records"):
-        languages = _extract_languages(row.get("Language", ""))
+        raw_language = row.get("Language", "")
+        raw_language = "" if pd.isna(raw_language) else str(raw_language)
+        languages = _extract_languages(raw_language)
         if not languages:
             output_row = dict(row)
             output_row["Language"] = ""
+            output_row["Language_Original"] = raw_language
             output_row["Language_ISO3"] = ""
             output_rows.append(output_row)
             continue
 
-        for language in languages:
+        for language, iso3 in languages:
             output_row = dict(row)
             output_row["Language"] = language
-            output_row["Language_ISO3"] = CANONICAL_TO_ISO3.get(language, "")
+            output_row["Language_Original"] = raw_language
+            output_row["Language_ISO3"] = iso3
             output_rows.append(output_row)
 
-    out_df = pd.DataFrame(output_rows)
-    out_df.to_csv(args.output_path, index=False)
+    pd.DataFrame(output_rows).to_csv(args.output_path, index=False)
 
 
 if __name__ == "__main__":

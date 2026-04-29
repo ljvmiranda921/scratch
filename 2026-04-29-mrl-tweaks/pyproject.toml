@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "langcodes>=3.5.1",
+    "language-data>=1.4.0",
     "numpy>=2.4.4",
     "pandas>=3.0.2",
 ]
