@@ -1,0 +1,6 @@
+drafts/*
+.claude/
+*.aux
+*.log
+*.pdf
+*.dvi
