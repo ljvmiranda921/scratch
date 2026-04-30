@@ -1,0 +1,75 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
+\definecolor{shapegray}{RGB}{160,160,160}
+\definecolor{shapedark}{RGB}{110,110,110}
+\definecolor{arrowred}{HTML}{a00000}
+
+\begin{document}
+\begin{tikzpicture}[
+    arrow/.style={
+        -{Stealth[length=4mm, width=3mm]},
+        line width=1.4pt,
+        draw=arrowred
+    }
+]
+
+% =================== Stage 1: Coffee Mug ===================
+\begin{scope}[shift={(0,0)}]
+    % Handle (drawn first; body covers the attachment points)
+    \draw[shapegray, line width=9pt, line cap=round]
+        (0.75, 0.55) .. controls (1.95, 0.55) and (1.95, -0.55) .. (0.75,-0.55);
+    % Body
+    \fill[shapegray]
+        (-0.85,-1.15)
+        -- (-0.85, 0.95)
+        arc[start angle=180, end angle=360, x radius=0.85, y radius=0.22]
+        -- (0.85,-1.15)
+        arc[start angle=0, end angle=-180, x radius=0.85, y radius=0.22]
+        -- cycle;
+    % Top rim
+    \fill[shapedark] (0, 0.95) ellipse[x radius=0.85, y radius=0.22];
+    % Inside opening (a touch lighter than rim)
+    \fill[shapegray!75!black] (0, 0.95) ellipse[x radius=0.68, y radius=0.17];
+\end{scope}
+
+% Arrow 1
+\draw[arrow] (2.6, 0) -- (3.7, 0);
+
+% =================== Stage 2: Deformed mug ===================
+\begin{scope}[shift={(5.1,0)}]
+    % Fatter handle
+    \draw[shapegray, line width=18pt, line cap=round]
+        (0.55, 0.40) .. controls (1.95, 0.40) and (1.95, -0.40) .. (0.55,-0.40);
+    % Shrunken body
+    \fill[shapegray]
+        (-0.55,-0.85)
+        -- (-0.55, 0.55)
+        arc[start angle=180, end angle=360, x radius=0.55, y radius=0.17]
+        -- (0.55,-0.85)
+        arc[start angle=0, end angle=-180, x radius=0.55, y radius=0.17]
+        -- cycle;
+    \fill[shapedark] (0, 0.55) ellipse[x radius=0.55, y radius=0.17];
+    \fill[shapegray!75!black] (0, 0.55) ellipse[x radius=0.42, y radius=0.13];
+\end{scope}
+
+% Arrow 2
+\draw[arrow] (7.55, 0) -- (8.65, 0);
+
+% =================== Stage 3: Torus / Donut ===================
+\begin{scope}[shift={(10.55,0)}]
+    % Outer ring with hole punched out (transparent)
+    \fill[shapegray, even odd rule]
+        (0,0) ellipse[x radius=1.45, y radius=0.9]
+        (0,0) ellipse[x radius=0.55, y radius=0.22];
+    % Inner-hole rim shading on the lower lip
+    \draw[shapedark, line width=0.9pt]
+        (-0.53, 0.04) arc[start angle=180, end angle=360, x radius=0.53, y radius=0.20];
+    % Subtle highlight on top of the hole
+    \draw[shapegray!85!white, line width=0.7pt]
+        (-0.50, -0.02) arc[start angle=180, end angle=0, x radius=0.50, y radius=0.16];
+\end{scope}
+
+\end{tikzpicture}
+\end{document}
